@@ -10,7 +10,7 @@ void main() {
 
     oportunidadeService.criarOportunidade(oportunidade);
 
-    IO.println(oportunidade);   //ainda nao cadastrada
+    IO.println("Oportunidade Criada " + oportunidade);   //ainda nao cadastrada
 
     oportunidadeService.publicar(1L);
 
