@@ -20,5 +20,4 @@ public class OportunidadeRepositoryImpl implements OportunidadeRepository {
         return banco.get(id);
     }
 
-
 }
