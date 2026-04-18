@@ -5,7 +5,7 @@ public class Discente extends Usuario{
     private Integer semestre;
     //private Curso curso;
 
-    public Discente(String nome, String email, String senha, Papel papel, String matricula, Integer semestre){
+    public Discente(String nome, String email, String senha, String papel, String matricula, Integer semestre){
         super(nome, email, senha, papel);
         //; private Curso curso;){
         this.matricula = matricula;

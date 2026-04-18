@@ -28,22 +28,22 @@ public class Curso {
         this.versao_ppc  = versao;
     }
 
-    public List<Discente> listarAlunosPorStatus(String Status){
-        List<Discente> resultado = new ArrayList<>();
+    //public List<Discente> listarAlunosPorStatus(String Status){
+        //List<Discente> resultado = new ArrayList<>();
 
-        for(Discente d: alunos){
-            if(d.getStatus().equalsIgoneCase(Status)){
-                resultado.add(d);
+        //for(Discente d: alunos){
+        //    if(d.getStatus().equalsIgoneCase(Status)){
+        //        resultado.add(d);
 
 
-            }
-        }
-        return resultado;
-    }
+        //    }
+        //}
+        //return resultado;
+    //}
 
-    public void adicionarAlunos(String alunos){
-        alunos.add(aluno);
-    }
+    //public void adicionarAlunos(String alunos){
+    //    alunos.add(aluno);
+    //}
 
 
     public String getNome() {

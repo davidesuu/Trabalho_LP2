@@ -15,7 +15,6 @@ public class OportunidadeService {
         Oportunidade o = repository.buscaPorId(id);  //aqui teria qyue verificar se ele existe no repo
         o.setStatus(Status.PUBLICADA); //poderia ter um metodo que setava sem passar?
         repository.salvar(o);
-        IO.println("Oportunidade cadastrada: " + o);
     }
 
     public void criarOportunidade(Oportunidade o){

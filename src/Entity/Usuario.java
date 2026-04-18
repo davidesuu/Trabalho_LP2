@@ -4,17 +4,21 @@ public class Usuario {
     protected String nome;
     protected String email;
     protected String senha;
-    protected Papel papel;
+    protected String papel;
     private boolean ativo;
 
-    public Usuario(String nome, String email, String senha, Papel papel){
+    public Usuario(String nome, String email, String senha, String papel){
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.papel = papel;
     }
 
-    public Papel getPapel() {
+    public boolean getStatus() {
+        return ativo;
+    }
+
+    public String getPapel() {
         return papel;
     }
 

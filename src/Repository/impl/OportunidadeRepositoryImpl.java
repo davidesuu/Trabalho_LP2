@@ -20,7 +20,9 @@ public class OportunidadeRepositoryImpl implements OportunidadeRepository {
         return banco.get(id);
     }
 
-    public Collection<Oportunidade> mostrarOportunidades(){
-        return banco.values();
+    public void mostrarOportunidades(){
+        for (Oportunidade valor : banco.values()) {
+            IO.println(valor);
+        }
     }
 }

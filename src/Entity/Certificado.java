@@ -6,7 +6,7 @@ import Enum.StatusAssinatura;
 
 public class Certificado {
     private String uuid_hash;
-    //private Discente discente;
+    private Discente discente;
     private Oportunidade oportunidade;
     private LocalDate data_emissao;
     private Integer horas;
@@ -21,7 +21,7 @@ public class Certificado {
         this.status_assinatura = status_assinatura;
     }
 
-    public Certificado (String uuid_hash, Oportunidade oportunidade, //Discente discente,
+    public Certificado (String uuid_hash, Oportunidade oportunidade, Discente discente,
                         Integer horas, String path){
         this.uuid_hash = uuid_hash;
         this.oportunidade = oportunidade;
@@ -29,13 +29,13 @@ public class Certificado {
         this.path = path;
         this.status_assinatura = status_assinatura.PENDENTE;
         this.data_emissao = LocalDate.now();
-        // this.discente = discente;
+        this.discente = discente;
     }
 
     @Override
     public String toString() {
         return "uuid_hash: "+ uuid_hash + "\n"+
-                //"Discente: " + discente + "\n" +
+                "Discente: " + discente + "\n" +
                 "Oportunidade: " + oportunidade + "\n" +
                 "Data de Emissao: " + data_emissao + "\n"+
                 "Horas: " + horas + "\n"+
