@@ -58,17 +58,15 @@ public class Oportunidade {
 
     @Override
     public String toString() {
-        return "Oportunidade{" +
-                "titulo='" + titulo + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", id=" + id +
-                ", tipo=" + tipo +
-                ", modalidade=" + modalidade +
-                ", carga_horaria=" + carga_horaria +
-                ", vagas=" + vagas +
-                ", status=" + status +
-                ", inicio=" + inicio +
-                ", fim=" + fim +
-                '}';
+        return "Titulo: " + titulo + "\n" +
+                "Descricao: " + descricao + "\n" +
+                "Id: " + id + "\n" +
+                "Tipo: " + tipo + "\n" +
+                "Modalidade: " + modalidade + "\n" +
+                "Carga_horaria: " + carga_horaria + "\n" +
+                "Vagas: " + vagas + "\n" +
+                "Status: " + status + "\n" +
+                "Inicio: " + inicio + "\n" +
+                "Fim: " + fim + "\n";
     }
 }

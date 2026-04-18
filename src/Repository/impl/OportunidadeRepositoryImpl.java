@@ -1,10 +1,10 @@
 package Repository.impl;
 
 import Entity.Oportunidade;
+import Entity.Usuario;
 import Repository.OportunidadeRepository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class OportunidadeRepositoryImpl implements OportunidadeRepository {
     private Map<Long, Oportunidade> banco = new HashMap<>();
@@ -20,5 +20,7 @@ public class OportunidadeRepositoryImpl implements OportunidadeRepository {
         return banco.get(id);
     }
 
-
+    public Collection<Oportunidade> mostrarOportunidades(){
+        return banco.values();
+    }
 }
