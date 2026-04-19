@@ -1,8 +1,12 @@
 package Entity;
 
+import Service.OportunidadeService;
+import Enum.TipoOportunidade;
+import Enum.Modalidade;
+
 import java.time.LocalDate;
 
-public class DiscenteDiretor extends Discente{
+public class DiscenteDiretor extends Discente {
     //private Grupo grupo;
     private String cargo;
     private LocalDate data_inicio;
@@ -10,7 +14,7 @@ public class DiscenteDiretor extends Discente{
 
     public DiscenteDiretor(String nome, String email, String senha, String papel, String matricula,
                            Integer semestre, Curso curso, String cargo, Integer duracao) {
-                            //Grupo grupo
+        //Grupo grupo
         super(nome, email, senha, papel, matricula, semestre, curso);
         this.cargo = cargo;
         this.data_inicio = LocalDate.now();
@@ -19,6 +23,12 @@ public class DiscenteDiretor extends Discente{
 
     public String getCargo() {
         return cargo;
+    }
+
+    public Oportunidade criarOportunidade(String titulo, String descricao, TipoOportunidade tipo,
+                                          Modalidade modalidade, int cargaHoraria, int vagas,
+                                          DiscenteDiretor autor) {
+        return new Oportunidade(titulo, descricao, tipo, modalidade, cargaHoraria, vagas, autor);
     }
 
     @Override

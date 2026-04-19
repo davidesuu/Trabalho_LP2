@@ -15,13 +15,14 @@ public class Oportunidade {
     private Status status; //get e set
     private LocalDate inicio; //get e set
     private LocalDate fim; //get e set
-    //Usuario
-    //Docente
+    private DiscenteDiretor autor;
+    private Docente responsavel;
 
 
-    public Oportunidade(String titulo, String descricao,
+
+    public Oportunidade (String titulo, String descricao,
                         TipoOportunidade tipo,
-                        Modalidade modalidade, int carga_horaria, int vagas) {
+                        Modalidade modalidade, int carga_horaria, int vagas, DiscenteDiretor autor) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.tipo = tipo;
@@ -30,6 +31,7 @@ public class Oportunidade {
         this.vagas = vagas;
         this.status = Status.PENDENTE;  //Repensa melhor depois se ela ja e pendente no começo
         this.inicio = LocalDate.now();
+        this.autor = autor;
     }
 
     public Long getId() {
@@ -52,10 +54,14 @@ public class Oportunidade {
         return status;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void publicar(Docente docente){
+        this.status = Status.PUBLICADA;
+        this.responsavel = docente;
     }
 
+    public void rejeitar(){
+        this.status = Status.REJEITADO;
+    }
     @Override
     public String toString() {
         return "Titulo: " + titulo + "\n" +

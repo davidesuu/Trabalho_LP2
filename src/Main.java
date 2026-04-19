@@ -1,7 +1,4 @@
-import Entity.Curso;
-import Entity.Discente;
-import Entity.Oportunidade;
-import Entity.Usuario;
+import Entity.*;
 import Repository.impl.InscricoesRepositoryImpl;
 import Repository.impl.OportunidadeRepositoryImpl;
 import Service.OportunidadeService;
@@ -14,16 +11,16 @@ import Service.CertificadoService;
 void main() {
     OportunidadeRepositoryImpl oportunidadeRepository = new OportunidadeRepositoryImpl();
     InscricoesRepositoryImpl inscricoesRepository = new InscricoesRepositoryImpl();
+    Docente docente = new Docente("Geraldo", "dfad", "senha", "sda", "2131", "dmat");
+    DiscenteDiretor rochel = new DiscenteDiretor("rochel", "email", "senha", "as", "a",4, new Curso("ccomp", 12, 132, "ws"), "sda", 12);
     OportunidadeService oportunidadeService = new OportunidadeService(oportunidadeRepository);
-    Oportunidade oportunidade1 = new Oportunidade("Vaga marketing DA", "Disponivel agora", TipoOportunidade.EVENTO, Modalidade.PRESENCIAL, 24, 10);
-    Oportunidade oportunidade2 = new Oportunidade("Vaga PETCOMP", "Disponivel agora", TipoOportunidade.PROJETO, Modalidade.PRESENCIAL, 64, 12);
-    oportunidadeService.criarOportunidade(oportunidade1);
-    oportunidadeService.criarOportunidade(oportunidade2);
+    Oportunidade oportunidade1 = oportunidadeService.criarOportunidade("Vaga marketing DA", "Disponivel agora", TipoOportunidade.EVENTO, Modalidade.PRESENCIAL, 24, 10, rochel);
+    Oportunidade oportunidade2 = oportunidadeService.criarOportunidade("Vaga PETCOMP", "Disponivel agora", TipoOportunidade.PROJETO, Modalidade.PRESENCIAL, 64, 12, rochel);
 
     IO.println("Oportunidade Criada " + oportunidade1);   //ainda nao cadastrada
     IO.println("Oportunidade Criada " + oportunidade2);
-    oportunidadeService.publicar(1L);
-    oportunidadeService.publicar(2L);
+    oportunidadeService.publicarOpurtunidade(1L, docente);
+    oportunidadeService.publicarOpurtunidade(2L, docente);
     Curso curso = new Curso("ccomp", 123, 60, "2");
     Usuario sam = new Discente("nome", "email", "senha", "papel",
             "matricula", 3, curso);
