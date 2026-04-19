@@ -8,6 +8,7 @@ import Enum.TipoOportunidade;
 import Enum.Modalidade;
 import Enum.Status;
 import Service.UsuarioService;
+import Service.CertificadoService;
 
 void main() {
     OportunidadeRepositoryImpl oportunidadeRepository = new OportunidadeRepositoryImpl();
@@ -25,4 +26,10 @@ void main() {
     Usuario sam = new Discente("nome", "email", "senha", "papel", "matricula", 3);
     UsuarioService src = new UsuarioService();
     src.selecionarOportunidade(oportunidadeRepository, inscricoesRepository);
+
+    String text = "https://example.com";
+    String output = "qrcode.png";
+
+    CertificadoService.generate("oiii.png");
+
     }
