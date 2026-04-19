@@ -34,12 +34,6 @@ public class InscricoesRepositoryImpl implements InscricaoRepository {
                 .collect(Collectors.toList());
     }
 
-    public void mostrarInscricoes(){
-        for (Inscricao valor : banco.values()) {
-            IO.println(valor);
-        }
-    }
-
     @Override
     public List<Inscricao> listarTodas() {
         return List.copyOf(banco.values());
