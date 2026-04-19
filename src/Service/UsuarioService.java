@@ -25,6 +25,5 @@ public class UsuarioService {
         Oportunidade c = repository.buscaPorId(s);
         Inscricao inscricao = new Inscricao(c, Status.PENDENTE, "motivacao", LocalDate.now());
         inscricoes.salvar(inscricao);
-        inscricoes.mostrarInscricoes();
     }
 }

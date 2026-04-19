@@ -3,14 +3,18 @@ package Entity;
 public class Discente extends Usuario{
     private String matricula;
     private Integer semestre;
-    //private Curso curso;
+    private Curso curso;
 
-    public Discente(String nome, String email, String senha, String papel, String matricula, Integer semestre){
+    public Discente(String nome, String email, String senha, String papel,
+                    String matricula, Integer semestre, Curso curso){
         super(nome, email, senha, papel);
-        //; private Curso curso;){
         this.matricula = matricula;
         this.semestre = semestre;
-        //this.curso = curso;
+        this.curso = curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
     }
 
     @Override

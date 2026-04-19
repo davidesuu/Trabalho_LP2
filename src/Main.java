@@ -1,3 +1,4 @@
+import Entity.Curso;
 import Entity.Discente;
 import Entity.Oportunidade;
 import Entity.Usuario;
@@ -23,7 +24,9 @@ void main() {
     IO.println("Oportunidade Criada " + oportunidade2);
     oportunidadeService.publicar(1L);
     oportunidadeService.publicar(2L);
-    Usuario sam = new Discente("nome", "email", "senha", "papel", "matricula", 3);
+    Curso curso = new Curso("ccomp", 123, 60, "2");
+    Usuario sam = new Discente("nome", "email", "senha", "papel",
+            "matricula", 3, curso);
     UsuarioService src = new UsuarioService();
     src.selecionarOportunidade(oportunidadeRepository, inscricoesRepository);
 

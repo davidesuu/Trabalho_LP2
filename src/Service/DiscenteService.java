@@ -1,7 +1,10 @@
 package Service;
 
+import Entity.Curso;
+import Entity.Discente;
+
 public class DiscenteService {
-    //public void mudarCurso(Discente discente, Curso curso){
-    //    discente.curso = curso;
-    //}
+    public void mudarCurso(Discente discente, Curso curso){
+        discente.setCurso(curso);
+    }
 }

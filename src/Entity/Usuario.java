@@ -18,6 +18,10 @@ public class Usuario {
         return ativo;
     }
 
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
     public String getPapel() {
         return papel;
     }
