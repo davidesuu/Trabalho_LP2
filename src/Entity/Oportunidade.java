@@ -15,14 +15,14 @@ public class Oportunidade {
     private Status status; //get e set
     private LocalDate inicio; //get e set
     private LocalDate fim; //get e set
-    private DiscenteDiretor autor;
+    private Usuario autor;
     private Docente responsavel;
 
 
 
     public Oportunidade (String titulo, String descricao,
                         TipoOportunidade tipo,
-                        Modalidade modalidade, int carga_horaria, int vagas, DiscenteDiretor autor) {
+                        Modalidade modalidade, int carga_horaria, int vagas, Usuario autor) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.tipo = tipo;

@@ -1,17 +1,20 @@
 package Entity;
+import Enum.*;
 
 public class Usuario {
     protected String nome;
     protected String email;
     protected String senha;
-    protected String papel;
     private boolean ativo;
 
-    public Usuario(String nome, String email, String senha, String papel){
+    public Usuario(String nome, String email, String senha){
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.papel = papel;
+    }
+
+    public Oportunidade criarOportunidade(String titulo, String descricao, TipoOportunidade tipo, Modalidade modalidade, int cargaHoraria, int vagas) {
+        throw new IllegalStateException("Usuario não pode criar Oportunidade");
     }
 
     public boolean getStatus() {
@@ -22,12 +25,24 @@ public class Usuario {
         this.ativo = ativo;
     }
 
-    public String getPapel() {
-        return papel;
-    }
-
     public String getSenha() {
         return senha;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setSenha(String nova_senha) {
@@ -39,7 +54,6 @@ public class Usuario {
         return "Nome: " + nome + "\n" +
                 "Email: " + email + "\n" +
                 "Senha: " + senha + "\n" +
-                "Papel: " + papel + "\n" +
                 "Ativo: " + ativo + "\n";
     }
 }

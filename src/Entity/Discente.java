@@ -5,9 +5,9 @@ public class Discente extends Usuario{
     private Integer semestre;
     private Curso curso;
 
-    public Discente(String nome, String email, String senha, String papel,
+    public Discente(String nome, String email, String senha,
                     String matricula, Integer semestre, Curso curso){
-        super(nome, email, senha, papel);
+        super(nome, email, senha);
         this.matricula = matricula;
         this.semestre = semestre;
         this.curso = curso;
@@ -15,6 +15,14 @@ public class Discente extends Usuario{
 
     public void setCurso(Curso curso) {
         this.curso = curso;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
     }
 
     @Override

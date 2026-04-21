@@ -1,10 +1,12 @@
 package Repository.impl;
 
 import Entity.Oportunidade;
-import Entity.Usuario;
 import Repository.OportunidadeRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import Enum.Status;
 
 public class OportunidadeRepositoryImpl implements OportunidadeRepository {
     private Map<Long, Oportunidade> banco = new HashMap<>();
@@ -20,9 +22,19 @@ public class OportunidadeRepositoryImpl implements OportunidadeRepository {
         return banco.get(id);
     }
 
+    @Override
+    public List<Oportunidade> listarPorStatus(Status status) {
+        return banco.values().stream().filter(o -> o.getStatus().equals(status)).collect(Collectors.toList());
+    }
+
     public void mostrarOportunidades(){
         for (Oportunidade valor : banco.values()) {
             IO.println(valor);
         }
+    }
+
+    @Override
+    public List<Oportunidade> listarTodas(){
+        return List.copyOf(banco.values());
     }
 }
