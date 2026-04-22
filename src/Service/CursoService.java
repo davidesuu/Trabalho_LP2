@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CursoService {
-    // tentando fazer a bostinha dos metodos
+    //Depois a gente faz
     public void atualizarPPC (Curso curso, Integer horas, String versao){
         curso.setCarga_horaria(horas);
         curso.setVersao_ppc(versao);

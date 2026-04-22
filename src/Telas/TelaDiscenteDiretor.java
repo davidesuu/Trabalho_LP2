@@ -35,7 +35,7 @@ public class TelaDiscenteDiretor {
                     AproveitamentoTela(aproveitamentoService, scanner, diretor); //Feito
                     break;
                 case 3:
-                    IO.println("Certificados");     //apenas esse faltando
+                    IO.println("Certificados");     //Criar Certifficado e gerar qr code do certificado
                     break;
                 case 4:
                     TelaCriarOportunidade(oportunidadeService, scanner, diretor); //Feito

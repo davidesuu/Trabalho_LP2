@@ -25,4 +25,8 @@ public class Docente extends Usuario{
         oportunidade.publicar(this);
         return oportunidade;
     }
+
+    public Grupo criarGrupo(String nome, String tipo, String email, String descricao){
+        return new Grupo(nome, tipo, email, descricao, this);
+    }
 }

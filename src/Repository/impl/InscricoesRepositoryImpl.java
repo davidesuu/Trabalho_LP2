@@ -3,6 +3,7 @@ import Entity.*;
 import Entity.Grupo;
 import Entity.Inscricao;
 import Entity.Oportunidade;
+import Enum.*;
 import Repository.InscricaoRepository;
 
 import java.util.HashMap;
@@ -40,5 +41,11 @@ public class InscricoesRepositoryImpl implements InscricaoRepository {
     @Override
     public List<Inscricao> listarTodas() {
         return List.copyOf(banco.values());
+    }
+
+    @Override
+    public List<Inscricao> listarStatus(Status status){
+        return banco.values().stream().filter(inscricao ->
+                inscricao.getStatus().equals(status)).collect(Collectors.toList());
     }
 }

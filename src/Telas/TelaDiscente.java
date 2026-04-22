@@ -2,16 +2,20 @@ package Telas;
 
 import Entity.Aproveitamento;
 import Entity.Discente;
+import Entity.Inscricao;
 import Entity.Oportunidade;
 import Service.AproveitamentoService;
+import Service.InscricaoServico;
 import Service.OportunidadeService;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class TelaDiscente {
-    public static void mostarTela(OportunidadeService oportunidadeService, AproveitamentoService aproveitamentoService,
-                           Discente discente){
+    public static void mostarTela(OportunidadeService oportunidadeService,
+                                  AproveitamentoService aproveitamentoService,
+                                  InscricaoServico inscricaoService,
+                                  Discente discente){
         int opt = 0;
         Scanner scanner = new Scanner(System.in);
         IO.println("Tela do discente");
@@ -19,7 +23,7 @@ public class TelaDiscente {
         do {
             IO.println("Escolha uma opção: ");
             IO.println("1 - Se inscrever em uma oportunidade");
-            IO.println("2 - Ver solicitações");
+            IO.println("2 - Ver inscrições");
             IO.println("3 - Ver Certificados");
             IO.println("4 - Sair");
             try {
@@ -30,27 +34,30 @@ public class TelaDiscente {
             }
             switch (opt){
                 case 1:
-                    verOportunidadesTela(oportunidadeService, scanner);        //Falta Inscriçao
+                    verOportunidadesTela(oportunidadeService, inscricaoService, scanner, discente);        //Falta Inscriçao
                     break;
                 case 2:
-                    IO.println("Solicitaçoes");
-                    AproveitamentoTela(aproveitamentoService, scanner, discente); //Feito
+                    verInscricoes(inscricaoService, discente);
                     break;
                 case 3:
-                    IO.println("Certificados");     //apenas esse faltando
+                    AproveitamentoTela(aproveitamentoService, scanner, discente); //Feito
                     break;
                 case 4:
+                    IO.println("Certificados");     //apenas esse faltando
+                    break;
+                case 5:
                     IO.println("Saindo...");
                     break;
             }
         }while(opt != 4);
 
     }
-    static void verOportunidadesTela(OportunidadeService oportunidadeService, Scanner scanner){
+    static void verOportunidadesTela(OportunidadeService oportunidadeService, InscricaoServico inscricaoService, Scanner scanner, Discente discente){
         List<Oportunidade> oportunidades = oportunidadeService.listarPublicadas();
-
+        Long id;
         if (oportunidades.isEmpty()){
-            IO.println("Nenhuma oportunidade disponivel");
+            IO.println("Nenhuma inscrição no momento");
+            return;
         }
 
         oportunidades.forEach(o ->
@@ -58,12 +65,21 @@ public class TelaDiscente {
         IO.println("─────────────────────────────");
 
         IO.println("Digite o ID para se inscrever e 0 para voltar");
-        int id = scanner.nextInt();
+        try {
+            id = Long.parseLong(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            IO.println("ID inválida.");
+            return;
+        }
 
         if (id == 0) return;
-        //Completar depois com inscricao;
-
-
+        Oportunidade o = oportunidadeService.buscar(id);
+        try{
+            criarInscricaoTela(inscricaoService, scanner, o, discente);
+            IO.println("Inscrição com sucesso");
+        } catch (RuntimeException e){
+            IO.println("Erro ao se Inscrever");
+        }
     }
 
     static void AproveitamentoTela(AproveitamentoService aproveitamentoService, Scanner scanner, Discente discente){
@@ -143,6 +159,42 @@ public class TelaDiscente {
             IO.println("Solicitação enviada com sucesso! Aguardando avaliação.");
         } catch (RuntimeException e) {
             IO.println("Erro ao solicitar aproveitamento: " + e.getMessage());
+        }
+
+    }
+
+    static void verInscricoes(InscricaoServico inscricaoServico, Discente discente){
+        List<Inscricao> inscricoes = inscricaoServico.listarDiscente(discente);
+        if (inscricoes.isEmpty()) {
+            IO.println("Você não possui inscrições");
+            return;
+        }
+
+        IO.println("\nMINHAS INSCRIÇÕES");
+        inscricoes.forEach(i -> {
+            IO.println("─────────────────────────────");
+            IO.println("ID: "            + i.getId());
+            IO.println("Oportunidade: "  + i.getOportunidade());
+            IO.println("Status: "        + i.getStatus());
+            IO.println("Motivação: "     + i.getMotivacao());
+
+        });
+        IO.println("─────────────────────────────");
+    }
+
+    static void criarInscricaoTela(InscricaoServico inscricaoServico, Scanner scanner, Oportunidade oportunidade, Discente discente){
+        IO.println("Motivação: ");
+        String motivacao = scanner.nextLine();
+
+        try {
+            inscricaoServico.criarInscricao(
+                    oportunidade,
+                    discente,
+                    motivacao
+            );
+            IO.println("Inscrição enviada com sucesso! Aguardando avaliação.");
+        } catch (RuntimeException e) {
+            IO.println("Erro ao solicitar aproveitamento");
         }
 
     }

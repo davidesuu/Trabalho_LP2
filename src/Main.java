@@ -1,8 +1,5 @@
 import Entity.*;
-import Repository.impl.AproveitamentoRepositoryImpl;
-import Repository.impl.InscricoesRepositoryImpl;
-import Repository.impl.OportunidadeRepositoryImpl;
-import Repository.impl.UsuarioRepositoryImpl;
+import Repository.impl.*;
 import Service.*;
 import Enum.TipoOportunidade;
 import Enum.Modalidade;
@@ -15,9 +12,11 @@ void main(String[] args) {
     OportunidadeRepositoryImpl oportunidadeRepository = new OportunidadeRepositoryImpl();
     InscricoesRepositoryImpl inscricoesRepository = new InscricoesRepositoryImpl();
     UsuarioRepositoryImpl usuarioRepository = new UsuarioRepositoryImpl();
+    GrupoRepositoryImpl grupoRepository = new GrupoRepositoryImpl();
     AproveitamentoRepositoryImpl aproveitamentoRepository = new AproveitamentoRepositoryImpl();
     AuthService authService = new AuthService(usuarioRepository);
     UsuarioService usuarioService = new UsuarioService(usuarioRepository);
+    GrupoService grupoService = new GrupoService(grupoRepository);
     OportunidadeService oportunidadeService = new OportunidadeService(oportunidadeRepository);
     AproveitamentoService aproveitamentoService = new AproveitamentoService(aproveitamentoRepository);
     InscricaoServico inscricaoServico = new InscricaoServico(inscricoesRepository);
@@ -30,17 +29,15 @@ void main(String[] args) {
             "PPC 2023"
     );
 
-    // Cadastro de Discente
     Discente discente = usuarioService.cadastrarDiscente(
-            "João Silva",
-            "joao",
+            "Perla Sousa",
+            "perla@",
             "senha",
             "2023001234",
             3,
             cursoComputacao
     );
 
-    // Cadastro de Discente Diretor
     DiscenteDiretor discenteDiretor = usuarioService.cadastrarDiscenteDiretor(
             "David Martins",
             "dvd@",
@@ -52,14 +49,24 @@ void main(String[] args) {
             2
     );
 
-    // Cadastro de Docente
-    Docente docente = usuarioService.cadastrarDocente(
-            "Prof. Carlos",
-            "carlos",
+
+    Docente docente1 = usuarioService.cadastrarDocente(
+            "Prof. Dr. Geraldo",
+            "geraldo@",
             "senha",
             "SIAPE12345",
             "Departamento de Computação"
     );
+
+    Docente docente2 = usuarioService.cadastrarDocente(
+            "Prof. Dr. Luis Rivero",
+            "luisrivero@",
+            "senha",
+            "SIAPE12325",
+            "Departamento de Computação"
+    );
+    //--------------------------------------------------------------------------------
+
 
     Scanner scanner = new Scanner(System.in);
     do {
@@ -75,7 +82,7 @@ void main(String[] args) {
             case "1":
                 try {
                     Login(authService);
-                    TelaPrincipal(authService, oportunidadeService, aproveitamentoService);
+                    TelaPrincipal(authService, oportunidadeService, aproveitamentoService, grupoService, inscricaoServico);
                 } catch (RuntimeException e) {
                     IO.println("Erro no login: " + e.getMessage());
                 }
@@ -169,17 +176,16 @@ void main(String[] args) {
         return authService.getUsuarioLogado();
     }
 
-    public void TelaPrincipal(AuthService authService, OportunidadeService oportunidadeService, AproveitamentoService aproveitamentoService){
+    public void TelaPrincipal(AuthService authService, OportunidadeService oportunidadeService, AproveitamentoService aproveitamentoService, GrupoService grupoService, InscricaoServico inscricaoServico){
         Usuario usuario = authService.getUsuarioLogado();
         switch (usuario){
-            case DiscenteDiretor dd:
-                IO.println("sou discente diretor");
-                Oportunidade oportunidade1 = oportunidadeService.criarOportunidade("Vaga marketing DA", "Disponivel agora", TipoOportunidade.EVENTO, Modalidade.PRESENCIAL, 24, 10, usuario);
-                TelaDiscenteDiretor.mostarTela(oportunidadeService, aproveitamentoService, dd);
+            case DiscenteDiretor discenteDiretor:
+                IO.println("i'm discente diretor");
+                TelaDiscenteDiretor.mostarTela(oportunidadeService, aproveitamentoService, inscricaoServico, discenteDiretor);
                 break;
-            case Discente d:
-                IO.println("soi discente");
-                TelaDiscente.mostarTela(oportunidadeService, aproveitamentoService, d);
+            case Discente discente:
+                IO.println("soy discente");
+                TelaDiscente.mostarTela(oportunidadeService, aproveitamentoService, inscricaoServico, discente);
                 break;
             case Docente docente:
                 IO.println("私は　docente");

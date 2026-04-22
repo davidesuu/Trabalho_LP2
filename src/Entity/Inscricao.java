@@ -52,6 +52,23 @@ public class Inscricao {
         return id;
     }
 
+    public Discente getDiscente() {
+        return discente;
+    }
+
+    public void setDiscente(Discente discente) {
+        this.discente = discente;
+    }
+
+
+    public void aprovar(){
+        this.status = Status.APROVADO;
+    }
+
+    public void rejeitar(){
+        this.status = Status.REJEITADO;
+    }
+
     public LocalDate getCreated_at() {
         return created_at;
     }

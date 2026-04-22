@@ -1,10 +1,13 @@
 package Telas;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import Entity.*;
 import Service.AproveitamentoService;
+import Service.GrupoService;
+import Service.InscricaoServico;
 import Service.OportunidadeService;
 import Enum.*;
 
@@ -25,7 +28,8 @@ public class TelaDocente {
             IO.println("2 - Verificar novos planos de Atividades");
             IO.println("3 - Verificar aproveitamentos");
             IO.println("4 - Verificar inscrição de discentes em Oportunidades");
-            IO.println("5 - Sair");
+            IO.println("5 - Verificar Grupos");
+            IO.println("6 - Sair");
 
             try {
                 opt = Integer.parseInt(scanner.nextLine());
@@ -50,10 +54,14 @@ public class TelaDocente {
                 case 5:
                     verificarGruposTela(grupoService, scanner, docente);
                     break;
+                case 6:
+                    IO.print("Saindo...");
+                    break;
                 default:
                     IO.println("Opção Inválida.");
+                    break;
             }
-        } while (opt != 5);
+        } while (opt != 6);
     }
 
     static void TelaCriarOportunidade(OportunidadeService oportunidadeService,
@@ -229,4 +237,126 @@ public class TelaDocente {
                 break;
         }
     }
+
+    static void verificarGruposTela(GrupoService grupoService, Scanner scanner, Docente docente){
+        int opt = 0;
+        do {
+            IO.println("Escolha uma opção: ");
+            IO.println("1 - Ver Grupos");
+            IO.println("2 - Criar um novo Grupo");
+            IO.println("3 - Sair");
+            try {
+                opt = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                IO.println("Opção inválida.");
+                continue;
+            }
+            switch (opt){
+                case 1:
+                    verGruposTelas(grupoService, docente);
+                    break;
+                case 2:
+                    criarGruposTela(grupoService, scanner, docente);
+                    break;
+                case 3:
+                    IO.println("Saindo...");
+                    break;
+            }
+        }while (opt != 3);
     }
+
+    static void verGruposTelas(GrupoService grupoService, Docente docente){
+        List<Grupo> grupos = grupoService.listarPorDocente(docente);
+
+        if (grupos.isEmpty()) {
+            IO.println("Você não possui solicitações.");
+            return;
+        }
+
+        IO.println("\nMEUS GRUPOS");
+        grupos.forEach(g -> {
+            IO.println("─────────────────────────────");
+            IO.println("ID: "         + g.getId());
+            IO.println("Nome: "  + g.getNome());
+            IO.println("Descrição: "+ g.getDescricao());
+            IO.println("Tipo: "      + g.getTipo());
+        });
+        IO.println("─────────────────────────────");
+    }
+
+    static void criarGruposTela(GrupoService grupoService, Scanner scanner, Docente docente){
+        IO.println("Nome: ");
+        String nome = scanner.nextLine();
+        IO.println("Tipo: ");
+        String tipo = scanner.nextLine();
+        IO.println("Email: ");
+        String email = scanner.nextLine();
+        IO.println("Descricao: ");
+        String descricao = scanner.nextLine();
+
+        try {
+            grupoService.criarGrupo(
+                    nome,
+                    tipo,
+                    email,
+                    descricao,
+                    docente
+            );
+            IO.println("Grupo criado com sucesso! Aguardando avaliação.");
+        } catch (RuntimeException e) {
+            IO.println("Erro ao criar grupo");
+        }
+    }
+
+    static void verificarInscricoes(InscricaoServico inscricaoServico, Scanner scanner){
+        List<Inscricao> inscricoes = inscricaoServico.listarPendente();
+
+                inscricoes.forEach(i -> {
+                    IO.println("─────────────────────────────");
+                    IO.println("ID: "            + i.getId());
+                    IO.println("Discente: "      + i.getDiscente());
+                    IO.println("Oportunidade: "  + i.getOportunidade());
+                    IO.println("Status: "        + i.getStatus());
+                    IO.println("Motivação: "     + i.getMotivacao());
+
+                });
+        IO.println("─────────────────────────────");
+        long id;
+        try{
+            id = Long.parseLong(scanner.nextLine());
+        }catch (NumberFormatException e){
+            IO.println("ID invalido");
+            return;
+        }
+        if (id == 0) return;
+
+        IO.println("1 - Aprovar");
+        IO.println("2 - Rejeitar");
+        IO.println("0 - Voltar");
+        int opc;
+        try {
+            opc = Integer.parseInt(scanner.nextLine()); // ← mesmo padrão
+        } catch (NumberFormatException e) {
+            IO.println("Opção inválida.");
+            return;
+        }
+        switch (opc){
+            case 1:
+                inscricaoServico.aprovar(id);
+                IO.println("Inscrição aprovado com sucesso!");
+                break;
+            case 2:
+                inscricaoServico.rejeitar(id);
+                IO.println("Inscrição rejeitada com sucesso!");
+                break;
+            case 3:
+                IO.println("Voltando...");
+                break;
+            default:
+                IO.println("Opção invalida");
+                break;
+        };
+
+
+    }
+}

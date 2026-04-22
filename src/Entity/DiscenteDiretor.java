@@ -7,14 +7,13 @@ import Enum.Modalidade;
 import java.time.LocalDate;
 
 public class DiscenteDiretor extends Discente {
-    //private Grupo grupo;
+    private Grupo grupo;
     private String cargo;
     private LocalDate data_inicio;
     private LocalDate data_fim;
 
     public DiscenteDiretor(String nome, String email, String senha, String matricula,
-                           Integer semestre, Curso curso, String cargo, Integer duracao) {
-        //Grupo grupo
+                           Integer semestre, Curso curso, String cargo, Integer duracao){
         super(nome, email, senha, matricula, semestre, curso);
         this.cargo = cargo;
         this.data_inicio = LocalDate.now();

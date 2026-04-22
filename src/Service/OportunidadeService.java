@@ -1,5 +1,6 @@
 package Service;
 import Entity.Docente;
+import Entity.Inscricao;
 import Entity.Usuario;
 import Enum.Status; //coment 16: Nao precisaria fazer isso
 import Enum.TipoOportunidade;
@@ -27,6 +28,10 @@ public class OportunidadeService {
         Oportunidade o = repository.buscaPorId(id);
         o.rejeitar(docente);
         //falta tbm a verificao do status e etc
+    }
+
+    public Oportunidade buscar(Long id){
+        return repository.buscaPorId(id);
     }
 
     public List<Oportunidade> listarPublicadas(){

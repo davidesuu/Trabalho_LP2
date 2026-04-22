@@ -56,15 +56,4 @@ public class UsuarioService {
         return docente;
     }
 
-    public void selecionarOportunidade(OportunidadeRepositoryImpl repository, InscricoesRepositoryImpl inscricoes, Discente discente){
-        //tirar o inscricaoRepositoryImpl depois e usar o service
-        repository.mostrarOportunidades();  // essa funcao nao faz sentido aqui
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Selecione o id da oportunidade: ");
-        Long s = scanner.nextLong();
-        Oportunidade c = repository.buscaPorId(s);
-        Inscricao inscricao = new Inscricao(c, discente, Status.PENDENTE, "motivacao", LocalDate.now());
-        inscricoes.salvar(inscricao);
-    }
 }

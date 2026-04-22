@@ -1,6 +1,7 @@
 package Entity;
 
 import Enum.*;
+import Repository.InscricaoRepository;
 
 public class Discente extends Usuario{
     private String matricula;
@@ -30,10 +31,17 @@ public class Discente extends Usuario{
     @Override
     public String toString() {
         return "Matricula: " + matricula + "\n" +
+                "Nome: " + nome + "\n" +
                 "Semestre: " + semestre + "\n";
+    }
+
+    public Inscricao criarInscricao(Oportunidade oportunidade, Discente discente, String motivacao){
+        return new Inscricao(oportunidade, discente, motivacao);
     }
 
     public Aproveitamento criarAproveitamento(Discente discente, int horas, String descricao, String instituicao, String certificado_path){
         return new Aproveitamento(discente, horas, descricao, instituicao, certificado_path);
     }
+
+
 }
