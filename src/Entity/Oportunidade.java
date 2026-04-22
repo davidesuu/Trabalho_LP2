@@ -54,12 +54,21 @@ public class Oportunidade {
         return status;
     }
 
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public Modalidade getModalidade() {
+        return modalidade;
+    }
+
     public void publicar(Docente docente){
         this.status = Status.PUBLICADA;
         this.responsavel = docente;
     }
 
-    public void rejeitar(){
+    public void rejeitar(Docente docente){
+        this.responsavel = docente;
         this.status = Status.REJEITADO;
     }
     @Override

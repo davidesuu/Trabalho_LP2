@@ -6,14 +6,15 @@ import java.time.LocalDate;
 
 public class Inscricao {
     private Oportunidade oportunidade;
-    //Discente
+    private Discente discente;
     private Status status;
     private String motivacao;
     private LocalDate created_at;
     private Long id;
 
-    public Inscricao(Oportunidade oportunidade, Status status, String motivacao, LocalDate created_at) {
+    public Inscricao(Oportunidade oportunidade, Discente discente, Status status, String motivacao, LocalDate created_at) {
         this.oportunidade = oportunidade;
+        this.discente = discente;
         this.status = status;
         this.motivacao = motivacao;
     }

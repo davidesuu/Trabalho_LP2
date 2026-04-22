@@ -1,15 +1,16 @@
 import Entity.*;
+import Repository.impl.AproveitamentoRepositoryImpl;
 import Repository.impl.InscricoesRepositoryImpl;
 import Repository.impl.OportunidadeRepositoryImpl;
 import Repository.impl.UsuarioRepositoryImpl;
-import Service.OportunidadeService;
+import Service.*;
 import Enum.TipoOportunidade;
 import Enum.Modalidade;
-import Service.AuthService;
-import Service.CertificadoService;
-import Service.UsuarioService;
+import Telas.TelaDiscente;
+import Telas.TelaDiscenteDiretor;
+import Telas.TelaDocente;
 
-void main() {
+void main(String[] args) {
 
 
 
@@ -21,14 +22,81 @@ void main() {
     OportunidadeRepositoryImpl oportunidadeRepository = new OportunidadeRepositoryImpl();
     InscricoesRepositoryImpl inscricoesRepository = new InscricoesRepositoryImpl();
     UsuarioRepositoryImpl usuarioRepository = new UsuarioRepositoryImpl();
+    AproveitamentoRepositoryImpl aproveitamentoRepository = new AproveitamentoRepositoryImpl();
     AuthService authService = new AuthService(usuarioRepository);
     UsuarioService usuarioService = new UsuarioService(usuarioRepository);
     OportunidadeService oportunidadeService = new OportunidadeService(oportunidadeRepository);
+    AproveitamentoService aproveitamentoService = new AproveitamentoService(aproveitamentoRepository);
     //
-    Cadastro(usuarioService);
+
+    // Criando um curso
+    Curso cursoComputacao = new Curso(
+            "Ciência da Computação",
+            123,
+            3200,
+            "PPC 2023"
+    );
+
+    // Cadastro de Discente
+    Discente discente = usuarioService.cadastrarDiscente(
+            "João Silva",
+            "joao",
+            "senha",
+            "2023001234",
+            3,
+            cursoComputacao
+    );
+
+    // Cadastro de Discente Diretor
+    DiscenteDiretor discenteDiretor = usuarioService.cadastrarDiscenteDiretor(
+            "Maria Souza",
+            "maria",
+            "senha",
+            "2022005678",
+            5,
+            cursoComputacao,
+            "Diretora de Eventos",
+            2
+    );
+
+    // Cadastro de Docente
+    Docente docente = usuarioService.cadastrarDocente(
+            "Prof. Carlos",
+            "carlos",
+            "senha",
+            "SIAPE12345",
+            "Departamento de Computação"
+    );
+
+    Scanner scanner = new Scanner(System.in);
     do {
-        Usuario usuario = Login(authService);
-        TelaPrincipal(usuario, oportunidadeService);
+        IO.println("\n=== BEM VINDO ===");
+        IO.println("1 - Login");
+        IO.println("2 - Cadastro");
+        IO.println("0 - Sair");
+        IO.println("Opção: ");
+
+        String opc = scanner.nextLine();
+
+        switch (opc) {
+            case "1":
+                try {
+                    Login(authService);
+                    TelaPrincipal(authService, oportunidadeService, aproveitamentoService);
+                } catch (RuntimeException e) {
+                    IO.println("Erro no login: " + e.getMessage());
+                }
+                break;
+            case "2":
+                Cadastro(usuarioService);
+                break;
+            case "0":
+                IO.println("Encerrando...");
+                return; // ← sai do main
+            default:
+                IO.println("Opção inválida.");
+        }
+
     } while (true);
     //ideia, usa o auth no login de todos, ai dependendo da escolha no switch no futuro, so fazer Usuario = new (escolha do switch)
     //como fazer isso? ainda nao sei
@@ -36,22 +104,22 @@ void main() {
 
 
 
-    Oportunidade oportunidade1 = oportunidadeService.criarOportunidade("Vaga marketing DA", "Disponivel agora", TipoOportunidade.EVENTO, Modalidade.PRESENCIAL, 24, 10, usuario);
-    Oportunidade oportunidade2 = oportunidadeService.criarOportunidade("Vaga PETCOMP", "Disponivel agora", TipoOportunidade.PROJETO, Modalidade.PRESENCIAL, 64, 12, usuario);
+    //Oportunidade oportunidade1 = oportunidadeService.criarOportunidade("Vaga marketing DA", "Disponivel agora", TipoOportunidade.EVENTO, Modalidade.PRESENCIAL, 24, 10, usuario);
+    //Oportunidade oportunidade2 = oportunidadeService.criarOportunidade("Vaga PETCOMP", "Disponivel agora", TipoOportunidade.PROJETO, Modalidade.PRESENCIAL, 64, 12, usuario);
     //Criar oportunidade ta discentediretor, ve la depois, pois o docente tbm pode, pode fazer um switch com docente aprovado e discente diretor pendendte
 
 
-    IO.println("Oportunidade Criada " + oportunidade1);   //ainda nao cadastrada
-    IO.println("Oportunidade Criada " + oportunidade2);
+    //IO.println("Oportunidade Criada " + oportunidade1);   //ainda nao cadastrada
+    //IO.println("Oportunidade Criada " + oportunidade2);
     //oportunidadeService.publicarOpurtunidade(1L, docente);
     //oportunidadeService.publicarOpurtunidade(2L, docente);
-    Curso curso = new Curso("ccomp", 123, 60, "2");
+    //Curso curso = new Curso("ccomp", 123, 60, "2");
     //Usuario sam = new Discente("nome", "email", "senha", "papel",
     //        "matricula", 3, curso);
-    String text = "https://example.com";
-    String output = "qrcode.png";
+    //String text = "https://example.com";
+    //String output = "qrcode.png";
 
-    CertificadoService.generate("oiii.png");
+    //CertificadoService.generate("oiii.png");
 
     }
 
@@ -125,21 +193,29 @@ void main() {
         return authService.getUsuarioLogado();
     }
 
-    public void TelaPrincipal(Usuario usuario, OportunidadeService oportunidadeService){
+    public void TelaPrincipal(AuthService authService, OportunidadeService oportunidadeService, AproveitamentoService aproveitamentoService){
+        Usuario usuario = authService.getUsuarioLogado();
         switch (usuario){
             case DiscenteDiretor dd:
                 IO.println("sou discente diretor");
                 Oportunidade oportunidade1 = oportunidadeService.criarOportunidade("Vaga marketing DA", "Disponivel agora", TipoOportunidade.EVENTO, Modalidade.PRESENCIAL, 24, 10, usuario);
+                TelaDiscenteDiretor.mostarTela(oportunidadeService, aproveitamentoService, dd);
                 break;
             case Discente d:
                 IO.println("soi discente");
+                TelaDiscente.mostarTela(oportunidadeService, aproveitamentoService, d);
                 break;
             case Docente doo:
                 IO.println("Soi docente");
+                TelaDocente.mostrarTela(oportunidadeService, aproveitamentoService, doo);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + usuario);
+
         }
+        authService.logout();
+        IO.println("Sessão Encerrada. Voltando...");
+        return;
     }
 
     public void VerOportunidades(OportunidadeRepositoryImpl oportunidadeRepository){

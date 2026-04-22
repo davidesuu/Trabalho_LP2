@@ -12,4 +12,5 @@ public class InscricaoServico {
     public void rejeitar(Inscricao inscricao){
         inscricao.setStatus(Status.REJEITADO);
     }
+
 }

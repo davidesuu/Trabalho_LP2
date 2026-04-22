@@ -46,6 +46,9 @@ public class AuthService {
     }
 
     public Usuario getUsuarioLogado() {
+        if (usuarioLogado == null) {
+            throw new IllegalStateException("Nenhum usuário logado.");
+        }
         return usuarioLogado;
     }
 }

@@ -1,5 +1,7 @@
 package Entity;
 
+import Enum.*;
+
 public class Discente extends Usuario{
     private String matricula;
     private Integer semestre;
@@ -29,5 +31,9 @@ public class Discente extends Usuario{
     public String toString() {
         return "Matricula: " + matricula + "\n" +
                 "Semestre: " + semestre + "\n";
+    }
+
+    public Aproveitamento criarAproveitamento(Discente discente, int horas, String descricao, String instituicao, String certificado_path){
+        return new Aproveitamento(discente, horas, descricao, instituicao, certificado_path);
     }
 }
