@@ -93,7 +93,7 @@ void main(String[] args) {
                 break;
             case "3":
                 IO.println("Gerando QrCode...");
-                String text = "https://example.com";
+                String text = "certificado";
                 String output = "qrcode.png";
 
                 CertificadoService.generate("oiii.png");
