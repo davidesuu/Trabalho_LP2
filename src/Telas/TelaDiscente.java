@@ -55,7 +55,7 @@ public class TelaDiscente {
 
         oportunidades.forEach(o ->
                 IO.println("[" + o.getId() + "] " + o.getTitulo() + " | " + o.getTipo()));
-        IO.println("--------------------------");
+        IO.println("─────────────────────────────");
 
         IO.println("Digite o ID para se inscrever e 0 para voltar");
         int id = scanner.nextInt();
@@ -69,7 +69,10 @@ public class TelaDiscente {
     static void AproveitamentoTela(AproveitamentoService aproveitamentoService, Scanner scanner, Discente discente){
         int opt = 0;
         do {
-            IO.println("Aperte 1 para ver aproveitamentos ou 2 para solicitar aproveitamento e 3 pra sair");
+            IO.println("Escolha uma opção: ");
+            IO.println("1 - Ver aproveitamentos");
+            IO.println("2 - Solicitar aproveitamento");
+            IO.println("3 - Sair");
             try {
                 opt = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
@@ -98,7 +101,7 @@ public class TelaDiscente {
             return;
         }
 
-        IO.println("\n=== MINHAS SOLICITAÇÕES ===");
+        IO.println("\nMINHAS SOLICITAÇÕES");
         solicitacoes.forEach(a -> {
             IO.println("─────────────────────────────");
             IO.println("ID: "         + a.getId());

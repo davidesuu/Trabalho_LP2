@@ -12,7 +12,7 @@ import javax.print.Doc;
 
 
 public class TelaDocente {
-    public static void mostrarTela (OportunidadeService oportunidadeService, AproveitamentoService aproveitamentoService, Docente docente){
+    public static void mostrarTela (OportunidadeService oportunidadeService, AproveitamentoService aproveitamentoService, GrupoService grupoService, InscricaoServico inscricaoServico, Docente docente){
         int opt = 0;
 
         Scanner scanner = new Scanner(System.in);
@@ -42,14 +42,13 @@ public class TelaDocente {
                     verOportunidadesTela(oportunidadeService, scanner, docente); // Feito
                     break;
                 case 3:
-                    IO.println("Verificar aproveitamentos."); //        //Feito
                     verificarAproveitamentosTela(aproveitamentoService, scanner, docente);
                     break;
                 case 4:
-                    IO.println("Verificar Inscrições");   //Falta concluit o do dd e discente;
+                    verificarInscricoes(inscricaoServico, scanner);  //Falta concluir o do dd e discente;
                     break;
                 case 5:
-                    IO.println("Saindo...");
+                    verificarGruposTela(grupoService, scanner, docente);
                     break;
                 default:
                     IO.println("Opção Inválida.");
@@ -60,7 +59,7 @@ public class TelaDocente {
     static void TelaCriarOportunidade(OportunidadeService oportunidadeService,
                                       Scanner scanner,
                                       Docente docente) {
-        IO.println("\n=== CRIAR OPORTUNIDADE ===");
+        IO.println("\nCRIAR OPORTUNIDADE");
 
         IO.println("Título: ");
         String titulo = scanner.nextLine();
@@ -138,7 +137,7 @@ public class TelaDocente {
 
         oportunidades.forEach(o ->
                 IO.println("[" + o.getId() + "] " + o.getTitulo() + " | " + o.getTipo()));
-        IO.println("--------------------------");
+        IO.println("─────────────────────────────");
         IO.println("Digite o ID da oportunidade (0 para voltar): ");
 
         Long id;
@@ -192,7 +191,7 @@ public class TelaDocente {
 
         aproveitamentos.forEach(a ->
                 IO.println("[" + a.getId() + "] " + a.getDescricao() + " | " + a.getDiscente()));
-        IO.println("--------------------------");
+        IO.println("─────────────────────────────");
         IO.println("Digite o ID da oportunidade (0 para voltar): ");
         long id;
         try{

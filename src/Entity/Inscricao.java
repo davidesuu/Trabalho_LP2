@@ -12,11 +12,12 @@ public class Inscricao {
     private LocalDate created_at;
     private Long id;
 
-    public Inscricao(Oportunidade oportunidade, Discente discente, Status status, String motivacao, LocalDate created_at) {
+    public Inscricao(Oportunidade oportunidade, Discente discente, String motivacao) {
         this.oportunidade = oportunidade;
         this.discente = discente;
-        this.status = status;
+        this.status = status.PENDENTE;
         this.motivacao = motivacao;
+        this.created_at = LocalDate.now();
     }
 
     public Oportunidade getOportunidade() {

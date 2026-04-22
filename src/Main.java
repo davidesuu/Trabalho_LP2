@@ -12,13 +12,6 @@ import Telas.TelaDocente;
 
 void main(String[] args) {
 
-
-
-
-
-
-
-    //manter até 25
     OportunidadeRepositoryImpl oportunidadeRepository = new OportunidadeRepositoryImpl();
     InscricoesRepositoryImpl inscricoesRepository = new InscricoesRepositoryImpl();
     UsuarioRepositoryImpl usuarioRepository = new UsuarioRepositoryImpl();
@@ -27,9 +20,9 @@ void main(String[] args) {
     UsuarioService usuarioService = new UsuarioService(usuarioRepository);
     OportunidadeService oportunidadeService = new OportunidadeService(oportunidadeRepository);
     AproveitamentoService aproveitamentoService = new AproveitamentoService(aproveitamentoRepository);
-    //
+    InscricaoServico inscricaoServico = new InscricaoServico(inscricoesRepository);
 
-    // Criando um curso
+// -------------------------------------------Usuarios de teste----------------------------------------------
     Curso cursoComputacao = new Curso(
             "Ciência da Computação",
             123,
@@ -49,8 +42,8 @@ void main(String[] args) {
 
     // Cadastro de Discente Diretor
     DiscenteDiretor discenteDiretor = usuarioService.cadastrarDiscenteDiretor(
-            "Maria Souza",
-            "maria",
+            "David Martins",
+            "dvd@",
             "senha",
             "2022005678",
             5,
@@ -70,7 +63,7 @@ void main(String[] args) {
 
     Scanner scanner = new Scanner(System.in);
     do {
-        IO.println("\n=== BEM VINDO ===");
+        IO.println("\nBEM VINDO");
         IO.println("1 - Login");
         IO.println("2 - Cadastro");
         IO.println("0 - Sair");
@@ -92,30 +85,13 @@ void main(String[] args) {
                 break;
             case "0":
                 IO.println("Encerrando...");
-                return; // ← sai do main
+                return; 
             default:
                 IO.println("Opção inválida.");
         }
 
     } while (true);
-    //ideia, usa o auth no login de todos, ai dependendo da escolha no switch no futuro, so fazer Usuario = new (escolha do switch)
-    //como fazer isso? ainda nao sei
-    //Docente docente = new Docente("Geraldo", "geraldobraz@", "senha", "sda", "2131", "dmat");
-
-
-
-    //Oportunidade oportunidade1 = oportunidadeService.criarOportunidade("Vaga marketing DA", "Disponivel agora", TipoOportunidade.EVENTO, Modalidade.PRESENCIAL, 24, 10, usuario);
-    //Oportunidade oportunidade2 = oportunidadeService.criarOportunidade("Vaga PETCOMP", "Disponivel agora", TipoOportunidade.PROJETO, Modalidade.PRESENCIAL, 64, 12, usuario);
-    //Criar oportunidade ta discentediretor, ve la depois, pois o docente tbm pode, pode fazer um switch com docente aprovado e discente diretor pendendte
-
-
-    //IO.println("Oportunidade Criada " + oportunidade1);   //ainda nao cadastrada
-    //IO.println("Oportunidade Criada " + oportunidade2);
-    //oportunidadeService.publicarOpurtunidade(1L, docente);
-    //oportunidadeService.publicarOpurtunidade(2L, docente);
-    //Curso curso = new Curso("ccomp", 123, 60, "2");
-    //Usuario sam = new Discente("nome", "email", "senha", "papel",
-    //        "matricula", 3, curso);
+    
     //String text = "https://example.com";
     //String output = "qrcode.png";
 
@@ -125,7 +101,7 @@ void main(String[] args) {
 
     public void Cadastro(UsuarioService usuarioService){
         Curso curso = new Curso("ccomp", 123, 60, "2");
-        IO.println("Cadastro \n ____________ \n");
+        IO.println("Cadastro \n____________ \n");
         String opc;
         String nome, email, senha;
         Scanner scanner = new Scanner(System.in);
@@ -142,9 +118,9 @@ void main(String[] args) {
             case "Discente":
                 String matricula1;
                 Integer semestre1;
-                IO.println("Matricula: \n");
+                IO.println("Matricula: ");
                 matricula1 = scanner.nextLine();
-                IO.println("Semestre: \n");
+                IO.println("Semestre: ");
                 semestre1 = scanner.nextInt();
                 scanner.nextLine();
                 Discente discente = usuarioService.cadastrarDiscente(nome, email, senha, matricula1, semestre1, curso);
@@ -152,7 +128,7 @@ void main(String[] args) {
             case "DiscDiretor":
                 String matricula2;
                 Integer semestre2;
-                //Grupo grupo;
+                Grupo grupo;
                 String cargo;
                 Integer duracao;
                 IO.println("Matricula: ");
@@ -170,9 +146,9 @@ void main(String[] args) {
                 break;
             case "Docente":
                 String siape, departamento;
-                IO.println("Siape: \n");
+                IO.println("Siape: ");
                 siape = scanner.nextLine();
-                IO.println("Departamento: \n");
+                IO.println("Departamento: ");
                 departamento = scanner.nextLine();
                 Docente docente = usuarioService.cadastrarDocente(nome, email, senha, siape, departamento);
                 break;
@@ -205,9 +181,9 @@ void main(String[] args) {
                 IO.println("soi discente");
                 TelaDiscente.mostarTela(oportunidadeService, aproveitamentoService, d);
                 break;
-            case Docente doo:
-                IO.println("Soi docente");
-                TelaDocente.mostrarTela(oportunidadeService, aproveitamentoService, doo);
+            case Docente docente:
+                IO.println("私は　docente");
+                TelaDocente.mostrarTela(oportunidadeService, aproveitamentoService, grupoService, inscricaoServico, docente);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + usuario);
@@ -217,20 +193,3 @@ void main(String[] args) {
         IO.println("Sessão Encerrada. Voltando...");
         return;
     }
-
-    public void VerOportunidades(OportunidadeRepositoryImpl oportunidadeRepository){
-        oportunidadeRepository.mostrarOportunidades();
-    }
-
-//public void InscreverOportunidade(Usuario usuario, UsuarioService usuarioService,OportunidadeRepositoryImpl oportunidadeRepository){
-//    usuarioService.selecionarOportunidade();
-//}
-
-
-//discente: ver oportunidades, inscrever em oportunidade, ver aproveitamento,
-// validar certificado, ver certificados
-
-//discentediretor: ver oportunidades, inscrever em oportunidade, ver aproveitamento,
-// validar certificado, ver certificados, criar oportunidade
-
-//docente: criar oportunidade, aprovar, rejeitar

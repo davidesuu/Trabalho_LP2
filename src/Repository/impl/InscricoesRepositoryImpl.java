@@ -1,5 +1,6 @@
 package Repository.impl;
-
+import Entity.*;
+import Entity.Grupo;
 import Entity.Inscricao;
 import Entity.Oportunidade;
 import Repository.InscricaoRepository;
@@ -25,7 +26,9 @@ public class InscricoesRepositoryImpl implements InscricaoRepository {
     }
 
     //buscar por discente
-
+    public List<Inscricao> listarPorDiscente(Discente discente){
+        return banco.values().stream().filter(i -> i.getDiscente().equals(discente)).collect(Collectors.toList());
+    }
 
     @Override
     public List<Inscricao> buscarPorOportunidade(Oportunidade oportunidade) {
