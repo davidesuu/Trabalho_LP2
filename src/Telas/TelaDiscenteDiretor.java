@@ -56,6 +56,7 @@ public class TelaDiscenteDiretor {
         //Podia fazer so uma tela que cada Tela depois herda
         if (oportunidades.isEmpty()) {
             IO.println("Nenhuma oportunidade disponivel");
+            return;
         }
 
         oportunidades.forEach(o ->

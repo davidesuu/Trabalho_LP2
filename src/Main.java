@@ -73,6 +73,7 @@ void main(String[] args) {
         IO.println("\nBEM VINDO");
         IO.println("1 - Login");
         IO.println("2 - Cadastro");
+        IO.println("3 - Menu secreto");
         IO.println("0 - Sair");
         IO.println("Opção: ");
 
@@ -89,6 +90,13 @@ void main(String[] args) {
                 break;
             case "2":
                 Cadastro(usuarioService);
+                break;
+            case "3":
+                IO.println("Gerando QrCode...");
+                String text = "https://example.com";
+                String output = "qrcode.png";
+
+                CertificadoService.generate("oiii.png");
                 break;
             case "0":
                 IO.println("Encerrando...");
