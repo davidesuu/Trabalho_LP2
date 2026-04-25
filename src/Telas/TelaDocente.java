@@ -46,13 +46,13 @@ public class TelaDocente {
                     verOportunidadesTela(oportunidadeService, scanner, docente); // Feito
                     break;
                 case 3:
-                    verificarAproveitamentosTela(aproveitamentoService, scanner, docente);
+                    verificarAproveitamentosTela(aproveitamentoService, scanner, docente); //Feito
                     break;
                 case 4:
-                    verificarInscricoes(inscricaoServico, scanner);  //Falta concluir o do dd e discente;
+                    verificarInscricoes(inscricaoServico, scanner);  //Feito
                     break;
                 case 5:
-                    verificarGruposTela(grupoService, scanner, docente);
+                    verificarGruposTela(grupoService, scanner, docente); //Feito
                     break;
                 case 6:
                     IO.print("Saindo...");

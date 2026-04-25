@@ -1,15 +1,15 @@
 package Entity;
 import Enum.Status;
 public class Aproveitamento {
-    Discente discente;
-    String descricao;
-    String instituicao;
-    int horas;
-    Long id;
-    Status status;
-    String certificado_path;
-    Usuario avaliador;
-    String motivo_rejeicao;
+    private Discente discente;
+    private String descricao;
+    private String instituicao;
+    private int horas;
+    private Long id;
+    private Status status;
+    private String certificado_path;
+    private Usuario avaliador;
+    private String motivo_rejeicao;
 
     public Aproveitamento(Discente discente, int horas, String descricao, String instituicao, String certificado_path) {
         this.discente = discente;
