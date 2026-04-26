@@ -1,6 +1,7 @@
 package Entity;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import Enum.StatusAssinatura;
 
@@ -21,14 +22,13 @@ public class Certificado {
         this.status_assinatura = status_assinatura;
     }
 
-    public Certificado (String uuid_hash, Oportunidade oportunidade, Discente discente,
-                        Integer horas, String path){
-        this.uuid_hash = uuid_hash;
+    public Certificado (Oportunidade oportunidade, Discente discente,
+                        Integer hora){
+        this.uuid_hash = UUID.randomUUID().toString();
         this.oportunidade = oportunidade;
         this.horas = horas;
-        this.path = path;
-        this.status_assinatura = status_assinatura.PENDENTE;
-        this.data_emissao = LocalDate.now();
+        this.status_assinatura = status_assinatura.PENDENTE;  // depois faz uma funçao pro docente aprovar
+        this.data_emissao = LocalDate.now();                  // Tira isso. quando o docente aprovar, isso aqui acontece
         this.discente = discente;
     }
 

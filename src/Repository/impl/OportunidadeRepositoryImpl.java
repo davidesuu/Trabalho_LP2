@@ -27,12 +27,6 @@ public class OportunidadeRepositoryImpl implements OportunidadeRepository {
         return banco.values().stream().filter(o -> o.getStatus().equals(status)).collect(Collectors.toList());
     }
 
-    public void mostrarOportunidades(){
-        for (Oportunidade valor : banco.values()) {
-            IO.println(valor);
-        }
-    }
-
     @Override
     public List<Oportunidade> listarTodas(){
         return List.copyOf(banco.values());

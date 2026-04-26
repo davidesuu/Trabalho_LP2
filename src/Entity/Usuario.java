@@ -6,6 +6,7 @@ public class Usuario {
     protected String email;
     protected String senha;
     private boolean ativo;
+    private Long id;
 
     public Usuario(String nome, String email, String senha){
         this.nome = nome;
@@ -47,6 +48,14 @@ public class Usuario {
 
     public void setSenha(String nova_senha) {
         this.senha = nova_senha;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

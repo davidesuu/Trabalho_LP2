@@ -30,7 +30,8 @@ public class Oportunidade {
         this.carga_horaria = carga_horaria;
         this.vagas = vagas;
         this.status = Status.PENDENTE;  //Repensa melhor depois se ela ja e pendente no começo
-        this.inicio = LocalDate.now();
+        this.fim = fim;
+        this.inicio = inicio;
         this.autor = autor;
     }
 

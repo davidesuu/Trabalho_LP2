@@ -28,11 +28,6 @@ public class AproveitamentoRepositoryImpl implements AproveitamentoRepository {
         return banco.values().stream().filter(o -> o.getStatus().equals(status)).collect(Collectors.toList());
     }
 
-    public void mostrarAproveitamentos(){
-        for (Aproveitamento valor : banco.values()) {
-            IO.println(valor);
-        }
-    }
 
     @Override
     public List<Aproveitamento> listarPorDiscente(String matricula) {

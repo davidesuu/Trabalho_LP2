@@ -22,13 +22,17 @@ public class UsuarioService {
             throw new IllegalStateException("Email já cadastrado");
         }
 
-        if (usuarioRepository.buscarPorMatricula(matricula)){
+        if (usuarioRepository.buscarPorMatricula(matricula).isPresent()){
             throw new IllegalStateException();
         }
+
         Discente discente = new Discente(nome, email, senha, matricula, semestre, curso);
         usuarioRepository.salvar(discente);
         discente.setAtivo(true);
         return discente;
+    }
+    public Usuario getId(Long id){
+        return usuarioRepository.buscaPorId(id);
     }
 
     public DiscenteDiretor cadastrarDiscenteDiretor(String nome, String email, String senha,
@@ -37,7 +41,7 @@ public class UsuarioService {
             throw new IllegalStateException("Email já cadastrado");
         }
 
-        if (usuarioRepository.buscarPorMatricula(matricula)){
+        if (usuarioRepository.buscarPorMatricula(matricula).isPresent()){
             throw new IllegalStateException();
         }
         DiscenteDiretor discenteDiretor = new DiscenteDiretor(nome, email, senha, matricula, semestre, curso, cargo, duracao);
