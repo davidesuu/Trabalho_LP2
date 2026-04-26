@@ -1,5 +1,6 @@
 package Telas;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -29,7 +30,7 @@ public class TelaDocente {
             System.out.println("3 - Verificar aproveitamentos");
             System.out.println("4 - Verificar inscrição de discentes em Oportunidades");
             System.out.println("5 - Verificar Grupos");
-            System.out.println("6 - Sair");
+            System.out.println("0 - Sair");
 
             try {
                 opt = Integer.parseInt(scanner.nextLine());
@@ -54,14 +55,14 @@ public class TelaDocente {
                 case 5:
                     verificarGruposTela(grupoService, scanner, docente); //Feito
                     break;
-                case 6:
+                case 0:
                     System.out.print("Saindo...");
                     break;
                 default:
                     System.out.println("Opção Inválida.");
                     break;
             }
-        } while (opt != 6);
+        } while (opt != 0);
     }
 
     static void TelaCriarOportunidade(OportunidadeService oportunidadeService,
@@ -130,6 +131,8 @@ public class TelaDocente {
             System.out.println("Oportunidade criada com sucesso!");
         } catch (RuntimeException e) {
             System.out.println("Erro ao criar oportunidade: " + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -177,13 +180,15 @@ public class TelaDocente {
                     System.out.println("Oportunidade aprovada!");
                 } catch (RuntimeException e) {
                     System.out.println("Erro: " + e.getMessage());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 2:
                 try {
                     oportunidadeService.rejeitarOportunidade(id, docente);
                     System.out.println("Oportunidade rejeitada.");
-                } catch (RuntimeException e) {
+                } catch (RuntimeException | IOException e) {
                     System.out.println("Erro!");
                 }
                 break;

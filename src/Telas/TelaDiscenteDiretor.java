@@ -5,6 +5,8 @@ import Service.AproveitamentoService;
 import Service.InscricaoServico;
 import Service.OportunidadeService;
 import Enum.*;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,7 +22,7 @@ public class TelaDiscenteDiretor {
             System.out.println("2 - Ver solicitações");
             System.out.println("3 - Ver Certificados");
             System.out.println("4 - Nova Iniciativa");  //feito
-            System.out.println("5 - Sair");
+            System.out.println("0 - Sair");
             try {
                 opt = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
@@ -40,13 +42,13 @@ public class TelaDiscenteDiretor {
                 case 4:
                     TelaCriarOportunidade(oportunidadeService, scanner, diretor); //Feito
                     break;
-                case 5:
+                case 0:
                     System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida.");
             }
-        } while (opt != 5);
+        } while (opt != 0);
 
     }
 
@@ -148,6 +150,8 @@ public class TelaDiscenteDiretor {
             System.out.println("Oportunidade criada com sucesso! Aguardando aprovação do docente.");
         } catch (RuntimeException e) {
             System.out.println("Erro ao criar oportunidade");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

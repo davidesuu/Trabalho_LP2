@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 import Entity.*;
@@ -8,7 +9,7 @@ import Telas.*;
 import Enum.*;
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         //Repositorios
         OportunidadeRepositoryImpl oportunidadeRepository = new OportunidadeRepositoryImpl();
@@ -36,7 +37,7 @@ public class Main {
 
         usuarioService.cadastrarDocente("Prof. Geraldo", "geraldo@", "senha", "SIAPE123", "Comp");
 
-        Oportunidade oportunidade = oportunidadeService.criarOportunidade("titulo", "descriçao", TipoOportunidade.CURSO, Modalidade.HIBRIDO, 10, 10, usuarioService.getId(2L));
+        // Oportunidade oportunidade = oportunidadeService.criarOportunidade("titulo", "descriçao", TipoOportunidade.CURSO, Modalidade.HIBRIDO, 10, 10, usuarioService.getId(2L));
 
         Scanner scanner = new Scanner(System.in);
 
@@ -63,7 +64,7 @@ public class Main {
                     Cadastro(usuarioService);
                     break;
                 case "3":
-                    certificadoService.criarCertificado(oportunidade, (Discente) usuarioService.getId(2L), 1);
+                    // certificadoService.criarCertificado(oportunidade, (Discente) usuarioService.getId(2L), 1);
                     break;
                 case "0":
                     System.out.println("Encerrando...");

@@ -3,6 +3,7 @@ package Service;
 import Entity.Oportunidade;
 import Repository.impl.OportunidadeRepositoryImpl;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 public class DocenteService {
@@ -12,7 +13,7 @@ public class DocenteService {
         this.repository = repository;
     }
 
-    public void criarOportunidade(Oportunidade o){
+    public void criarOportunidade(Oportunidade o) throws IOException {
         repository.salvar(o);
     }
 

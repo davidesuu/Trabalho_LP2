@@ -1,0 +1,151 @@
+{
+  "1": {
+    "titulo": "titulo",
+    "descricao": "descriçao",
+    "id": 1,
+    "tipo": "CURSO",
+    "modalidade": "HIBRIDO",
+    "carga_horaria": 10,
+    "vagas": 10,
+    "status": "REJEITADO",
+    "autor": {
+      "nome": "David Martins",
+      "email": "dvd@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 2
+    },
+    "responsavel": {
+      "siape": "SIAPE123",
+      "departamento": "Comp",
+      "nome": "Prof. Geraldo",
+      "email": "geraldo@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 3
+    }
+  },
+  "2": {
+    "titulo": "agora vai",
+    "descricao": "eba",
+    "id": 2,
+    "tipo": "PROJETO",
+    "modalidade": "PRESENCIAL",
+    "carga_horaria": 123,
+    "vagas": 123,
+    "status": "PUBLICADA",
+    "autor": {
+      "nome": "David Martins",
+      "email": "dvd@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 2
+    },
+    "responsavel": {
+      "siape": "SIAPE123",
+      "departamento": "Comp",
+      "nome": "Prof. Geraldo",
+      "email": "geraldo@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 3
+    }
+  },
+  "3": {
+    "titulo": "oportunidade",
+    "descricao": "123",
+    "id": 3,
+    "tipo": "PROJETO",
+    "modalidade": "REMOTO",
+    "carga_horaria": 123,
+    "vagas": 123,
+    "status": "PUBLICADA",
+    "autor": {
+      "nome": "David Martins",
+      "email": "dvd@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 2
+    },
+    "responsavel": {
+      "siape": "SIAPE123",
+      "departamento": "Comp",
+      "nome": "Prof. Geraldo",
+      "email": "geraldo@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 3
+    }
+  },
+  "4": {
+    "titulo": "titulo",
+    "descricao": "descriçao",
+    "id": 4,
+    "tipo": "CURSO",
+    "modalidade": "HIBRIDO",
+    "carga_horaria": 10,
+    "vagas": 10,
+    "status": "PENDENTE",
+    "autor": {
+      "nome": "David Martins",
+      "email": "dvd@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 2
+    }
+  },
+  "5": {
+    "titulo": "agora que é pra ser a sexta",
+    "descricao": "essa é pra ser a sexta",
+    "id": 5,
+    "tipo": "PROJETO",
+    "modalidade": "PRESENCIAL",
+    "carga_horaria": 123,
+    "vagas": 123,
+    "status": "PUBLICADA",
+    "autor": {
+      "nome": "Prof. Geraldo",
+      "email": "geraldo@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 3
+    },
+    "responsavel": {
+      "siape": "SIAPE123",
+      "departamento": "Comp",
+      "nome": "Prof. Geraldo",
+      "email": "geraldo@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 3
+    }
+  },
+  "6": {
+    "titulo": "agora SIM é pra ser a sexta",
+    "descricao": "6",
+    "id": 6,
+    "tipo": "PROJETO",
+    "modalidade": "PRESENCIAL",
+    "carga_horaria": 1,
+    "vagas": 1,
+    "status": "PUBLICADA",
+    "autor": {
+      "siape": "SIAPE123",
+      "departamento": "Comp",
+      "nome": "Prof. Geraldo",
+      "email": "geraldo@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 3
+    },
+    "responsavel": {
+      "siape": "SIAPE123",
+      "departamento": "Comp",
+      "nome": "Prof. Geraldo",
+      "email": "geraldo@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 3
+    }
+  }
+}

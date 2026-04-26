@@ -2,12 +2,13 @@ package Repository;
 
 import Entity.Oportunidade;
 
+import java.io.IOException;
 import java.util.List;
 
 import Enum.Status;
 
 public interface OportunidadeRepository {
-    void salvar(Oportunidade o);
+    void salvar(Oportunidade o) throws IOException;
 
     public Oportunidade buscaPorId(Long id);
 

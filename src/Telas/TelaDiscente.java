@@ -25,7 +25,7 @@ public class TelaDiscente {
             System.out.println("1 - Se inscrever em uma oportunidade");
             System.out.println("2 - Ver inscrições");
             System.out.println("3 - Ver Certificados");
-            System.out.println("4 - Sair");
+            System.out.println("0 - Sair");
             try {
                 opt = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
@@ -45,11 +45,11 @@ public class TelaDiscente {
                 case 4:
                     System.out.println("Certificados");     //apenas esse faltando
                     break;
-                case 5:
+                case 0:
                     System.out.println("Saindo...");
                     break;
             }
-        }while(opt != 4);
+        } while(opt != 0);
 
     }
     static void verOportunidadesTela(OportunidadeService oportunidadeService, InscricaoServico inscricaoService, Scanner scanner, Discente discente){
