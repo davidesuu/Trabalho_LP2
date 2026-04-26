@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 import Entity.*;
+import Repository.CertificadoRepository;
 import Repository.impl.*;
 import Service.*;
 import Telas.*;

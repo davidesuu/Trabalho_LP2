@@ -13,6 +13,7 @@ public class Certificado {
     private Integer horas;
     private String path;
     private StatusAssinatura status_assinatura;
+    private Long id;
 
     public StatusAssinatura getStatus_assinatura() {
         return status_assinatura;
@@ -40,5 +41,21 @@ public class Certificado {
                 "Data de Emissao: " + data_emissao + "\n"+
                 "Horas: " + horas + "\n"+
                 "Status da Assinatura: " + status_assinatura;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId (Long id) {
+        this.id = id;
+    }
+
+    public String getUuid_hash() {
+        return uuid_hash;
+    }
+
+    public Discente getDiscente() {
+        return discente;
     }
 }

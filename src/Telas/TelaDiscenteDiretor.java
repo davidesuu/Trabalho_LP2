@@ -12,19 +12,19 @@ public class TelaDiscenteDiretor {
     public static void mostarTela(OportunidadeService oportunidadeService, AproveitamentoService aproveitamentoService, InscricaoServico inscricaoServico, DiscenteDiretor diretor) {
         int opt = 0;
         Scanner scanner = new Scanner(System.in);
-        IO.println("Tela do discente");
+        System.out.println("Tela do discente");
 
         do {
-            IO.println("Escolha uma opção: ");
-            IO.println("1 - Se inscrever em uma oportunidade");
-            IO.println("2 - Ver solicitações");
-            IO.println("3 - Ver Certificados");
-            IO.println("4 - Nova Iniciativa");  //feito
-            IO.println("5 - Sair");
+            System.out.println("Escolha uma opção: ");
+            System.out.println("1 - Se inscrever em uma oportunidade");
+            System.out.println("2 - Ver solicitações");
+            System.out.println("3 - Ver Certificados");
+            System.out.println("4 - Nova Iniciativa");  //feito
+            System.out.println("5 - Sair");
             try {
                 opt = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                IO.println("Opção inválida.");
+                System.out.println("Opção inválida.");
                 continue;
             }
             switch (opt) {
@@ -35,16 +35,16 @@ public class TelaDiscenteDiretor {
                     AproveitamentoTela(aproveitamentoService, scanner, diretor); //Feito
                     break;
                 case 3:
-                    IO.println("Certificados");     //Criar Certifficado e gerar qr code do certificado
+                    System.out.println("Certificados");     //Criar Certifficado e gerar qr code do certificado
                     break;
                 case 4:
                     TelaCriarOportunidade(oportunidadeService, scanner, diretor); //Feito
                     break;
                 case 5:
-                    IO.println("Saindo...");
+                    System.out.println("Saindo...");
                     break;
                 default:
-                    IO.println("Opção inválida.");
+                    System.out.println("Opção inválida.");
             }
         } while (opt != 5);
 
@@ -55,19 +55,19 @@ public class TelaDiscenteDiretor {
         Long id;
         //Podia fazer so uma tela que cada Tela depois herda
         if (oportunidades.isEmpty()) {
-            IO.println("Nenhuma oportunidade disponivel");
+            System.out.println("Nenhuma oportunidade disponivel");
             return;
         }
 
         oportunidades.forEach(o ->
-                IO.println("[" + o.getId() + "] " + o.getTitulo() + " | " + o.getTipo()));
-        IO.println("─────────────────────────────");
+                System.out.println("[" + o.getId() + "] " + o.getTitulo() + " | " + o.getTipo()));
+        System.out.println("─────────────────────────────");
 
-        IO.println("Digite o ID para se inscrever e 0 para voltar");
+        System.out.println("Digite o ID para se inscrever e 0 para voltar");
         try {
             id = Long.parseLong(scanner.nextLine());
         } catch (NumberFormatException e) {
-            IO.println("ID inválida.");
+            System.out.println("ID inválida.");
             return;
         }
 
@@ -75,9 +75,9 @@ public class TelaDiscenteDiretor {
         Oportunidade o = oportunidadeService.buscar(id);
         try{
             criarInscricaoTela(inscricaoService, scanner, o, discenteDiretor);
-            IO.println("Inscrição com sucesso");
+            System.out.println("Inscrição com sucesso");
         } catch (RuntimeException e){
-            IO.println("Erro ao se Inscrever");
+            System.out.println("Erro ao se Inscrever");
         }
 
     }
@@ -85,15 +85,15 @@ public class TelaDiscenteDiretor {
     static void TelaCriarOportunidade(OportunidadeService oportunidadeService,
                                       Scanner scanner,
                                       DiscenteDiretor diretor) {
-        IO.println("\nCRIAR OPORTUNIDADE");
+        System.out.println("\nCRIAR OPORTUNIDADE");
 
-        IO.println("Título: ");
+        System.out.println("Título: ");
         String titulo = scanner.nextLine();
 
-        IO.println("Descrição: ");
+        System.out.println("Descrição: ");
         String descricao = scanner.nextLine();
 
-        IO.println("Tipo (1-PROJETO, 2-CURSO, 3-EVENTO, 4-OFICINA): ");
+        System.out.println("Tipo (1-PROJETO, 2-CURSO, 3-EVENTO, 4-OFICINA): ");
         TipoOportunidade tipo;
         try {
             int optTipo = Integer.parseInt(scanner.nextLine());
@@ -105,11 +105,11 @@ public class TelaDiscenteDiretor {
                 default -> throw new IllegalArgumentException("Tipo inválido.");
             };
         } catch (IllegalArgumentException e) {
-            IO.println("Tipo inválido, operação cancelada.");
+            System.out.println("Tipo inválido, operação cancelada.");
             return;
         }
 
-        IO.println("Modalidade (1-PRESENCIAL, 2-REMOTO, 3-HIBRIDO): ");
+        System.out.println("Modalidade (1-PRESENCIAL, 2-REMOTO, 3-HIBRIDO): ");
         Modalidade modalidade;
         try {
             int optMod = Integer.parseInt(scanner.nextLine());
@@ -120,48 +120,48 @@ public class TelaDiscenteDiretor {
                 default -> throw new IllegalArgumentException("Modalidade inválida.");
             };
         } catch (IllegalArgumentException e) {
-            IO.println("Modalidade inválida, operação cancelada.");
+            System.out.println("Modalidade inválida, operação cancelada.");
             return;
         }
 
-        IO.println("Carga horária: ");
+        System.out.println("Carga horária: ");
         int cargaHoraria;
         try {
             cargaHoraria = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
-            IO.println("Carga horária inválida, operação cancelada.");
+            System.out.println("Carga horária inválida, operação cancelada.");
             return;
         }
 
-        IO.println("Vagas: ");
+        System.out.println("Vagas: ");
         int vagas;
         try {
             vagas = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
-            IO.println("Número de vagas inválido, operação cancelada.");
+            System.out.println("Número de vagas inválido, operação cancelada.");
             return;
         }
 
         try {
             oportunidadeService.criarOportunidade(titulo, descricao, tipo,
                     modalidade, cargaHoraria, vagas, diretor);
-            IO.println("Oportunidade criada com sucesso! Aguardando aprovação do docente.");
+            System.out.println("Oportunidade criada com sucesso! Aguardando aprovação do docente.");
         } catch (RuntimeException e) {
-            IO.println("Erro ao criar oportunidade");
+            System.out.println("Erro ao criar oportunidade");
         }
     }
 
     static void AproveitamentoTela(AproveitamentoService aproveitamentoService, Scanner scanner, DiscenteDiretor diretor) {
         int opt = 0;
         do {
-            IO.println("Escolha uma opção: ");
-            IO.println("1 - Ver aproveitamentos");
-            IO.println("2 - Solicitar aproveitamento");
-            IO.println("3 - Sair");
+            System.out.println("Escolha uma opção: ");
+            System.out.println("1 - Ver aproveitamentos");
+            System.out.println("2 - Solicitar aproveitamento");
+            System.out.println("3 - Sair");
             try {
                 opt = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                IO.println("Opção inválida.");
+                System.out.println("Opção inválida.");
                 continue;
             }
             switch (opt) {
@@ -172,7 +172,7 @@ public class TelaDiscenteDiretor {
                     solicitarAproveitamentoTela(aproveitamentoService, scanner, diretor);
                     break;
                 case 3:
-                    IO.println("Saindo...");
+                    System.out.println("Saindo...");
                     break;
             }
         } while (opt != 3);
@@ -182,39 +182,39 @@ public class TelaDiscenteDiretor {
         List<Aproveitamento> solicitacoes = aproveitamentoService.listarPrivado(diretor);
 
         if (solicitacoes.isEmpty()) {
-            IO.println("Você não possui solicitações.");
+            System.out.println("Você não possui solicitações.");
             return;
         }
 
-        IO.println("\nMINHAS SOLICITAÇÕES");
+        System.out.println("\nMINHAS SOLICITAÇÕES");
         solicitacoes.forEach(a -> {
-            IO.println("─────────────────────────────");
-            IO.println("ID: " + a.getId());
-            IO.println("Descrição: " + a.getDescricao());
-            IO.println("Instituição: " + a.getInstituicao());
-            IO.println("Horas: " + a.getHoras());
-            IO.println("Status: " + a.getStatus());
+            System.out.println("─────────────────────────────");
+            System.out.println("ID: " + a.getId());
+            System.out.println("Descrição: " + a.getDescricao());
+            System.out.println("Instituição: " + a.getInstituicao());
+            System.out.println("Horas: " + a.getHoras());
+            System.out.println("Status: " + a.getStatus());
         });
-        IO.println("─────────────────────────────");
+        System.out.println("─────────────────────────────");
     }
 
     static void solicitarAproveitamentoTela(AproveitamentoService aproveitamentoService, Scanner scanner, DiscenteDiretor diretor) {
-        IO.println("Descrição da atividade: ");
+        System.out.println("Descrição da atividade: ");
         String descricao = scanner.nextLine();
 
-        IO.println("Instituição: ");
+        System.out.println("Instituição: ");
         String instituicao = scanner.nextLine();
 
-        IO.println("Carga horária: ");
+        System.out.println("Carga horária: ");
         int horas;
         try {
             horas = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
-            IO.println("Carga horária inválida, operação cancelada.");
+            System.out.println("Carga horária inválida, operação cancelada.");
             return;
         }
 
-        IO.println("Caminho do certificado (ex: /arquivos/cert.pdf): ");
+        System.out.println("Caminho do certificado (ex: /arquivos/cert.pdf): ");
         String certificadoPath = scanner.nextLine();
 
         try {
@@ -225,9 +225,9 @@ public class TelaDiscenteDiretor {
                     instituicao,
                     certificadoPath
             );
-            IO.println("Solicitação enviada com sucesso! Aguardando avaliação.");
+            System.out.println("Solicitação enviada com sucesso! Aguardando avaliação.");
         } catch (RuntimeException e) {
-            IO.println("Erro ao solicitar aproveitamento");
+            System.out.println("Erro ao solicitar aproveitamento");
         }
 
     }
@@ -235,24 +235,24 @@ public class TelaDiscenteDiretor {
     static void verInscricoes(InscricaoServico inscricaoServico, DiscenteDiretor discenteDiretor) {
         List<Inscricao> inscricoes = inscricaoServico.listarDiscente(discenteDiretor);
         if (inscricoes.isEmpty()) {
-            IO.println("Você não possui inscrições");
+            System.out.println("Você não possui inscrições");
             return;
         }
 
-        IO.println("\nMINHAS INSCRIÇÕES");
+        System.out.println("\nMINHAS INSCRIÇÕES");
         inscricoes.forEach(i -> {
-            IO.println("─────────────────────────────");
-            IO.println("ID: " + i.getId());
-            IO.println("Oportunidade: " + i.getOportunidade());
-            IO.println("Status: " + i.getStatus());
-            IO.println("Motivação: " + i.getMotivacao());
+            System.out.println("─────────────────────────────");
+            System.out.println("ID: " + i.getId());
+            System.out.println("Oportunidade: " + i.getOportunidade());
+            System.out.println("Status: " + i.getStatus());
+            System.out.println("Motivação: " + i.getMotivacao());
 
         });
-        IO.println("─────────────────────────────");
+        System.out.println("─────────────────────────────");
     }
 
     static void criarInscricaoTela(InscricaoServico inscricaoServico, Scanner scanner, Oportunidade oportunidade, DiscenteDiretor discenteDiretor) {
-        IO.println("Motivação: ");
+        System.out.println("Motivação: ");
         String motivacao = scanner.nextLine();
 
         try {
@@ -261,9 +261,9 @@ public class TelaDiscenteDiretor {
                     discenteDiretor,
                     motivacao
             );
-            IO.println("Inscrição enviada com sucesso! Aguardando avaliação.");
+            System.out.println("Inscrição enviada com sucesso! Aguardando avaliação.");
         } catch (RuntimeException e) {
-            IO.println("Erro ao solicitar aproveitamento");
+            System.out.println("Erro ao solicitar aproveitamento");
         }
 
     }
