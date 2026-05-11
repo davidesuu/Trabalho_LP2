@@ -4,6 +4,7 @@ import Enum.Modalidade;
 import Enum.Status;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Oportunidade {
     private String titulo, descricao; //get e set
@@ -33,6 +34,18 @@ public class Oportunidade {
         this.fim = fim;
         this.inicio = inicio;
         this.autor = autor;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Oportunidade that = (Oportunidade) o;
+        return carga_horaria == that.carga_horaria && vagas == that.vagas && Objects.equals(titulo, that.titulo) && Objects.equals(descricao, that.descricao) && Objects.equals(id, that.id) && tipo == that.tipo && modalidade == that.modalidade && status == that.status && Objects.equals(inicio, that.inicio) && Objects.equals(fim, that.fim) && Objects.equals(autor, that.autor) && Objects.equals(responsavel, that.responsavel);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(titulo, descricao, id, tipo, modalidade, carga_horaria, vagas, status, inicio, fim, autor, responsavel);
     }
 
     public Long getId() {

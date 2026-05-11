@@ -18,21 +18,21 @@ public class OportunidadeService {
         this.repository = repository;
     }
 
-    public void publicarOpurtunidade(Long id, Docente docente) throws IOException {
+    public void publicarOpurtunidade(int id, Docente docente) throws IOException {
         //aqui é serve para o docente aprovar uma oportunidade enviada por um discente diretor
         Oportunidade o = repository.buscaPorId(id);  //aqui teria qyue verificar se ele existe no repo
         o.publicar(docente); //poderia ter um metodo que setava sem passar?
         repository.salvar(o);  //tecnicamente aprvar e publicar sao coisas diferente, precisaria de um aprovar
     }
 
-    public void rejeitarOportunidade(Long id, Docente docente) throws IOException {
+    public void rejeitarOportunidade(int id, Docente docente) throws IOException {
         Oportunidade o = repository.buscaPorId(id);
         o.rejeitar(docente);
         repository.salvar(o);
         //falta tbm a verificao do status e etc
     }
 
-    public Oportunidade buscar(Long id){
+    public Oportunidade buscar(int id){
         return repository.buscaPorId(id);
     }
 

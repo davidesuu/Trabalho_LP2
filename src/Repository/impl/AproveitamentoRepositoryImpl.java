@@ -12,8 +12,10 @@ import java.util.stream.Collectors;
 public class AproveitamentoRepositoryImpl implements AproveitamentoRepository {
     private Map<Long, Aproveitamento> banco = new HashMap<>();
     private Long proximoId = 1L;
+
     @Override
     public void salvar(Aproveitamento a) {
+
         if (a.getId() == null) a.setId(proximoId++);
         banco.put(a.getId(), a);
     }

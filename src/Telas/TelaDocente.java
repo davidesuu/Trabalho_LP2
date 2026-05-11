@@ -1,22 +1,31 @@
 package Telas;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import Entity.*;
 import Service.AproveitamentoService;
 import Service.GrupoService;
-import Service.InscricaoServico;
+import Service.InscricaoService;
 import Service.OportunidadeService;
-import Enum.*;
-
-import javax.print.Doc;
 
 
-public class TelaDocente {
-    public static void mostrarTela (OportunidadeService oportunidadeService, AproveitamentoService aproveitamentoService, GrupoService grupoService, InscricaoServico inscricaoServico, Docente docente){
+public class TelaDocente extends Tela{
+    protected final Docente docente;
+
+
+    public TelaDocente(OportunidadeService oportunidadeService,
+                        AproveitamentoService aproveitamentoService,
+                        InscricaoService inscricaoService,
+                        GrupoService grupoService,
+                        Docente docente) {
+        super(oportunidadeService, aproveitamentoService, inscricaoService, grupoService);
+        this.docente = docente;
+    }
+
+    @Override
+    public void mostrarTela (){
         int opt = 0;
 
         Scanner scanner = new Scanner(System.in);
@@ -41,16 +50,17 @@ public class TelaDocente {
 
             switch (opt) {
                 case 1:
-                    TelaCriarOportunidade(oportunidadeService, scanner, docente); // Feito
+                    TelaOportunidade.CriarOportunidade(oportunidadeService, scanner, docente); // Feito
                     break;
                 case 2:
-                    verOportunidadesTela(oportunidadeService, scanner, docente); // Feito
+                    aprovarOportunidades(oportunidadeService, scanner, docente);
+                    // Falta mudar pra generalizar tbm, criar listar por enum
                     break;
                 case 3:
-                    verificarAproveitamentosTela(aproveitamentoService, scanner, docente); //Feito
+                    verificarAproveitamentos(aproveitamentoService, scanner, docente); //Feito
                     break;
                 case 4:
-                    verificarInscricoes(inscricaoServico, scanner);  //Feito
+                    verificarInscricoes(inscricaoService, scanner);  //Feito
                     break;
                 case 5:
                     verificarGruposTela(grupoService, scanner, docente); //Feito
@@ -65,78 +75,8 @@ public class TelaDocente {
         } while (opt != 0);
     }
 
-    static void TelaCriarOportunidade(OportunidadeService oportunidadeService,
-                                      Scanner scanner,
-                                      Docente docente) {
-        System.out.println("\nCRIAR OPORTUNIDADE");
 
-        System.out.println("Título: ");
-        String titulo = scanner.nextLine();
-
-        System.out.println("Descrição: ");
-        String descricao = scanner.nextLine();
-
-        System.out.println("Tipo (1-PROJETO, 2-CURSO, 3-EVENTO, 4-OFICINA): ");
-        TipoOportunidade tipo;
-        try {
-            int optTipo = Integer.parseInt(scanner.nextLine());
-            tipo = switch (optTipo) {
-                case 1 -> TipoOportunidade.PROJETO;
-                case 2 -> TipoOportunidade.CURSO;
-                case 3 -> TipoOportunidade.EVENTO;
-                case 4 -> TipoOportunidade.OFICINA;
-                default -> throw new IllegalArgumentException("Tipo inválido.");
-            };
-        } catch (IllegalArgumentException e) {
-            System.out.println("Tipo inválido, operação cancelada.");
-            return;
-        }
-
-        System.out.println("Modalidade (1-PRESENCIAL, 2-REMOTO, 3-HIBRIDO): ");
-        Modalidade modalidade;
-        try {
-            int optMod = Integer.parseInt(scanner.nextLine());
-            modalidade = switch (optMod) {
-                case 1 -> Modalidade.PRESENCIAL;
-                case 2 -> Modalidade.REMOTO;
-                case 3 -> Modalidade.HIBRIDO;
-                default -> throw new IllegalArgumentException("Modalidade inválida.");
-            };
-        } catch (IllegalArgumentException e) {
-            System.out.println("Modalidade inválida, operação cancelada.");
-            return;
-        }
-
-        System.out.println("Carga horária: ");
-        int cargaHoraria;
-        try {
-            cargaHoraria = Integer.parseInt(scanner.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("Carga horária inválida, operação cancelada.");
-            return;
-        }
-
-        System.out.println("Vagas: ");
-        int vagas;
-        try {
-            vagas = Integer.parseInt(scanner.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("Número de vagas inválido, operação cancelada.");
-            return;
-        }
-
-        try {
-            oportunidadeService.criarOportunidade(titulo, descricao, tipo,
-                    modalidade, cargaHoraria, vagas, docente);
-            System.out.println("Oportunidade criada com sucesso!");
-        } catch (RuntimeException e) {
-            System.out.println("Erro ao criar oportunidade: " + e.getMessage());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    static void verOportunidadesTela(OportunidadeService oportunidadeService,
+    static void aprovarOportunidades(OportunidadeService oportunidadeService,
                                      Scanner scanner,
                                      Docente docente) {
         List<Oportunidade> oportunidades = oportunidadeService.listarPendentes();
@@ -151,9 +91,9 @@ public class TelaDocente {
         System.out.println("─────────────────────────────");
         System.out.println("Digite o ID da oportunidade (0 para voltar): ");
 
-        Long id;
+        int id;
         try {
-            id = Long.parseLong(scanner.nextLine()); // ← nextLine + parse, sem nextLong
+            id = Integer.parseInt(scanner.nextLine()); // ← nextLine + parse, sem nextLong
         } catch (NumberFormatException e) {
             System.out.println("ID inválido.");
             return;
@@ -199,14 +139,14 @@ public class TelaDocente {
         }
 
     }
-    static void verificarAproveitamentosTela(AproveitamentoService aproveitamentoService, Scanner scanner, Docente docente){
+    static void verificarAproveitamentos(AproveitamentoService aproveitamentoService, Scanner scanner, Docente docente){
         List<Aproveitamento> aproveitamentos = aproveitamentoService.listarPendentes();
 
         aproveitamentos.forEach(a ->
                 System.out.println("[" + a.getId() + "] " + a.getDescricao() + " | " + a.getDiscente()));
         System.out.println("─────────────────────────────");
         System.out.println("Digite o ID da oportunidade (0 para voltar): ");
-        long id;
+        Long id;
         try{
             id = Long.parseLong(scanner.nextLine());
         }catch (NumberFormatException e){
@@ -313,20 +253,21 @@ public class TelaDocente {
         }
     }
 
-    static void verificarInscricoes(InscricaoServico inscricaoServico, Scanner scanner){
-        List<Inscricao> inscricoes = inscricaoServico.listarPendente();
+    static void verificarInscricoes(InscricaoService inscricaoService, Scanner scanner){
+        List<Inscricao> inscricoes = inscricaoService.listarPendente();
 
-                inscricoes.forEach(i -> {
-                    System.out.println("─────────────────────────────");
-                    System.out.println("ID: "            + i.getId());
-                    System.out.println("Discente: "      + i.getDiscente());
-                    System.out.println("Oportunidade: "  + i.getOportunidade());
-                    System.out.println("Status: "        + i.getStatus());
-                    System.out.println("Motivação: "     + i.getMotivacao());
+        inscricoes.forEach(i -> {
+            System.out.println("─────────────────────────────");
+            System.out.println("ID: "            + i.getId());
+            System.out.println("Discente: "      + i.getDiscente());
+            System.out.println("Oportunidade: "  + i.getOportunidade());
+            System.out.println("Status: "        + i.getStatus());
+            System.out.println("Motivação: "     + i.getMotivacao());
 
-                });
+        });
         System.out.println("─────────────────────────────");
-        long id;
+        Long id;
+
         try{
             id = Long.parseLong(scanner.nextLine());
         }catch (NumberFormatException e){
@@ -347,11 +288,11 @@ public class TelaDocente {
         }
         switch (opc){
             case 1:
-                inscricaoServico.aprovar(id);
+                inscricaoService.aprovar(id);
                 System.out.println("Inscrição aprovado com sucesso!");
                 break;
             case 2:
-                inscricaoServico.rejeitar(id);
+                inscricaoService.rejeitar(id);
                 System.out.println("Inscrição rejeitada com sucesso!");
                 break;
             case 3:

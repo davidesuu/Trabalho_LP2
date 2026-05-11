@@ -35,6 +35,11 @@ public class Discente extends Usuario{
                 "Semestre: " + semestre + "\n";
     }
 
+    @Override
+    public String getNome(){
+        return super.nome;
+    }
+
     public Inscricao criarInscricao(Oportunidade oportunidade, Discente discente, String motivacao){
         return new Inscricao(oportunidade, discente, motivacao);
     }

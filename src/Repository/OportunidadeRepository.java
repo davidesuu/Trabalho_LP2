@@ -10,7 +10,8 @@ import Enum.Status;
 public interface OportunidadeRepository {
     void salvar(Oportunidade o) throws IOException;
 
-    public Oportunidade buscaPorId(Long id);
+
+    Oportunidade buscaPorId(int id);
 
     public List<Oportunidade> listarPorStatus(Status oportunidade);
 

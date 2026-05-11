@@ -6,13 +6,12 @@ import Repository.impl.InscricoesRepositoryImpl;
 import Entity.Discente;
 import Entity.Oportunidade;
 
-import java.time.LocalDate;
 import java.util.List;
 
-public class InscricaoServico {
+public class InscricaoService {
     private final InscricoesRepositoryImpl banco;
 
-    public InscricaoServico(InscricoesRepositoryImpl inscricoesRepository) {
+    public InscricaoService(InscricoesRepositoryImpl inscricoesRepository) {
         this.banco = inscricoesRepository;
     }
 

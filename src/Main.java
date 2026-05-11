@@ -2,11 +2,10 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import Entity.*;
-import Repository.CertificadoRepository;
 import Repository.impl.*;
 import Service.*;
 import Telas.*;
-import Enum.*;
+
 public class Main {
 
     public static void main(String[] args) throws IOException {
@@ -25,7 +24,7 @@ public class Main {
         GrupoService grupoService = new GrupoService(grupoRepository);
         OportunidadeService oportunidadeService = new OportunidadeService(oportunidadeRepository);
         AproveitamentoService aproveitamentoService = new AproveitamentoService(aproveitamentoRepository);
-        InscricaoServico inscricaoServico = new InscricaoServico(inscricoesRepository);
+        InscricaoService inscricaoService = new InscricaoService(inscricoesRepository);
         CertificadoService certificadoService = new CertificadoService(certificadoRepository);
 
         // Usuários de teste
@@ -54,7 +53,7 @@ public class Main {
                 case "1":
                     try {
                         Login(authService);
-                        TelaPrincipal(authService, oportunidadeService, aproveitamentoService, grupoService, inscricaoServico);
+                        TelaPrincipal(authService, oportunidadeService, aproveitamentoService, grupoService, inscricaoService);
                     } catch (RuntimeException e) {
                         System.out.println("Erro: " + e.getMessage());
                     }
@@ -130,7 +129,7 @@ public class Main {
         String senha = scanner.nextLine();
 
         Usuario u = authService.login(email, senha);
-        System.out.println("Bem-vindo " + u.getNome());
+
 
         return u;
     }
@@ -140,21 +139,35 @@ public class Main {
             OportunidadeService oportunidadeService,
             AproveitamentoService aproveitamentoService,
             GrupoService grupoService,
-            InscricaoServico inscricaoServico
+            InscricaoService inscricaoService
     ) {
         Usuario usuario = authService.getUsuarioLogado();
 
+        Tela tela;
+
         if (usuario instanceof DiscenteDiretor dd) {
-            TelaDiscenteDiretor.mostarTela(oportunidadeService, aproveitamentoService, inscricaoServico, dd);
+            tela = new TelaDiscenteDiretor(
+                    oportunidadeService, aproveitamentoService,
+                    inscricaoService, grupoService, dd);
 
         } else if (usuario instanceof Discente d) {
-            TelaDiscente.mostarTela(oportunidadeService, aproveitamentoService, inscricaoServico, d);
+            tela = new TelaDiscente(
+                    oportunidadeService, aproveitamentoService,
+                    inscricaoService, grupoService, d);
 
         } else if (usuario instanceof Docente doc) {
-            TelaDocente.mostrarTela(oportunidadeService, aproveitamentoService, grupoService, inscricaoServico, doc);
+            tela = new TelaDocente(
+                    oportunidadeService, aproveitamentoService,
+                    inscricaoService, grupoService, doc);
+
+        } else {
+            System.out.println("Tipo de usuário não reconhecido.");
+            return;
         }
 
+        tela.mostrarTela();
+
         authService.logout();
-        System.out.println("Sessão encerrada");
+        System.out.println("Sessão encerrada.");
     }
 }
