@@ -1,6 +1,5 @@
 package Service;
 import Entity.Docente;
-import Entity.Inscricao;
 import Entity.Usuario;
 import Enum.Status; //coment 16: Nao precisaria fazer isso
 import Enum.TipoOportunidade;
@@ -10,6 +9,7 @@ import Repository.impl.OportunidadeRepositoryImpl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public class OportunidadeService {
     private final OportunidadeRepositoryImpl repository;
@@ -52,4 +52,14 @@ public class OportunidadeService {
         return o;
     }
 
+    public List<Integer> test(List<Oportunidade> oportunidades) {
+        List<Integer> set = repository.teste();
+        Integer id = 1;
+        for(Integer i : set) {
+            System.out.println("[" + id + "]\n" + repository.buscaPorId(i) + "\n");
+            id++;
+        }
+
+        return set;
+    }
 }

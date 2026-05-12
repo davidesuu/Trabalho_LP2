@@ -28,10 +28,10 @@ public class OportunidadeRepositoryImpl implements OportunidadeRepository {
 
     }
     public OportunidadeRepositoryImpl() throws IOException {
-        Type tipo = new TypeToken<HashMap<Long, Oportunidade>>(){}.getType();
+        Type tipo = new TypeToken<HashMap<Integer, Oportunidade>>(){}.getType();
         FileReader leitor = new FileReader("Oportunidades.json");
         this.banco = GsonUtil.GSON.fromJson(leitor, tipo);
-        leitor.close();
+        leitor.close();  //TRATAR ARQUIVO VAZIO PRA ONTEM!
     }
 
     @Override
@@ -48,4 +48,6 @@ public class OportunidadeRepositoryImpl implements OportunidadeRepository {
     public List<Oportunidade> listarTodas(){
         return List.copyOf(banco.values());
     }
+
+    public List<Integer> teste(){return List.copyOf(banco.keySet());}
 }

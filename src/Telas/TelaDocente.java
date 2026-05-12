@@ -281,7 +281,7 @@ public class TelaDocente extends Tela{
         System.out.println("0 - Voltar");
         int opc;
         try {
-            opc = Integer.parseInt(scanner.nextLine()); // ← mesmo padrão
+            opc = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
             System.out.println("Opção inválida.");
             return;
