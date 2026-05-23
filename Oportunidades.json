@@ -1,18 +1,21 @@
 {
-  "385916376": {
-    "titulo": "Agora vai ser NULL",
-    "descricao": "null",
+  "1": {
+    "titulo": "Acalourada",
+    "descricao": "snidkas",
+    "id": 1,
     "tipo": "PROJETO",
-    "modalidade": "PRESENCIAL",
-    "carga_horaria": 123,
-    "vagas": 123,
+    "modalidade": "REMOTO",
+    "carga_horaria": 1234,
+    "vagas": 1234,
     "status": "PUBLICADA",
     "autor": {
+      "tipo": "DOCENTE",
+      "siape": "SIAPE123",
+      "departamento": "Comp",
       "nome": "Prof. Geraldo",
       "email": "geraldo@",
       "senha": "senha",
-      "ativo": true,
-      "id": 3
+      "ativo": true
     },
     "responsavel": {
       "siape": "SIAPE123",
@@ -20,38 +23,50 @@
       "nome": "Prof. Geraldo",
       "email": "geraldo@",
       "senha": "senha",
-      "ativo": true,
-      "id": 3
+      "ativo": true
     }
   },
-  "1276352042": {
-    "titulo": "Acaloyrada",
-    "descricao": "pet e demais",
-    "tipo": "PROJETO",
-    "modalidade": "PRESENCIAL",
-    "carga_horaria": 120,
-    "vagas": 120,
-    "status": "PENDENTE",
+  "2": {
+    "titulo": "VipLab",
+    "descricao": "wsdasd",
+    "id": 2,
+    "tipo": "EVENTO",
+    "modalidade": "HIBRIDO",
+    "carga_horaria": 1234,
+    "vagas": 1244,
+    "status": "PUBLICADA",
     "autor": {
-      "nome": "David Martins",
-      "email": "dvd@",
+      "tipo": "DOCENTE",
+      "siape": "SIAPE123",
+      "departamento": "Comp",
+      "nome": "Prof. Geraldo",
+      "email": "geraldo@",
       "senha": "senha",
-      "ativo": true,
-      "id": 2
+      "ativo": true
+    },
+    "responsavel": {
+      "siape": "SIAPE123",
+      "departamento": "Comp",
+      "nome": "Prof. Geraldo",
+      "email": "geraldo@",
+      "senha": "senha",
+      "ativo": true
     }
   },
-  "-674180741": {
-    "titulo": "sdad",
-    "descricao": "qwrq",
-    "tipo": "PROJETO",
-    "modalidade": "PRESENCIAL",
-    "carga_horaria": 123,
-    "vagas": 123,
+  "3": {
+    "titulo": "My chemical Romance",
+    "descricao": "sdmaslf",
+    "id": 3,
+    "tipo": "EVENTO",
+    "modalidade": "HIBRIDO",
+    "carga_horaria": 1234,
+    "vagas": 1234,
     "status": "PENDENTE",
     "autor": {
+      "tipo": "DISCENTE_DIRETOR",
       "cargo": "Diretora",
-      "data_inicio": "2026-05-11",
-      "data_fim": "2028-05-11",
+      "data_inicio": "2026-05-22",
+      "data_fim": "2028-05-22",
       "matricula": "2022005678",
       "semestre": 5,
       "curso": {
@@ -64,51 +79,26 @@
       "nome": "David Martins",
       "email": "dvd@",
       "senha": "senha",
-      "ativo": true,
-      "id": 2
+      "ativo": true
     }
   },
-  "-1216050392": {
-    "titulo": "Acalourada",
-    "descricao": "pet comp é demais",
-    "tipo": "EVENTO",
-    "modalidade": "PRESENCIAL",
-    "carga_horaria": 120,
-    "vagas": 12,
-    "status": "PUBLICADA",
-    "autor": {
-      "nome": "Prof. Geraldo",
-      "email": "geraldo@",
-      "senha": "senha",
-      "ativo": true,
-      "id": 3
-    },
-    "responsavel": {
-      "siape": "SIAPE123",
-      "departamento": "Comp",
-      "nome": "Prof. Geraldo",
-      "email": "geraldo@",
-      "senha": "senha",
-      "ativo": true,
-      "id": 3
-    }
-  },
-  "1998705149": {
-    "titulo": "asda",
-    "descricao": "sdas",
+  "4": {
+    "titulo": "The smiths",
+    "descricao": "now i know how joan of arc felt",
+    "id": 4,
     "tipo": "PROJETO",
     "modalidade": "PRESENCIAL",
-    "carga_horaria": 123,
-    "vagas": 123,
+    "carga_horaria": 1234,
+    "vagas": 1234,
     "status": "PUBLICADA",
     "autor": {
+      "tipo": "DOCENTE",
       "siape": "SIAPE123",
       "departamento": "Comp",
       "nome": "Prof. Geraldo",
       "email": "geraldo@",
       "senha": "senha",
-      "ativo": true,
-      "id": 3
+      "ativo": true
     },
     "responsavel": {
       "siape": "SIAPE123",
@@ -116,8 +106,7 @@
       "nome": "Prof. Geraldo",
       "email": "geraldo@",
       "senha": "senha",
-      "ativo": true,
-      "id": 3
+      "ativo": true
     }
   }
 }
