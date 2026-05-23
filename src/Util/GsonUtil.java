@@ -2,12 +2,24 @@ package Util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import Entity.*;
 import com.google.gson.*;
+import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
+
 import java.lang.reflect.Type;
 
 public class GsonUtil {
 
+    private static final RuntimeTypeAdapterFactory<Usuario> usuarioAdapter =
+            RuntimeTypeAdapterFactory
+                    .of(Usuario.class, "tipo")
+                    .registerSubtype(DiscenteDiretor.class, "DISCENTE_DIRETOR")
+                    .registerSubtype(Discente.class, "DISCENTE")
+                    .registerSubtype(Docente.class, "DOCENTE");
+
     public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapterFactory(usuarioAdapter)
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
                 @Override

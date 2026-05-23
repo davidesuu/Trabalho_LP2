@@ -1,4 +1,5 @@
 package Service;
+
 import Entity.Docente;
 import Entity.Usuario;
 import Enum.Status; //coment 16: Nao precisaria fazer isso
@@ -12,54 +13,96 @@ import java.util.List;
 import java.util.Set;
 
 public class OportunidadeService {
+
     private final OportunidadeRepositoryImpl repository;
 
     public OportunidadeService(OportunidadeRepositoryImpl repository){
+
         this.repository = repository;
+
     }
 
-    public void publicarOpurtunidade(int id, Docente docente) throws IOException {
+    public void publicarOpurtunidade(long id, Docente docente) throws IOException {
+
         //aqui é serve para o docente aprovar uma oportunidade enviada por um discente diretor
-        Oportunidade o = repository.buscaPorId(id);  //aqui teria qyue verificar se ele existe no repo
-        o.publicar(docente); //poderia ter um metodo que setava sem passar?
-        repository.salvar(o);  //tecnicamente aprvar e publicar sao coisas diferente, precisaria de um aprovar
+
+        Oportunidade o = repository.buscaPorId(id);
+
+        //aqui teria qyue verificar se ele existe no repo
+
+        o.publicar(docente);
+
+        //poderia ter um metodo que setava sem passar?
+
+        repository.salvar(o);
+
+        //tecnicamente aprvar e publicar sao coisas diferente, precisaria de um aprovar
     }
 
-    public void rejeitarOportunidade(int id, Docente docente) throws IOException {
+    public void rejeitarOportunidade(long id, Docente docente) throws IOException {
+
         Oportunidade o = repository.buscaPorId(id);
+
         o.rejeitar(docente);
+
         repository.salvar(o);
+
         //falta tbm a verificao do status e etc
     }
 
-    public Oportunidade buscar(int id){
+    public Oportunidade buscar(long id){
+
         return repository.buscaPorId(id);
+
     }
 
     public List<Oportunidade> listarPublicadas(){
+
         return repository.listarPorStatus(Status.PUBLICADA);
+
     }
 
     public List<Oportunidade> listarPendentes(){
+
         return repository.listarPorStatus(Status.PENDENTE);
+
     }
 
     public Oportunidade criarOportunidade(String titulo, String descricao, TipoOportunidade tipo,
-                                  Modalidade modalidade, int cargaHoraria, int vagas,
-                                  Usuario autor) throws IOException {
-        Oportunidade o = autor.criarOportunidade(titulo, descricao, tipo, modalidade, cargaHoraria, vagas);
+                                          Modalidade modalidade, int cargaHoraria, int vagas,
+                                          Usuario autor) throws IOException {
+
+        Oportunidade o = autor.criarOportunidade(
+                titulo,
+                descricao,
+                tipo,
+                modalidade,
+                cargaHoraria,
+                vagas
+        );
+
         repository.salvar(o);
+
         return o;
     }
 
-    public List<Integer> test(List<Oportunidade> oportunidades) {
-        List<Integer> set = repository.teste();
-        Integer id = 1;
-        for(Integer i : set) {
-            System.out.println("[" + id + "]\n" + repository.buscaPorId(i) + "\n");
-            id++;
+    public List<Long> test(List<Oportunidade> oportunidades) {
+
+        List<Long> ids = repository.teste();
+
+        Integer menuIndex = 1;
+
+        for(Long realId : ids) {
+
+            System.out.println(
+                    "[" + menuIndex + "]\n"
+                            + repository.buscaPorId(realId)
+                            + "\n"
+            );
+
+            menuIndex++;
         }
 
-        return set;
+        return ids;
     }
 }

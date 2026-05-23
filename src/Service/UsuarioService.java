@@ -31,9 +31,6 @@ public class UsuarioService {
         discente.setAtivo(true);
         return discente;
     }
-    public Usuario getId(Long id){
-        return usuarioRepository.buscaPorId(id);
-    }
 
     public DiscenteDiretor cadastrarDiscenteDiretor(String nome, String email, String senha,
                                       String matricula, Integer semestre, Curso curso, String cargo, int duracao){

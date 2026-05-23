@@ -10,18 +10,6 @@ public class Usuario {
     protected boolean ativo;
     protected Long id;
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Usuario usuario = (Usuario) o;
-        return ativo == usuario.ativo && Objects.equals(nome, usuario.nome) && Objects.equals(email, usuario.email) && Objects.equals(senha, usuario.senha) && Objects.equals(id, usuario.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nome, email, senha, ativo, id);
-    }
-
     public Usuario(String nome, String email, String senha){
         this.nome = nome;
         this.email = email;
@@ -78,5 +66,17 @@ public class Usuario {
                 "Email: " + email + "\n" +
                 "Senha: " + senha + "\n" +
                 "Ativo: " + ativo + "\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return ativo == usuario.ativo && Objects.equals(nome, usuario.nome) && Objects.equals(email, usuario.email) && Objects.equals(senha, usuario.senha) && Objects.equals(id, usuario.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, email, senha, ativo, id);
     }
 }

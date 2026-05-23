@@ -1,34 +1,86 @@
 package Repository.impl;
 
+import Entity.Discente;
 import Entity.Usuario;
-import Repository.UsuarioRepository;
+import Util.GsonUtil;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class UsuarioRepositoryImpl implements UsuarioRepository {
-    private final HashMap<Long, Usuario> banco = new HashMap<>();
-    private long proximoId = 1L;
+public class UsuarioRepositoryImpl {
 
-    @Override
+    private HashMap<Long, Usuario> banco = new HashMap<>();
+
+    private Long proximoId = 1L;
+
+    public UsuarioRepositoryImpl() {
+
+        try (FileReader leitor = new FileReader("Usuarios.json")) {
+
+            Type tipo = new TypeToken<HashMap<Long, Usuario>>() {}.getType();
+
+            banco = GsonUtil.GSON.fromJson(leitor, tipo);
+
+            if (banco == null) {
+                banco = new HashMap<>();
+            }
+
+            long maiorId = banco.keySet()
+                    .stream()
+                    .max(Long::compare)
+                    .orElse(0L);
+
+            this.proximoId = maiorId + 1;
+
+        } catch (Exception e) {
+
+            banco = new HashMap<>();
+
+            this.proximoId = 1L;
+        }
+    }
+
     public Optional<Usuario> buscarPorEmail(String email) {
-        return banco.values().stream().filter(u -> u.getEmail().equals(email)).findFirst();
+
+        return banco.values()
+                .stream()
+                .filter(u -> u.getEmail().equals(email))
+                .findFirst();
     }
 
-    @Override
-    public Optional<Usuario> buscarPorMatricula(String matricula) {
-        return banco.values().stream().filter(u -> u.getEmail().equals(matricula)).findFirst();
+    public Optional<Discente> buscarPorMatricula(String matricula) {
+
+        return banco.values()
+                .stream()
+                .filter(u -> u instanceof Discente)
+                .map(u -> (Discente) u)
+                .filter(a -> a.getMatricula().equals(matricula))
+                .findFirst();
     }
 
-    @Override
-    public Usuario buscaPorId(Long id) {
-        return banco.get(id);
-    }
-
-    @Override
     public void salvar(Usuario u) {
-        if (u.getId() == null) u.setId(proximoId++);
-        banco.put(u.getId(), u);
-    }
 
+        if (u.getId() == null) {
+            u.setId(proximoId++);
+        }
+
+        banco.put(u.getId(), u);
+
+        try (FileWriter escritor = new FileWriter("Usuarios.json")) {
+
+            Type tipo = new TypeToken<HashMap<Long, Usuario>>() {}.getType();
+
+            GsonUtil.GSON.toJson(banco, tipo, escritor);
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        }
+    }
 }

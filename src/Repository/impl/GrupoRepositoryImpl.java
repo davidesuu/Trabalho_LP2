@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class GrupoRepositoryImpl implements GrupoRepository {
     private final HashMap<Long, Grupo> banco = new HashMap<>();
-    Long proximoId = 1L;
+    private Long proximoId = 1L;
     @Override
     public void salvar(Grupo grupo){
         if(grupo.getId() == null) grupo.setId(proximoId++);

@@ -3,10 +3,14 @@ package Entity;
 import Enum.*;
 import Repository.InscricaoRepository;
 
+import java.util.List;
+
 public class Discente extends Usuario{
-    private String matricula;
+    private String matricula; //talvez eu tire
     private Integer semestre;
     private Curso curso;
+    private List<Matricula> matriculas;
+
 
     public Discente(String nome, String email, String senha,
                     String matricula, Integer semestre, Curso curso){

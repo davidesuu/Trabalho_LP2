@@ -28,14 +28,7 @@ public class Main {
         CertificadoService certificadoService = new CertificadoService(certificadoRepository);
 
         // Usuários de teste
-        Curso curso = new Curso("Ciência da Computação", 123, 3200, "PPC 2023");
-
-        usuarioService.cadastrarDiscente("Perla Sousa", "perla@", "senha", "2023001234", 3, curso);
-
-        usuarioService.cadastrarDiscenteDiretor("David Martins", "dvd@", "senha", "2022005678", 5, curso, "Diretora", 2);
-
-        usuarioService.cadastrarDocente("Prof. Geraldo", "geraldo@", "senha", "SIAPE123", "Comp");
-
+        Curso curso = new Curso("Ciência da Computação", 123320);
         // Oportunidade oportunidade = oportunidadeService.criarOportunidade("titulo", "descriçao", TipoOportunidade.CURSO, Modalidade.HIBRIDO, 10, 10, usuarioService.getId(2L));
 
         Scanner scanner = new Scanner(System.in);
@@ -90,7 +83,7 @@ public class Main {
         System.out.println("Tipo (Discente/Docente/DiscDiretor):");
         String opc = scanner.nextLine();
 
-        Curso curso = new Curso("ccomp", 123, 60, "2");
+        Curso curso = new Curso("ccomp", 123);
 
         switch (opc) {
             case "Discente":
