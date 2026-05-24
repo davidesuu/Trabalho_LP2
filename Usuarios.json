@@ -1,0 +1,46 @@
+{
+  "1": {
+    "matricula": "2023001234",
+    "semestre": 3,
+    "curso": {
+      "nome": "Ciência da Computação",
+      "codigo": 123,
+      "carga_horaria": 3200,
+      "versao_ppc": "PPC 2023",
+      "alunos": []
+    },
+    "nome": "Perla Sousa",
+    "email": "perla@",
+    "senha": "senha",
+    "ativo": true,
+    "id": 1
+  },
+  "2": {
+    "cargo": "Diretora",
+    "data_inicio": "2026-05-22",
+    "data_fim": "2028-05-22",
+    "matricula": "2022005678",
+    "semestre": 5,
+    "curso": {
+      "nome": "Ciência da Computação",
+      "codigo": 123,
+      "carga_horaria": 3200,
+      "versao_ppc": "PPC 2023",
+      "alunos": []
+    },
+    "nome": "David Martins",
+    "email": "dvd@",
+    "senha": "senha",
+    "ativo": true,
+    "id": 2
+  },
+  "3": {
+    "siape": "SIAPE123",
+    "departamento": "Comp",
+    "nome": "Prof. Geraldo",
+    "email": "geraldo@",
+    "senha": "senha",
+    "ativo": false,
+    "id": 3
+  }
+}
