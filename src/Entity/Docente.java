@@ -13,6 +13,11 @@ public class Docente extends Usuario{
         this.departamento = departamento;
     }
 
+    public String getSiape() {
+        return siape;
+    }
+
+
     @Override
     public String toString() {
         return "Siape: " + siape + "\n" +
@@ -24,9 +29,5 @@ public class Docente extends Usuario{
         Oportunidade oportunidade = new Oportunidade(titulo, descricao, tipo, modalidade, cargaHoraria, vagas, this);
         oportunidade.publicar(this);
         return oportunidade;
-    }
-
-    public Grupo criarGrupo(String nome, String tipo, String email, String descricao){
-        return new Grupo(nome, tipo, email, descricao, this);
     }
 }

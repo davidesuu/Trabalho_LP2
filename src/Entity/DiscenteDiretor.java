@@ -13,9 +13,10 @@ public class DiscenteDiretor extends Discente {
     private LocalDate data_fim;
 
     public DiscenteDiretor(String nome, String email, String senha, String matricula,
-                           Integer semestre, Curso curso, String cargo, Integer duracao){
+                           Integer semestre, Curso curso, String cargo, Integer duracao, Grupo grupo){
         super(nome, email, senha, matricula, semestre, curso);
         this.cargo = cargo;
+        this.grupo = grupo;
         this.data_inicio = LocalDate.now();
         this.data_fim = LocalDate.now().plusYears(duracao);  //vai mudar dps pq a pessoal pd ja estar no cargo
     }
@@ -23,7 +24,6 @@ public class DiscenteDiretor extends Discente {
     public String getCargo() {
         return cargo;
     }
-
 
     @Override
     public String toString() {

@@ -1,6 +1,7 @@
 package Repository.impl;
 
 import Entity.Discente;
+import Entity.Docente;
 import Entity.Usuario;
 import Util.GsonUtil;
 import com.google.gson.reflect.TypeToken;
@@ -50,6 +51,16 @@ public class UsuarioRepositoryImpl {
         return banco.values()
                 .stream()
                 .filter(u -> u.getEmail().equals(email))
+                .findFirst();
+    }
+
+    public Optional<Docente> buscarPorSiape(String siape) {
+
+        return banco.values()
+                .stream()
+                .filter(u -> u instanceof Docente)
+                .map(u -> (Docente) u)
+                .filter(a -> a.getSiape().equals(siape))
                 .findFirst();
     }
 

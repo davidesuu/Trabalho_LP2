@@ -16,6 +16,7 @@ public class GsonUtil {
                     .of(Usuario.class, "tipo")
                     .registerSubtype(DiscenteDiretor.class, "DISCENTE_DIRETOR")
                     .registerSubtype(Discente.class, "DISCENTE")
+                    .registerSubtype(Coordenador.class, "COORDENADOR")
                     .registerSubtype(Docente.class, "DOCENTE");
 
     public static final Gson GSON = new GsonBuilder()

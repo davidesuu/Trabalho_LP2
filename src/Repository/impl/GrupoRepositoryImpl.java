@@ -32,6 +32,12 @@ public class GrupoRepositoryImpl implements GrupoRepository {
     public Grupo buscaPorId(Long id) {
         return banco.get(id);
     }
+
+    public List<Long> ListarKeys(){
+
+        return List.copyOf(banco.keySet());
+
+    }
 }
 
 

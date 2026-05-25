@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class TelaOportunidade{
     static void verOportunidades(OportunidadeService oportunidadeService, InscricaoService inscricaoService, Scanner scanner, Discente discente){
         List<Oportunidade> oportunidades = oportunidadeService.listarPublicadas();
-        List<Long> keyset = oportunidadeService.test(oportunidades);
+        List<Long> keyset = oportunidadeService.ListarIndice(oportunidades);
         Integer id;
         if (oportunidades.isEmpty()){
             System.out.println("Nenhuma inscrição no momento");

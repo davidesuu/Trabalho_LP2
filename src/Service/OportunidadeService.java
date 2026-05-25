@@ -86,9 +86,9 @@ public class OportunidadeService {
         return o;
     }
 
-    public List<Long> test(List<Oportunidade> oportunidades) {
+    public List<Long> ListarIndice(List<Oportunidade> oportunidades) {
 
-        List<Long> ids = repository.teste();
+        List<Long> ids = repository.ListarKeys();
 
         Integer menuIndex = 1;
 

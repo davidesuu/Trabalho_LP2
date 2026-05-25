@@ -4,10 +4,7 @@ import Entity.Aproveitamento;
 import Entity.Discente;
 import Entity.Inscricao;
 import Entity.Oportunidade;
-import Service.AproveitamentoService;
-import Service.GrupoService;
-import Service.InscricaoService;
-import Service.OportunidadeService;
+import Service.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -20,8 +17,9 @@ public class TelaDiscente extends Tela{
                         AproveitamentoService aproveitamentoService,
                         InscricaoService inscricaoService,
                         GrupoService grupoService,
+                        UsuarioService usuarioService,
                         Discente discente) {
-        super(oportunidadeService, aproveitamentoService, inscricaoService, grupoService);
+        super(oportunidadeService, aproveitamentoService, inscricaoService, grupoService, usuarioService);
         this.discente = discente;
     }
 

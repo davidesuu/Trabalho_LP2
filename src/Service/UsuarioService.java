@@ -7,6 +7,7 @@ import Repository.impl.UsuarioRepositoryImpl;
 import Enum.Status;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class UsuarioService {
@@ -33,7 +34,7 @@ public class UsuarioService {
     }
 
     public DiscenteDiretor cadastrarDiscenteDiretor(String nome, String email, String senha,
-                                      String matricula, Integer semestre, Curso curso, String cargo, int duracao){
+                                      String matricula, Integer semestre, Curso curso, String cargo, int duracao, Grupo grupo){
         if(usuarioRepository.buscarPorEmail(email).isPresent()){
             throw new IllegalStateException("Email já cadastrado");
         }
@@ -41,10 +42,12 @@ public class UsuarioService {
         if (usuarioRepository.buscarPorMatricula(matricula).isPresent()){
             throw new IllegalStateException();
         }
-        DiscenteDiretor discenteDiretor = new DiscenteDiretor(nome, email, senha, matricula, semestre, curso, cargo, duracao);
+        DiscenteDiretor discenteDiretor = new DiscenteDiretor(nome, email, senha, matricula, semestre, curso, cargo, duracao, grupo);
         usuarioRepository.salvar(discenteDiretor);
         discenteDiretor.setAtivo(true);
-        return discenteDiretor;
+        return discenteDiretor;                             //Discente ----------- membro
+                                                            //Discente ------------ Diretor
+                                                            //Discetne = new DiscenteDiretor(grupo);
     }
 
     public Docente cadastrarDocente(String nome, String email, String senha, String siape, String departamento){
@@ -52,9 +55,26 @@ public class UsuarioService {
             throw new IllegalStateException("Email já cadastrado");
         }
         Docente docente = new Docente(nome, email, senha, siape, departamento);
-        usuarioRepository.salvar(docente);
         docente.setAtivo(true);
+        usuarioRepository.salvar(docente);
         return docente;
     }
 
+    public Coordenador cadastrarCoordenador(String nome, String email, String senha, String siape, String departamento){
+        if(usuarioRepository.buscarPorEmail(email).isPresent()) {
+            throw new IllegalStateException("Email já cadastrado");
+        }
+        Coordenador coordenador = new Coordenador(nome, email, senha, siape, departamento);
+        coordenador.setAtivo(true);
+        usuarioRepository.salvar(coordenador);
+        return coordenador;
+    }
+
+    public Discente buscarMatricula(String matricula){
+        return usuarioRepository.buscarPorMatricula(matricula).orElseThrow(null);
+    }
+
+    public Docente buscarSiape(String siape){
+        return usuarioRepository.buscarPorSiape(siape).orElseThrow(null);
+    }
 }

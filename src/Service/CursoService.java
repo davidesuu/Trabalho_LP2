@@ -9,10 +9,10 @@ import java.util.List;
 
 public class CursoService {
     //Depois a gente faz
-    public void atualizarPPC (Curso curso, Integer horas, String versao){
-        curso.setCarga_horaria(horas);
-        curso.setVersao_ppc(versao);
-    }
+    //public void atualizarPPC (Curso curso, Integer horas, String versao){
+        //curso.setCarga_horaria(horas);
+        //curso.setVersao_ppc(versao);
+    //}
 
     public List<Discente> listarAlunosPorStatus(Curso curso, boolean status){
         List<Discente> resultado = new ArrayList<>();

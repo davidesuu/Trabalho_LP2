@@ -86,7 +86,7 @@ public class OportunidadeRepositoryImpl{
 
     }
 
-    public List<Long> teste(){
+    public List<Long> ListarKeys(){
 
         return List.copyOf(banco.keySet());
 

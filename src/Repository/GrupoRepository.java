@@ -13,4 +13,6 @@ public interface GrupoRepository {
     List<Grupo> listarPorDocente(Docente docente);
 
     List<Grupo> listaTudo();
+
+    List<Long> ListarKeys();
 }

@@ -9,15 +9,17 @@ public abstract class Tela {
     protected final AproveitamentoService aproveitamentoService;
     protected final InscricaoService inscricaoService;
     protected final GrupoService grupoService;
+    protected final UsuarioService usuarioService;
     protected final Scanner scanner;
 
     protected Tela(OportunidadeService oportunidadeService,
                        AproveitamentoService aproveitamentoService,
-                       InscricaoService inscricaoService, GrupoService grupoService) {
+                       InscricaoService inscricaoService, GrupoService grupoService, UsuarioService usuarioService) {
         this.oportunidadeService   = oportunidadeService;
         this.aproveitamentoService = aproveitamentoService;
         this.inscricaoService = inscricaoService;
         this.grupoService = grupoService;
+        this.usuarioService = usuarioService;
         this.scanner               = new Scanner(System.in);
     }
 

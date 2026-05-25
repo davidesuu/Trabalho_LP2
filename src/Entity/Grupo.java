@@ -7,16 +7,14 @@ import java.util.List;
 
 public class Grupo {
     String nome;
-    String tipo;
     String email;
     String descricao;
     Status status;
     Docente responsavel;
     Long id;
     List<Discente> membros;
-    public Grupo(String nome, String tipo, String email, String descricao, Docente responsavel) {
+    public Grupo(String nome, String email, String descricao, Docente responsavel) {
         this.nome = nome;
-        this.tipo = tipo;
         this.email = email;
         this.descricao = descricao;
         this.status = Status.ATIVO;
@@ -38,14 +36,6 @@ public class Grupo {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
     }
 
     public String getEmail() {

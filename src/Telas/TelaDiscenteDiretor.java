@@ -1,10 +1,7 @@
 package Telas;
 
 import Entity.*;
-import Service.AproveitamentoService;
-import Service.GrupoService;
-import Service.InscricaoService;
-import Service.OportunidadeService;
+import Service.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -14,8 +11,8 @@ public class TelaDiscenteDiretor extends TelaDiscente{
 
     public TelaDiscenteDiretor(OportunidadeService oportunidadeService, AproveitamentoService aproveitamentoService,
                                InscricaoService inscricaoService,
-                               GrupoService grupoService, DiscenteDiretor diretor) {
-        super(oportunidadeService, aproveitamentoService, inscricaoService, grupoService, diretor);
+                               GrupoService grupoService, UsuarioService usuarioService, DiscenteDiretor diretor) {
+        super(oportunidadeService, aproveitamentoService, inscricaoService, grupoService, usuarioService, diretor);
         this.diretor = diretor;
     }
 
@@ -23,7 +20,7 @@ public class TelaDiscenteDiretor extends TelaDiscente{
     public void mostrarTela() {
         int opt = 0;
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Tela do discente");
+        System.out.println("Tela do Discente Diretor");
 
         do {
             System.out.println("Escolha uma opção: ");
