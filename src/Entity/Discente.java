@@ -32,6 +32,14 @@ public class Discente extends Usuario{
         this.matricula = matricula;
     }
 
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public Integer getSemestre() {
+        return semestre;
+    }
+
     @Override
     public String toString() {
         return "Matricula: " + matricula + "\n" +

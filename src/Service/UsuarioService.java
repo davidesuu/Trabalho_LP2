@@ -33,22 +33,22 @@ public class UsuarioService {
         return discente;
     }
 
-    public DiscenteDiretor cadastrarDiscenteDiretor(String nome, String email, String senha,
-                                      String matricula, Integer semestre, Curso curso, String cargo, int duracao, Grupo grupo){
-        if(usuarioRepository.buscarPorEmail(email).isPresent()){
-            throw new IllegalStateException("Email já cadastrado");
-        }
-
-        if (usuarioRepository.buscarPorMatricula(matricula).isPresent()){
-            throw new IllegalStateException();
-        }
-        DiscenteDiretor discenteDiretor = new DiscenteDiretor(nome, email, senha, matricula, semestre, curso, cargo, duracao, grupo);
-        usuarioRepository.salvar(discenteDiretor);
-        discenteDiretor.setAtivo(true);
-        return discenteDiretor;                             //Discente ----------- membro
-                                                            //Discente ------------ Diretor
-                                                            //Discetne = new DiscenteDiretor(grupo);
-    }
+//    public DiscenteDiretor cadastrarDiscenteDiretor(String nome, String email, String senha,
+//                                      String matricula, Integer semestre, Curso curso, String cargo, int duracao, Grupo grupo){
+//        if(usuarioRepository.buscarPorEmail(email).isPresent()){
+//            throw new IllegalStateException("Email já cadastrado");
+//        }
+//
+//        if (usuarioRepository.buscarPorMatricula(matricula).isPresent()){
+//            throw new IllegalStateException();
+//        }
+//        DiscenteDiretor discenteDiretor = new DiscenteDiretor(nome, email, senha, matricula, semestre, curso, cargo, duracao, grupo);
+//        usuarioRepository.salvar(discenteDiretor);
+//        discenteDiretor.setAtivo(true);
+//        return discenteDiretor;                             //Discente ----------- membro
+//                                                            //Discente ------------ Diretor
+//                                                            //Discetne = new DiscenteDiretor(grupo);
+//    }
 
     public Docente cadastrarDocente(String nome, String email, String senha, String siape, String departamento){
         if(usuarioRepository.buscarPorEmail(email).isPresent()) {

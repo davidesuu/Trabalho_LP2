@@ -14,6 +14,7 @@ public class Usuario {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+        this.id = 0L;
     }
 
     public Oportunidade criarOportunidade(String titulo, String descricao, TipoOportunidade tipo, Modalidade modalidade, int cargaHoraria, int vagas) {

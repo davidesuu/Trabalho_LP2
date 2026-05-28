@@ -12,13 +12,13 @@ public class DiscenteDiretor extends Discente {
     private LocalDate data_inicio;
     private LocalDate data_fim;
 
-    public DiscenteDiretor(String nome, String email, String senha, String matricula,
-                           Integer semestre, Curso curso, String cargo, Integer duracao, Grupo grupo){
-        super(nome, email, senha, matricula, semestre, curso);
+    public DiscenteDiretor(Discente disc, String cargo, Integer duracao, Grupo grupo, Long id){
+        super(disc.getNome(), disc.getEmail(), disc.getSenha(), disc.getMatricula(), disc.getSemestre(), disc.getCurso());
         this.cargo = cargo;
         this.grupo = grupo;
         this.data_inicio = LocalDate.now();
         this.data_fim = LocalDate.now().plusYears(duracao);  //vai mudar dps pq a pessoal pd ja estar no cargo
+        disc.setId(id);
     }
 
     public String getCargo() {

@@ -76,10 +76,10 @@ public class UsuarioRepositoryImpl {
 
     public void salvar(Usuario u) {
 
-        if (u.getId() == null) {
+        if (u.getId() == 0) {
             u.setId(proximoId++);
         }
-
+        System.out.println(u.getId());
         banco.put(u.getId(), u);
 
         try (FileWriter escritor = new FileWriter("Usuarios.json")) {

@@ -37,6 +37,7 @@ public class TelaDocente extends Tela{
             System.out.println("3 - Verificar aproveitamentos");
             System.out.println("4 - Verificar inscrição de discentes em Oportunidades");
             System.out.println("5 - Verificar Grupos");
+            
             System.out.println("0 - Sair");
 
             try {
