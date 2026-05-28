@@ -28,8 +28,8 @@ public class UsuarioService {
         }
 
         Discente discente = new Discente(nome, email, senha, matricula, semestre, curso);
-        usuarioRepository.salvar(discente);
         discente.setAtivo(true);
+        usuarioRepository.salvar(discente);
         return discente;
     }
 
@@ -72,6 +72,10 @@ public class UsuarioService {
 
     public Discente buscarMatricula(String matricula){
         return usuarioRepository.buscarPorMatricula(matricula).orElseThrow(null);
+    }
+
+    public void atualizarUsuario(Usuario usuario){
+        usuarioRepository.salvar(usuario);
     }
 
     public Docente buscarSiape(String siape){

@@ -8,6 +8,7 @@ import java.util.Scanner;
 import Entity.*;
 import Repository.UsuarioRepository;
 import Service.*;
+import Enum.*;
 
 
 public class TelaDocente extends Tela{
@@ -188,7 +189,8 @@ public class TelaDocente extends Tela{
             System.out.println("Escolha uma opção: ");
             System.out.println("1 - Ver Grupos");
             System.out.println("2 - Adicionar novos membros");
-            System.out.println("3 - Sair");
+            System.out.println("3 - Promover Membros");
+            System.out.println("4 - Sair");
             try {
                 opt = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
@@ -203,66 +205,238 @@ public class TelaDocente extends Tela{
                     AdicionarMembrosTela(grupoService, usuarioService, scanner, docente);
                     break;
                 case 3:
+                    promoverMembroTela(grupoService, usuarioService, scanner, docente);
+                    break;
+                case 4:
                     System.out.println("Saindo...");
                     break;
             }
-        }while (opt != 3);
+        }while (opt != 4);
     }
-
-    static void verGruposTelas(GrupoService grupoService, Docente docente){
+    static void promoverMembroTela(
+            GrupoService grupoService,
+            UsuarioService usuarioService,
+            Scanner scanner,
+            Docente docente
+    ){
         List<Grupo> grupos = grupoService.listarPorDocente(docente);
 
-        if (grupos.isEmpty()) {
-            System.out.println("Você não é responsável por nenhum grupo.");
-            return;
-        }
-
-        System.out.println("\nMEUS GRUPOS");
-        grupos.forEach(g -> {
-            System.out.println("─────────────────────────────");
-            System.out.println("ID: "         + g.getId());
-            System.out.println("Nome: "  + g.getNome());
-            System.out.println("Descrição: "+ g.getDescricao());
-            System.out.println("Membros: "+ g.getMembros());
-        });
-        System.out.println("─────────────────────────────");
-    }
-
-    static void AdicionarMembrosTela(GrupoService grupoService, UsuarioService usuarioService,Scanner scanner, Docente docente){
-        List<Grupo> grupos = grupoService.listarPorDocente(docente);
-        List<Long> keyset = grupoService.ListarIndice(grupos);
-        Integer id;
-        String matricula;
         if (grupos.isEmpty()){
             System.out.println("Você não é responsável por nenhum grupo.");
             return;
         }
 
-        grupos.forEach(o ->
-                System.out.println("[" + o.getId() + "] " + o.getNome() + " | " + o.getMembros()));
+        System.out.println("\nGRUPOS:");
 
-        System.out.println("Digite o ID do grupo em que será adicionado e 0 para voltar");
-        try {
-            id = Integer.parseInt(scanner.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("ID inválida.");
-            return;
-        }
+        grupos.forEach(g ->
+                System.out.println("[" + g.getId() + "] " + g.getNome())
+        );
 
-        System.out.println("Digite a matricula do discente que será adicionado e enter para voltar");
-        try { //mudar pq é str
-            matricula = scanner.nextLine();
-        } catch (NumberFormatException e) {
-            System.out.println("Matricula inválida.");
-            return;
-        }
+        System.out.println("Digite o ID do grupo:");
 
-        if (id == 0 || matricula == null) return;
+        Long grupoId;
+
         try{
-            Discente disc = usuarioService.buscarMatricula(matricula);
-            grupoService.adicionarMembro(keyset.get(id-1), disc); //bagunça rola solta
+            grupoId = Long.parseLong(scanner.nextLine());
+        } catch (NumberFormatException e){
+            System.out.println("ID inválido.");
+            return;
+        }
+
+        Optional<Grupo> grupoOpt = grupos.stream()
+                .filter(g -> g.getId().equals(grupoId))
+                .findFirst();
+
+        if (grupoOpt.isEmpty()){
+            System.out.println("Grupo não encontrado.");
+            return;
+        }
+
+        Grupo grupo = grupoOpt.get();
+
+        if (grupo.getMembros().isEmpty()){
+            System.out.println("Esse grupo não possui membros.");
+            return;
+        }
+
+        System.out.println("\nMEMBROS:");
+
+        grupo.getMembros().forEach(m ->
+                 System.out.println(
+                        m.getMatricula() + " - " + m.getNome()
+                )
+        );
+
+        System.out.println("Digite a matrícula do membro:");
+
+        String matricula = scanner.nextLine();
+
+        Discente discente;
+
+        try{
+            discente = usuarioService.buscarMatricula(matricula);
         } catch (RuntimeException e){
-            System.out.println("Erro ao se adicionar membro"); //se for null isso acontece
+            System.out.println("Discente não encontrado.");
+            return;
+        }
+
+        if (!grupo.getMembros().contains(discente)){
+            System.out.println("Esse discente não pertence ao grupo.");
+            return;
+        }
+
+        System.out.println("\nEscolha um cargo:");
+        System.out.println("1 - PRESIDENTE");
+        System.out.println("2 - SECRETARIO");
+        System.out.println("3 - TESOUREIRO");
+        System.out.println("4 - VICE_PRESIDENTE");
+        System.out.print("> ");
+
+        Cargo cargo;
+        try {
+            int optMod = Integer.parseInt(scanner.nextLine());
+            cargo = switch (optMod) {
+                case 1 -> Cargo.PRESIDENTE;
+                case 2 -> Cargo.SECRETARIO;
+                case 3 -> Cargo.TESOUREIRO;
+                case 4 -> Cargo.VICE_PRESIDENTE;
+                default -> throw new IllegalArgumentException("Cargo inválida.");
+            };
+        } catch (IllegalArgumentException e) {
+            System.out.println("Cargo inválida, operação cancelada.");
+            return;
+        }
+
+        System.out.println("Digite a duração do mandato:");
+
+        Integer duracao;
+
+        try{
+            duracao = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e){
+            System.out.println("Duração inválida.");
+            return;
+        }
+
+        try{
+            DiscenteDiretor diretor =
+                    new DiscenteDiretor(
+                            discente,
+                            cargo,
+                            duracao,
+                            grupo
+                    );
+
+            usuarioService.atualizarUsuario(diretor);
+
+            System.out.println("Discente promovido com sucesso!");
+
+        } catch (RuntimeException e){
+            System.out.println("Erro ao promover discente.");
+        }
+    }
+
+    static void verGruposTelas(GrupoService grupoService, Docente docente){
+
+        List<Grupo> grupos = grupoService.listarPorDocente(docente);
+
+        if (grupos.isEmpty()) {
+            System.out.println("\nVocê não é responsável por nenhum grupo.");
+            return;
+        }
+
+        System.out.println("\n=== MEUS GRUPOS ===");
+
+        grupos.forEach(g -> {
+
+            System.out.println("\nID: " + g.getId());
+            System.out.println("Nome: " + g.getNome());
+            System.out.println("Descrição: " + g.getDescricao());
+
+            System.out.println("Membros:");
+
+            if(g.getMembros().isEmpty()){
+
+                System.out.println(" - Nenhum membro");
+
+            } else {
+
+                g.getMembros().forEach(m -> {
+
+                    String cargo = "MEMBRO";
+
+                    if(m instanceof DiscenteDiretor diretor){
+                        cargo = diretor.getCargo().toString();
+                    }
+
+                    System.out.println(
+                            " - "
+                                    + m.getNome()
+                                    + " | "
+                                    + m.getMatricula()
+                                    + " | "
+                                    + cargo
+                    );
+                });
+            }
+
+            System.out.println("----------------------------");
+        });
+    }
+
+    static void AdicionarMembrosTela(
+            GrupoService grupoService,
+            UsuarioService usuarioService,
+            Scanner scanner,
+            Docente docente
+    ){
+
+        List<Grupo> grupos = grupoService.listarPorDocente(docente);
+
+        Long id;
+        String matricula;
+
+        if (grupos.isEmpty()){
+            System.out.println("Você não é responsável por nenhum grupo.");
+            return;
+        }
+
+        System.out.println("\n=== GRUPOS ===");
+
+        List<Long> keyset = grupoService.ListarIndice(grupos);
+
+        System.out.println("\nDigite o número do grupo:");
+
+        try {
+            id = Long.parseLong(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("ID inválido.");
+            return;
+        }
+
+        if(id <= 0 || id > keyset.size()){
+            System.out.println("Grupo inválido.");
+            return;
+        }
+
+        System.out.println("Digite a matrícula do discente:");
+
+        matricula = scanner.nextLine();
+
+        try{
+
+            Discente disc =
+                    usuarioService.buscarMatricula(matricula);
+            Grupo grupo = grupoService.buscarGrupoPorId(id);
+            grupoService.adicionarMembro(disc, grupo);
+            grupoService.atualizarGrupo(grupo);
+
+            System.out.println("Membro adicionado com sucesso!");
+
+        } catch (RuntimeException e){
+
+            System.out.println("Erro ao adicionar membro.");
+
         }
     }
 

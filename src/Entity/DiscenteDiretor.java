@@ -1,27 +1,34 @@
 package Entity;
 
 import Service.OportunidadeService;
-import Enum.TipoOportunidade;
-import Enum.Modalidade;
+import Enum.*;
 
 import java.time.LocalDate;
 
 public class DiscenteDiretor extends Discente {
     private Grupo grupo;
-    private String cargo;
+    private Cargo cargo;
     private LocalDate data_inicio;
     private LocalDate data_fim;
 
-    public DiscenteDiretor(Discente disc, String cargo, Integer duracao, Grupo grupo, Long id){
+    public DiscenteDiretor(
+            Discente disc,
+            Cargo cargo,
+            Integer duracao,
+            Grupo grupo
+    ){
         super(disc.getNome(), disc.getEmail(), disc.getSenha(), disc.getMatricula(), disc.getSemestre(), disc.getCurso());
+
+        this.setId(disc.getId());
+
         this.cargo = cargo;
         this.grupo = grupo;
         this.data_inicio = LocalDate.now();
-        this.data_fim = LocalDate.now().plusYears(duracao);  //vai mudar dps pq a pessoal pd ja estar no cargo
-        disc.setId(id);
+        this.data_fim = LocalDate.now().plusYears(duracao);
+        this.setAtivo(true);
     }
 
-    public String getCargo() {
+    public Cargo getCargo() {
         return cargo;
     }
 

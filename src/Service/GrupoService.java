@@ -1,9 +1,6 @@
 package Service;
 
-import Entity.Discente;
-import Entity.Docente;
-import Entity.Coordenador;
-import Entity.Grupo;
+import Entity.*;
 import Repository.impl.GrupoRepositoryImpl;
 
 import java.util.List;
@@ -16,9 +13,12 @@ public class GrupoService {
         this.grupoRepository = grupoRepository;
     }
 
-    public void adicionarMembro(Long id, Discente discente){
-        //Depois
-        grupoRepository.buscaPorId(id).setMembros(discente);
+    public void adicionarMembro(Discente discente, Grupo grupo){
+        grupo.setMembros(discente);
+    }
+
+    public Grupo buscarGrupoPorId(Long id){
+        return grupoRepository.buscaPorId(id);
     }
 
     public List<Grupo> listarPorDocente(Docente docente ){
@@ -35,15 +35,18 @@ public class GrupoService {
         return grupo;
     }
 
-    public List<Long> ListarIndice(List<Grupo> oportunidades) {
+    public void atualizarGrupo(Grupo grupo){
+        grupoRepository.salvar(grupo);
+    }
 
-        List<Long> ids = grupoRepository.ListarKeys();
+    public List<Long> ListarIndice(List<Grupo> grupos) {
 
-        Integer menuIndex = 1;
+        List<Long> ids = grupoRepository.listarKeys(grupos);   ///explicando o fluxo
+        Integer menuIndex = 1;                                   ///Faz uma lista com todos ids com o filtro selecionado
 
         for(Long realId : ids) {
-
-            System.out.println(
+            ///itera no ids, e usa o buscarporid para conseguir pegar
+            System.out.println(                                  /// O valor no hashmap enquando mostra um id "falso"
                     "[" + menuIndex + "]\n"
                             + grupoRepository.buscaPorId(realId)
                             + "\n"
@@ -51,7 +54,6 @@ public class GrupoService {
 
             menuIndex++;
         }
-
         return ids;
     }
 }

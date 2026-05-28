@@ -20,6 +20,7 @@ public class Grupo {
         this.status = Status.ATIVO;
         this.responsavel = responsavel;
         this.membros = new ArrayList<>();
+        this.id = 0L;
     }
 
     public String getNome() {
@@ -76,5 +77,41 @@ public class Grupo {
 
     public void setMembros(Discente usuario){
         this.membros.add(usuario);
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder membrosStr = new StringBuilder();
+
+        if(membros.isEmpty()){
+
+            membrosStr.append("Nenhum membro");
+
+        } else {
+
+            for(Discente membro : membros){
+
+                membrosStr.append("- ")
+                        .append(membro.getNome())
+                        .append(" (")
+                        .append(membro.getMatricula())
+                        .append(")");
+
+                if(membro instanceof DiscenteDiretor diretor){
+                    membrosStr.append(" - ")
+                            .append(diretor.getCargo());
+                }
+
+                membrosStr.append("\n");
+            }
+        }
+
+        return  "Nome: " + nome + "\n" +
+                "Descrição: " + descricao + "\n" +
+                "Responsável: " + responsavel.getNome() + "\n" +
+                "Status: " + status + "\n\n" +
+                "Membros:\n" +
+                membrosStr;
     }
 }

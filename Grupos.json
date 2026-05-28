@@ -1,0 +1,153 @@
+{
+  "1": {
+    "nome": "PetComp",
+    "email": "PetComp@",
+    "descricao": "Os melhorzinhos que ta tendo",
+    "status": "ATIVO",
+    "responsavel": {
+      "siape": "SIAPE123",
+      "departamento": "Comp",
+      "nome": "Prof. Geraldo",
+      "email": "geraldo@",
+      "senha": "senha",
+      "ativo": true,
+      "id": 3
+    },
+    "id": 1,
+    "membros": [
+      {
+        "matricula": "1234",
+        "semestre": 3,
+        "curso": {
+          "nome": "ccomp",
+          "codigo": 123,
+          "alunos": []
+        },
+        "nome": "Perla",
+        "email": "perla@",
+        "senha": "123",
+        "ativo": true,
+        "id": 1
+      },
+      {
+        "matricula": "1235",
+        "semestre": 3,
+        "curso": {
+          "nome": "ccomp",
+          "codigo": 123,
+          "alunos": []
+        },
+        "nome": "Nicolas",
+        "email": "nicolas@",
+        "senha": "123",
+        "ativo": true,
+        "id": 4
+      },
+      {
+        "matricula": "190",
+        "semestre": 3,
+        "curso": {
+          "nome": "ccomp",
+          "codigo": 123,
+          "alunos": []
+        },
+        "nome": "Samantha",
+        "email": "sam@",
+        "senha": "123",
+        "ativo": true,
+        "id": 5
+      },
+      {
+        "grupo": {
+          "nome": "PetComp",
+          "email": "PetComp@",
+          "descricao": "Os melhorzinhos que ta tendo",
+          "status": "ATIVO",
+          "responsavel": {
+            "siape": "SIAPE123",
+            "departamento": "Comp",
+            "nome": "Prof. Geraldo",
+            "email": "geraldo@",
+            "senha": "senha",
+            "ativo": true,
+            "id": 3
+          },
+          "id": 1,
+          "membros": [
+            {
+              "matricula": "1234",
+              "semestre": 3,
+              "curso": {
+                "nome": "ccomp",
+                "codigo": 123,
+                "alunos": []
+              },
+              "nome": "Perla",
+              "email": "perla@",
+              "senha": "123",
+              "ativo": true,
+              "id": 1
+            },
+            {
+              "matricula": "1771",
+              "semestre": 3,
+              "curso": {
+                "nome": "ccomp",
+                "codigo": 123,
+                "alunos": []
+              },
+              "nome": "David",
+              "email": "dvd@",
+              "senha": "123",
+              "ativo": true,
+              "id": 6
+            },
+            {
+              "matricula": "190",
+              "semestre": 3,
+              "curso": {
+                "nome": "ccomp",
+                "codigo": 123,
+                "alunos": []
+              },
+              "nome": "Samantha",
+              "email": "sam@",
+              "senha": "123",
+              "ativo": true,
+              "id": 5
+            },
+            {
+              "matricula": "1235",
+              "semestre": 3,
+              "curso": {
+                "nome": "ccomp",
+                "codigo": 123,
+                "alunos": []
+              },
+              "nome": "Nicolas",
+              "email": "nicolas@",
+              "senha": "123",
+              "ativo": true,
+              "id": 4
+            }
+          ]
+        },
+        "cargo": "PRESIDENTE",
+        "data_inicio": "2026-05-28",
+        "data_fim": "2036-05-28",
+        "matricula": "1771",
+        "semestre": 3,
+        "curso": {
+          "nome": "ccomp",
+          "codigo": 123,
+          "alunos": []
+        },
+        "nome": "David",
+        "email": "dvd@",
+        "senha": "123",
+        "ativo": true,
+        "id": 6
+      }
+    ]
+  }
+}

@@ -18,11 +18,6 @@ public class TelaOportunidade{
             return;
         }
 
-        oportunidades.forEach(o ->
-                System.out.println("[" + o.getId() + "] " + o.getTitulo() + " | " + o.getTipo()));
-        System.out.println("─────────────────────────────");
-
-
         System.out.println("Digite o ID para se inscrever e 0 para voltar");
         try {
             id = Integer.parseInt(scanner.nextLine());

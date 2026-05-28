@@ -5,6 +5,7 @@ import Entity.*;
 import Repository.impl.*;
 import Service.*;
 import Telas.*;
+import Enum.*;
 
 public class Main {
 
@@ -92,16 +93,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
 
-        Docente docent2 = usuarioService.buscarSiape("123");
-        Grupo grupo = new Grupo("pet", "pet@", "n fazemos nd", docent2);
-        Discente user = usuarioService.buscarMatricula("2023001234");
-        Long aux = user.getId();
-        System.out.println(aux);
-        user = new DiscenteDiretor(user, "membro", 4, grupo, aux);
-        System.out.println(user.getId());
-        user.setId(user.getId());
-        System.out.println(user.getId());
-        usuarioRepository.salvar(user);
         while (true) {
             System.out.println("\nBEM VINDO");
             System.out.println("1 - Login");

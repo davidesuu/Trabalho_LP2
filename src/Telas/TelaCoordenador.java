@@ -239,8 +239,10 @@ public class TelaCoordenador extends TelaDocente{
         String descricao = scanner.nextLine();
         System.out.println("SIAPE do prof. responsavel: ");
         String siape = scanner.nextLine();
-        Docente doc = usuarioService.buscarSiape(siape);
         try {
+
+            Docente doc = usuarioService.buscarSiape(siape);
+
             grupoService.criarGrupo(
                     nome,
                     email,
@@ -248,9 +250,13 @@ public class TelaCoordenador extends TelaDocente{
                     doc,
                     coordenador
             );
+
             System.out.println("Grupo criado com sucesso!");
+
         } catch (RuntimeException e) {
-            System.out.println("Erro ao criar grupo");
+
+            e.printStackTrace();
+
         }
     }
 }

@@ -86,9 +86,10 @@ public class OportunidadeRepositoryImpl{
 
     }
 
-    public List<Long> ListarKeys(){
+    public List<Long> listarKeys(List<Oportunidade> oportunidades){
 
-        return List.copyOf(banco.keySet());
-
+        return oportunidades.stream()
+                .map(o -> o.getId())
+                .toList();
     }
 }

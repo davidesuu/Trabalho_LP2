@@ -14,5 +14,5 @@ public interface GrupoRepository {
 
     List<Grupo> listaTudo();
 
-    List<Long> ListarKeys();
+    List<Long> listarKeys(List<Grupo> grupo);
 }

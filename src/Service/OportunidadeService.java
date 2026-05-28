@@ -88,13 +88,12 @@ public class OportunidadeService {
 
     public List<Long> ListarIndice(List<Oportunidade> oportunidades) {
 
-        List<Long> ids = repository.ListarKeys();
-
-        Integer menuIndex = 1;
+        List<Long> ids = repository.listarKeys(oportunidades);   ///explicando o fluxo
+        Integer menuIndex = 1;                                   ///Faz uma lista com todos ids com o filtro selecionado
 
         for(Long realId : ids) {
-
-            System.out.println(
+                                                                 ///itera no ids, e usa o buscarporid para conseguir pegar
+            System.out.println(                                  /// O valor no hashmap enquando mostra um id "falso"
                     "[" + menuIndex + "]\n"
                             + repository.buscaPorId(realId)
                             + "\n"
