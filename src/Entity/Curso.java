@@ -4,6 +4,7 @@ import java.util.List;
 
 
 public class Curso {
+    Long cursoId;
     private String nome;
     private Integer codigo;
     private ArrayList<Discente> alunos;
@@ -13,6 +14,14 @@ public class Curso {
         this.nome = nome;
         this.codigo = codigo;
         this.alunos = new ArrayList<>();
+    }
+
+    public Long getCursoId() {
+        return cursoId;
+    }
+
+    public void setCursoId(Long cursoId) {
+        this.cursoId = cursoId;
     }
 
     public String getNome() {

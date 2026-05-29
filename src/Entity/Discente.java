@@ -6,7 +6,7 @@ import Repository.InscricaoRepository;
 import java.util.List;
 
 public class Discente extends Usuario{
-    private String matricula; //talvez eu tire
+    private Matricula matricula; //talvez eu tire
     private Integer semestre;
     private Curso curso;
     private List<Matricula> matriculas;
