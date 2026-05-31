@@ -1,28 +1,29 @@
 package Repository.impl;
 
-import Entity.PPC;
+import Entity.Curso;
 import Util.GsonUtil;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class PPCRepositoryImpl {
+public class CursoRepositoryImpl {
 
-    private HashMap<Long, PPC> banco = new HashMap<>();
+    private HashMap<Long, Curso> banco = new HashMap<>();
 
     private Long proximoId = 1L;
 
-    public PPCRepositoryImpl() {
+    public CursoRepositoryImpl() {
 
-        try (FileReader leitor = new FileReader("PPCs.json")) {
+        try (FileReader leitor = new FileReader("Cursos.json")) {
 
-            Type tipo = new TypeToken<HashMap<Long, PPC>>() {}.getType();
+            Type tipo = new TypeToken<HashMap<Long, Curso>>() {}.getType();
 
             banco = GsonUtil.GSON.fromJson(leitor, tipo);
 
@@ -45,30 +46,33 @@ public class PPCRepositoryImpl {
         }
     }
 
-    public Optional<PPC> buscarPorId(Long id) {
+    public Optional<Curso> buscarPorId(Long id) {
 
         return Optional.ofNullable(banco.get(id));
     }
 
-    public Optional<PPC> buscarMaisRecentePorCurso(Long cursoId) {
+    public Optional<Curso> buscarPorNome(String nome) {
 
         return banco.values()
                 .stream()
-                .filter(p -> p.getCursoId().equals(cursoId))
-                .max(Comparator.comparing(PPC::getAnoVigencia));
+                .filter(c -> c.getNome().equalsIgnoreCase(nome))
+                .findFirst();
+    }
+    public List<Curso> listarTodos() {
+        return banco.values().stream().toList();
     }
 
-    public void salvar(PPC ppc) {
+    public void salvar(Curso curso) {
 
-        if (ppc.getId() == 0) {
-            ppc.setId(proximoId++);
+        if (curso.getCursoId() == null) {
+            curso.setCursoId(proximoId++);
         }
 
-        banco.put(ppc.getId(), ppc);
+        banco.put(curso.getCursoId(), curso);
 
-        try (FileWriter escritor = new FileWriter("PPCs.json")) {
+        try (FileWriter escritor = new FileWriter("Cursos.json")) {
 
-            Type tipo = new TypeToken<HashMap<Long, PPC>>() {}.getType();
+            Type tipo = new TypeToken<HashMap<Long, Curso>>() {}.getType();
 
             GsonUtil.GSON.toJson(banco, tipo, escritor);
 

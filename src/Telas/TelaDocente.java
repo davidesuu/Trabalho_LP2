@@ -1,6 +1,7 @@
 package Telas;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -14,12 +15,14 @@ import Enum.*;
 public class TelaDocente extends Tela{
     protected final Docente docente;
 
-    public TelaDocente( OportunidadeService oportunidadeService,
-                        AproveitamentoService aproveitamentoService,
-                        InscricaoService inscricaoService,
-                        GrupoService grupoService, UsuarioService usuarioService,
-                        Docente docente) {
-        super(oportunidadeService, aproveitamentoService, inscricaoService, grupoService, usuarioService);
+    public TelaDocente(OportunidadeService oportunidadeService,
+                       AproveitamentoService aproveitamentoService,
+                       InscricaoService inscricaoService,
+                       GrupoService grupoService,
+                       UsuarioService usuarioService,
+                       PPCService ppcService,
+                       Docente docente, LocalDate dataAtual) {
+        super(oportunidadeService, aproveitamentoService, inscricaoService, grupoService, usuarioService, ppcService, dataAtual);
         this.docente = docente;
     }
 
@@ -50,7 +53,7 @@ public class TelaDocente extends Tela{
 
             switch (opt) {
                 case 1:
-                    TelaOportunidade.CriarOportunidade(oportunidadeService, scanner, docente); // Feito
+                    TelaOportunidade.CriarOportunidade(oportunidadeService, scanner, docente, dataAtual); // Feito
                     break;
                 case 2:
                     aprovarOportunidades(oportunidadeService, scanner, docente);
@@ -160,7 +163,7 @@ public class TelaDocente extends Tela{
         System.out.println("0 - Voltar");
         int opc;
         try {
-            opc = Integer.parseInt(scanner.nextLine()); // ← mesmo padrão
+            opc = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
             System.out.println("Opção inválida.");
             return;
@@ -190,7 +193,8 @@ public class TelaDocente extends Tela{
             System.out.println("1 - Ver Grupos");
             System.out.println("2 - Adicionar novos membros");
             System.out.println("3 - Promover Membros");
-            System.out.println("4 - Sair");
+            System.out.println("4 - Remover Membros");
+            System.out.println("5 - Sair");
             try {
                 opt = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
@@ -208,10 +212,12 @@ public class TelaDocente extends Tela{
                     promoverMembroTela(grupoService, usuarioService, scanner, docente);
                     break;
                 case 4:
+                    removerMembroTela(grupoService, usuarioService, scanner, docente);
+                case 5:
                     System.out.println("Saindo...");
                     break;
             }
-        }while (opt != 4);
+        }while (opt != 5);
     }
     static void promoverMembroTela(
             GrupoService grupoService,
@@ -259,13 +265,14 @@ public class TelaDocente extends Tela{
             return;
         }
 
-        System.out.println("\nMEMBROS:");
-
-        grupo.getMembros().forEach(m ->
-                 System.out.println(
-                        m.getMatricula() + " - " + m.getNome()
-                )
-        );
+        List<Discente> membros = grupoService.getMembros(grupo);
+        if (membros.isEmpty()){
+            System.out.println("Esse grupo não possui membros.");
+            return; }
+        System.out.println("\n=== MEMBROS ===");
+        membros.forEach(m -> {
+            if (!(m instanceof DiscenteDiretor)) {
+                System.out.println( m.getMatricula() + " - " + m.getNome() ); } });
 
         System.out.println("Digite a matrícula do membro:");
 
@@ -280,8 +287,12 @@ public class TelaDocente extends Tela{
             return;
         }
 
-        if (!grupo.getMembros().contains(discente)){
+        if (!grupo.getMembros().contains(discente.getId())){
             System.out.println("Esse discente não pertence ao grupo.");
+            return;
+        }
+        if (discente instanceof DiscenteDiretor){
+            System.out.println("Esse discente já possui um cargo.");
             return;
         }
 
@@ -327,12 +338,109 @@ public class TelaDocente extends Tela{
                             grupo
                     );
 
+
             usuarioService.atualizarUsuario(diretor);
+            Log log = new Log(discente.getMatricula(), discente.getNome(), grupo.getNome(), cargo.toString());
 
             System.out.println("Discente promovido com sucesso!");
 
         } catch (RuntimeException e){
             System.out.println("Erro ao promover discente.");
+        }
+    }
+
+    static void removerMembroTela(
+            GrupoService grupoService,
+            UsuarioService usuarioService,
+            Scanner scanner,
+            Docente docente
+    ){
+        List<Grupo> grupos = grupoService.listarPorDocente(docente);
+
+        if (grupos.isEmpty()){
+            System.out.println("Você não é responsável por nenhum grupo.");
+            return;
+        }
+
+        System.out.println("\nGRUPOS:");
+
+        grupos.forEach(g ->
+                System.out.println("[" + g.getId() + "] " + g.getNome())
+        );
+
+        System.out.println("Digite o ID do grupo:");
+
+        Long grupoId;
+
+        try{
+            grupoId = Long.parseLong(scanner.nextLine());
+        } catch (NumberFormatException e){
+            System.out.println("ID inválido.");
+            return;
+        }
+
+        Grupo grupo;
+
+        try {
+            grupo = grupoService.buscarGrupoPorId(grupoId);
+        } catch (RuntimeException e){
+            System.out.println("Erro ao buscar grupo.");
+            return;
+        }
+
+       List<Discente> membros = grupoService.getMembros(grupo);
+
+        if(membros.isEmpty()){
+            System.out.println("Esse grupo não possui membros");
+            return;
+        }
+
+        System.out.println("\nMEMBROS:");
+
+        membros.forEach(m ->
+                System.out.println(m.getMatricula() + " - " + m.getNome()));
+
+        System.out.println("Digite a matrícula do membro:");
+
+        String matricula = scanner.nextLine();
+
+        Discente discente;
+
+        try{
+            discente = usuarioService.buscarMatricula(matricula);
+        } catch (RuntimeException e){
+            System.out.println("Discente não encontrado.");
+            return;
+        }
+
+        if (!grupo.getMembros().contains(discente.getId())){
+            System.out.println("Esse discente não pertence ao grupo.");
+            return;
+        }
+
+        try{
+            grupoService.removerMembro(discente, grupo);
+
+            Long idOriginal = discente.getId();
+            Vinculo vinculo = discente.getVinculo();
+
+            discente = new Discente(discente.getNome(),
+                    discente.getEmail(),
+                    discente.getSenha(),
+                    discente.getMatricula(),
+                    discente.getSemestre(),
+                    discente.getCurso());
+
+            discente.setId(idOriginal);
+            discente.setVinculo(vinculo);
+            discente.setAtivo(true);
+
+            usuarioService.atualizarUsuario(discente);
+
+            System.out.println("Membro removido com sucesso!");
+
+        } catch (RuntimeException e){
+            System.out.println("Erro ao remover membro.");
         }
     }
 
@@ -353,30 +461,41 @@ public class TelaDocente extends Tela{
             System.out.println("Nome: " + g.getNome());
             System.out.println("Descrição: " + g.getDescricao());
 
+            List<Discente> membros = grupoService.getMembros(g);
             System.out.println("Membros:");
 
-            if(g.getMembros().isEmpty()){
+
+            if(membros.isEmpty()){
 
                 System.out.println(" - Nenhum membro");
 
             } else {
+                membros.forEach(m -> {
 
-                g.getMembros().forEach(m -> {
+                    String cargo;
 
-                    String cargo = "MEMBRO";
-
-                    if(m instanceof DiscenteDiretor diretor){
+                    if (m instanceof DiscenteDiretor diretor) {
                         cargo = diretor.getCargo().toString();
-                    }
+                        System.out.println(
+                                " - "
+                                        + m.getNome()
+                                        + " | "
+                                        + m.getMatricula()
+                                        + " | "
+                                        + cargo
 
-                    System.out.println(
-                            " - "
-                                    + m.getNome()
-                                    + " | "
-                                    + m.getMatricula()
-                                    + " | "
-                                    + cargo
-                    );
+                        );
+                    } else {
+                        cargo = "MEMBRO";
+                        System.out.println(
+                                " - "
+                                        + m.getNome()
+                                        + " | "
+                                        + m.getMatricula()
+                                        + " | "
+                                        + cargo
+                        );
+                    }
                 });
             }
 
@@ -425,10 +544,9 @@ public class TelaDocente extends Tela{
 
         try{
 
-            Discente disc =
-                    usuarioService.buscarMatricula(matricula);
+            Discente disc = usuarioService.buscarMatricula(matricula);
             Grupo grupo = grupoService.buscarGrupoPorId(id);
-            grupoService.adicionarMembro(disc, grupo);
+            grupoService.adicionarMembro(id, disc);
             grupoService.atualizarGrupo(grupo);
 
             System.out.println("Membro adicionado com sucesso!");

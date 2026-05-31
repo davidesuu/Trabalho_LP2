@@ -1,31 +1,30 @@
 package Service;
 import Entity.Discente;
-import Entity.Matricula;
-import Entity.PPC;
-import Service.PPCService;
+import Entity.Vinculo;
 import Repository.impl.UsuarioRepositoryImpl;
 
 public class MatriculaService {
-    private final UsuarioService usuarioService;
+    private final UsuarioRepositoryImpl usuarioRepository;
     private final PPCService ppcService;
 
-    public MatriculaService(UsuarioService usuarioService, PPCService ppcService) {
-        this.usuarioService = usuarioService;
+    public MatriculaService(UsuarioRepositoryImpl usuarioRepository, PPCService ppcService) {
+        this.usuarioRepository = usuarioRepository;
         this.ppcService = ppcService;
     }
 
-    public Matricula matricular(Discente discente) {
+    public Vinculo matricular(Discente discente) {
         Long cursoId = discente.getCurso().getCursoId();
         Long ppcId = ppcService.buscarMaisRecentePorCurso(cursoId).getId();
 
-        Matricula matricula = new Matricula(ppcId, "Ativo", 0);
-        discente.setMatricula(matricula);
-        return matricula;
+        Vinculo vinculo = new Vinculo(ppcId, "Ativo", 0);
+        discente.setVinculo(vinculo);
+        usuarioRepository.salvar(discente);
+        return vinculo;
     }
 
     public void adicionarHoras(Discente discente, int horas) {
-        Matricula matricula = discente.getMatricula();
-        matricula.setChTotalCumprida(matricula.getChTotalCumprida()+horas);
-        usuarioService.atualizarUsuario(discente);
+        Vinculo vinculo = discente.getVinculo();
+        vinculo.setChTotalCumprida(vinculo.getChTotalCumprida() + horas);
+        usuarioRepository.salvar(discente);
     }
 }

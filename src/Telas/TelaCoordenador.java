@@ -4,6 +4,7 @@ import Entity.*;
 import Service.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,12 +14,13 @@ public class TelaCoordenador extends TelaDocente{
     public TelaCoordenador(OportunidadeService oportunidadeService,
                            AproveitamentoService aproveitamentoService,
                            InscricaoService inscricaoService,
-                           GrupoService grupoService, UsuarioService usuarioService, Coordenador coordenador){
-        super(oportunidadeService,
-              aproveitamentoService,
-              inscricaoService,
-              grupoService, usuarioService, coordenador);
+                           GrupoService grupoService,
+                           UsuarioService usuarioService,
+                           PPCService ppcService,
+                           Coordenador coordenador, LocalDate dataAtual) {
+        super(oportunidadeService, aproveitamentoService, inscricaoService, grupoService, usuarioService, ppcService, coordenador, dataAtual);
         this.coordenador = coordenador;
+
     }
    @Override
     public void mostrarTela (){
@@ -34,6 +36,7 @@ public class TelaCoordenador extends TelaDocente{
             System.out.println("3 - Verificar aproveitamentos");
             System.out.println("4 - Verificar inscrição de discentes em Oportunidades");
             System.out.println("5 - Criar Grupos");
+            System.out.println("6 - Cadastrar Novo PPC");
             System.out.println("0 - Sair");
 
             try {
@@ -45,7 +48,7 @@ public class TelaCoordenador extends TelaDocente{
 
             switch (opt) {
                 case 1:
-                    TelaOportunidade.CriarOportunidade(oportunidadeService, scanner, coordenador); // Feito
+                    TelaOportunidade.CriarOportunidade(oportunidadeService, scanner, coordenador, dataAtual); // Feito
                     break;
                 case 2:
                     aprovarOportunidades(oportunidadeService, scanner, coordenador);
@@ -60,6 +63,9 @@ public class TelaCoordenador extends TelaDocente{
                 case 5:
                     criarGruposTela(grupoService, usuarioService, scanner, coordenador); //Feito
                     break;
+                case 6:
+                    cadastrarPPC(ppcService, scanner);
+                    break;
                 case 0:
                     System.out.print("Saindo...");
                     break;
@@ -70,6 +76,38 @@ public class TelaCoordenador extends TelaDocente{
         } while (opt != 0);
     }
 
+    static void cadastrarPPC(PPCService ppcService, Scanner scanner) {
+
+        System.out.println("ID do curso:");
+        Long cursoId;
+        try {
+            cursoId = Long.parseLong(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("ID inválido.");
+            return;
+        }
+
+        System.out.println("Ano de vigência:");
+        int anoVigencia;
+        try {
+            anoVigencia = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Ano inválido.");
+            return;
+        }
+
+        System.out.println("Carga horária total exigida:");
+        int chTotal;
+        try {
+            chTotal = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Carga horária inválida.");
+            return;
+        }
+
+        ppcService.criarPPC(cursoId, anoVigencia, chTotal);
+        System.out.println("PPC cadastrado com sucesso!");
+    }
 
     static void aprovarOportunidades(OportunidadeService oportunidadeService,
                                      Scanner scanner,

@@ -1,15 +1,13 @@
 package Entity;
 
-import Enum.*;
-import Repository.InscricaoRepository;
-
 import java.util.List;
 
 public class Discente extends Usuario{
-    private Matricula matricula; //talvez eu tire
+    private String matricula; //talvez eu tire
     private Integer semestre;
     private Curso curso;
-    private List<Matricula> matriculas;
+    private Vinculo vinculo;
+    private boolean hasSpecialPermission;
 
 
     public Discente(String nome, String email, String senha,
@@ -26,6 +24,14 @@ public class Discente extends Usuario{
 
     public String getMatricula() {
         return matricula;
+    }
+
+    public Vinculo getVinculo() {
+        return vinculo;
+    }
+
+    public void setVinculo(Vinculo vinculo) {
+        this.vinculo = vinculo;
     }
 
     public void setMatricula(String matricula) {

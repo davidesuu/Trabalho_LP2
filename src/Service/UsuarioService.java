@@ -2,6 +2,7 @@ package Service;
 
 import Entity.*;
 import Repository.impl.InscricoesRepositoryImpl;
+import Repository.impl.LogRepositoryImpl;
 import Repository.impl.OportunidadeRepositoryImpl;
 import Repository.impl.UsuarioRepositoryImpl;
 import Enum.Status;
@@ -9,27 +10,30 @@ import Enum.Status;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class UsuarioService {
     private UsuarioRepositoryImpl usuarioRepository;
+    private MatriculaService matriculaService;
 
-    public UsuarioService(UsuarioRepositoryImpl usuarioRepository) {
+    public UsuarioService(UsuarioRepositoryImpl usuarioRepository,  MatriculaService matriculaService) {
+        this.matriculaService = matriculaService;
         this.usuarioRepository = usuarioRepository;
     }
 
     public Discente cadastrarDiscente(String nome, String email, String senha,
-                                      String matricula, Integer semestre, Curso curso){
-        if(usuarioRepository.buscarPorEmail(email).isPresent()){
+                                      Integer semestre, Curso curso) {
+        if (usuarioRepository.buscarPorEmail(email).isPresent()) {
             throw new IllegalStateException("Email já cadastrado");
         }
 
-        if (usuarioRepository.buscarPorMatricula(matricula).isPresent()){
-            throw new IllegalStateException();
-        }
+        String matricula = gerarNumeroMatricula();
 
         Discente discente = new Discente(nome, email, senha, matricula, semestre, curso);
         discente.setAtivo(true);
-        usuarioRepository.salvar(discente);
+
+        matriculaService.matricular(discente); // já salva o discente internamente
+
         return discente;
     }
 
@@ -74,8 +78,30 @@ public class UsuarioService {
         return usuarioRepository.buscarPorMatricula(matricula).orElseThrow(null);
     }
 
+    public Usuario buscarId(Long id){
+        return usuarioRepository.buscarPorId(id);
+    }
+
     public void atualizarUsuario(Usuario usuario){
         usuarioRepository.salvar(usuario);
+
+        if (usuario instanceof DiscenteDiretor diretor) {
+
+            Log log = new Log(diretor.getMatricula(), diretor.getNome(), diretor.getGrupo().getNome(), diretor.getCargo().toString());
+
+            LogRepositoryImpl LogRepository = new LogRepositoryImpl();
+            LogRepository.registrar(log);
+        }
+    }
+
+    private String gerarNumeroMatricula() {
+        int ano = LocalDate.now().getYear();
+        String matricula;
+        do {
+            int numero = ThreadLocalRandom.current().nextInt(1000, 9999);
+            matricula = ano + String.format("%04d", numero);
+        } while (usuarioRepository.buscarPorMatricula(matricula).isPresent());
+        return matricula;
     }
 
     public Docente buscarSiape(String siape){

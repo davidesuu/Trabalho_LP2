@@ -54,6 +54,10 @@ public class UsuarioRepositoryImpl {
                 .findFirst();
     }
 
+    public Usuario buscarPorId(Long id) {
+        return banco.get(id);
+    }
+
     public Optional<Docente> buscarPorSiape(String siape) {
 
         return banco.values()

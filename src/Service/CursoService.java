@@ -1,27 +1,37 @@
 package Service;
 
 import Entity.Curso;
-import Entity.Discente;
-import Enum.Status;
+import Repository.impl.CursoRepositoryImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CursoService {
-    //Depois a gente faz
-    //public void atualizarPPC (Curso curso, Integer horas, String versao){
-        //curso.setCarga_horaria(horas);
-        //curso.setVersao_ppc(versao);
-    //}
 
-    public List<Discente> listarAlunosPorStatus(Curso curso, boolean status){
-        List<Discente> resultado = new ArrayList<>();
+    private final CursoRepositoryImpl repository;
 
-        for(Discente d: curso.getAlunos()){
-            if(status == d.getStatus()){
-                resultado.add(d);
-            }
-        }
-        return resultado;
+    public CursoService(CursoRepositoryImpl repository) {
+        this.repository = repository;
+    }
+
+    public Curso criarCurso(String nome, Integer codigo) {
+
+        Curso curso = new Curso(nome, codigo);
+        repository.salvar(curso);
+        return curso;
+    }
+
+    public Curso buscarPorId(Long id) {
+
+        return repository.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Curso não encontrado: " + id));
+    }
+
+    public Curso buscarPorNome(String nome) {
+        return repository.buscarPorNome(nome)
+                .orElseThrow(() -> new RuntimeException("Curso não encontrado: " + nome));
+    }
+
+    public List<Curso> listarTodos() {
+        return repository.listarTodos();
     }
 }

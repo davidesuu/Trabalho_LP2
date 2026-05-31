@@ -23,9 +23,10 @@ public class PPCService {
                 .orElseThrow(() -> new RuntimeException("Nenhum PPC encontrado para o curso: " + cursoId));
     }
 
-    public PPC criarPPC(Integer cursoId, int anoVigencia, int chTotalExigida) {
+    public PPC criarPPC(Long cursoId, int anoVigencia, int chTotalExigida) {
 
         PPC ppc = new PPC();
+        ppc.setId(0L);
         ppc.setCursoId(cursoId);
         ppc.setAnoVigencia(anoVigencia);
         ppc.setCargaHorariaTotal(chTotalExigida);

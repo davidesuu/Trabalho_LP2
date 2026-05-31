@@ -1,6 +1,8 @@
 package Telas;
 
 import Service.*;
+
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public abstract class Tela {
@@ -11,16 +13,24 @@ public abstract class Tela {
     protected final GrupoService grupoService;
     protected final UsuarioService usuarioService;
     protected final Scanner scanner;
+    protected final PPCService ppcService;
+    protected final LocalDate dataAtual;
 
     protected Tela(OportunidadeService oportunidadeService,
-                       AproveitamentoService aproveitamentoService,
-                       InscricaoService inscricaoService, GrupoService grupoService, UsuarioService usuarioService) {
+                   AproveitamentoService aproveitamentoService,
+                   InscricaoService inscricaoService,
+                   GrupoService grupoService,
+                   UsuarioService usuarioService,
+                   PPCService ppcService,
+                   LocalDate dataAtual) {
         this.oportunidadeService   = oportunidadeService;
         this.aproveitamentoService = aproveitamentoService;
-        this.inscricaoService = inscricaoService;
-        this.grupoService = grupoService;
-        this.usuarioService = usuarioService;
+        this.inscricaoService      = inscricaoService;
+        this.grupoService          = grupoService;
+        this.usuarioService        = usuarioService;
+        this.ppcService            = ppcService;
         this.scanner               = new Scanner(System.in);
+        this.dataAtual = dataAtual;
     }
 
     public abstract void mostrarTela();

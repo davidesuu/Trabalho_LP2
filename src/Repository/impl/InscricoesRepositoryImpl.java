@@ -48,4 +48,11 @@ public class InscricoesRepositoryImpl implements InscricaoRepository {
         return banco.values().stream().filter(inscricao ->
                 inscricao.getStatus().equals(status)).collect(Collectors.toList());
     }
+
+    public List<Long> listarKeys(List<Inscricao> inscricoes){
+
+        return inscricoes.stream()
+                .map(o -> o.getId())
+                .toList();
+    }
 }

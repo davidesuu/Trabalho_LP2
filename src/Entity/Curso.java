@@ -1,19 +1,13 @@
 package Entity;
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class Curso {
-    Long cursoId;
+    private Long cursoId;
     private String nome;
     private Integer codigo;
-    private ArrayList<Discente> alunos;
 
-
-    public Curso(String nome, Integer codigo){
+    public Curso(String nome, Integer codigo) {
         this.nome = nome;
         this.codigo = codigo;
-        this.alunos = new ArrayList<>();
     }
 
     public Long getCursoId() {
@@ -28,18 +22,20 @@ public class Curso {
         return nome;
     }
 
-    public int getCodigo() {
-        return codigo;
-    }
-
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public ArrayList<Discente> getAlunos() {
-        return alunos;
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+
+    @Override
+    public String toString() {
+        return "Curso: " + nome + " | Código: " + codigo;
     }
 }
-
-
-

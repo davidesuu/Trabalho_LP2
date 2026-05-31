@@ -13,13 +13,12 @@ public class Oportunidade {
     private Modalidade modalidade;  //get e set
     private int carga_horaria; //get e set
     private int vagas; //get e set
+    private int vagasOcupadas;
     private Status status; //get e set
     private LocalDate inicio; //get e set
     private LocalDate fim; //get e set
     private Usuario autor;
     private Docente responsavel;
-
-
 
     public Oportunidade (String titulo, String descricao,
                         TipoOportunidade tipo,
@@ -31,9 +30,32 @@ public class Oportunidade {
         this.carga_horaria = carga_horaria;
         this.vagas = vagas;
         this.status = Status.PENDENTE;  //Repensa melhor depois se ela ja e pendente no começo
-        this.fim = fim;
-        this.inicio = inicio;
         this.autor = autor;
+        this.vagasOcupadas = 0;
+    }
+
+    public LocalDate getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(LocalDate inicio) {
+        this.inicio = inicio;
+    }
+
+    public LocalDate getFim() {
+        return fim;
+    }
+
+    public void setFim(LocalDate fim) {
+        this.fim = fim;
+    }
+
+    public int getCarga_horaria() {
+        return carga_horaria;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override
@@ -81,6 +103,11 @@ public class Oportunidade {
         this.responsavel = docente;
     }
 
+    public void incrementaVagasOcupadas(int acrescimo) {
+        this.vagasOcupadas += acrescimo;
+    }
+    public void decrementaVagasOcupadas(int acrescimo) {this.vagasOcupadas =- acrescimo;}
+
     public void rejeitar(Docente docente){
         this.responsavel = docente;
         this.status = Status.REJEITADO;
@@ -92,7 +119,7 @@ public class Oportunidade {
                 "Tipo: " + tipo + "\n" +
                 "Modalidade: " + modalidade + "\n" +
                 "Carga Horária: " + carga_horaria + "h\n" +
-                "Vagas: " + vagas + "\n" +
+                "Vagas Livres: " + (vagas - vagasOcupadas) + "\n" +
                 "Status: " + status + "\n" +
                 "Descrição: " + descricao;
     }

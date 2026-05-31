@@ -1,11 +1,11 @@
 package Entity;
 
-public class Matricula {
+public class Vinculo {
         private Long ppcId;
         private String situacao;
         private int chTotalCumprida;
 
-        public Matricula(Long ppcId, String situacao, int chTotalCumprida) {
+        public Vinculo(Long ppcId, String situacao, int chTotalCumprida) {
                 this.ppcId = ppcId;
                 this.situacao = situacao;
                 this.chTotalCumprida = chTotalCumprida;

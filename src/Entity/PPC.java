@@ -2,7 +2,7 @@ package Entity;
 
 public class PPC {
     private Long id;
-    private Integer cursoId;
+    private Long cursoId;
     private Integer anoVigencia;
     private Integer cargaHorariaTotal;
 
@@ -14,12 +14,12 @@ public class PPC {
         this.id = id;
     }
 
-    public Integer getCursoId() {
-        return cursoId;
+    public void setCursoId(Long cursoId) {
+        this.cursoId = cursoId;
     }
 
-    public void setCursoId(Integer cursoId) {
-        this.cursoId = cursoId;
+    public Long getCursoId() {
+        return cursoId;
     }
 
     public Integer getAnoVigencia() {

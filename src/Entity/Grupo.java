@@ -6,21 +6,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Grupo {
-    String nome;
-    String email;
-    String descricao;
-    Status status;
-    Docente responsavel;
-    Long id;
-    List<Discente> membros;
+    private Long id;
+    private String nome;
+    private String email;
+    private String descricao;
+    private Status status;
+    private Docente responsavel;
+    private List<Long> membroIds = new ArrayList<>();
     public Grupo(String nome, String email, String descricao, Docente responsavel) {
         this.nome = nome;
         this.email = email;
         this.descricao = descricao;
         this.status = Status.ATIVO;
         this.responsavel = responsavel;
-        this.membros = new ArrayList<>();
         this.id = 0L;
+    }
+
+    public List<Long> getMembroIds() {
+        return membroIds;
+    }
+
+    public void setMembroIds(List<Long> membroIds) {
+        this.membroIds = membroIds;
     }
 
     public String getNome() {
@@ -71,47 +78,19 @@ public class Grupo {
         this.responsavel = responsavel;
     }
 
-    public List<Discente> getMembros() {
-        return membros;
+    public List<Long> getMembros() {
+        return membroIds;
     }
 
-    public void setMembros(Discente usuario){
-        this.membros.add(usuario);
+    public void setMembros(Long id) {
+        this.membroIds.add(id);
     }
 
     @Override
     public String toString() {
-
-        StringBuilder membrosStr = new StringBuilder();
-
-        if(membros.isEmpty()){
-
-            membrosStr.append("Nenhum membro");
-
-        } else {
-
-            for(Discente membro : membros){
-
-                membrosStr.append("- ")
-                        .append(membro.getNome())
-                        .append(" (")
-                        .append(membro.getMatricula())
-                        .append(")");
-
-                if(membro instanceof DiscenteDiretor diretor){
-                    membrosStr.append(" - ")
-                            .append(diretor.getCargo());
-                }
-
-                membrosStr.append("\n");
-            }
-        }
-
-        return  "Nome: " + nome + "\n" +
+        return "Nome: " + nome + "\n" +
                 "Descrição: " + descricao + "\n" +
                 "Responsável: " + responsavel.getNome() + "\n" +
-                "Status: " + status + "\n\n" +
-                "Membros:\n" +
-                membrosStr;
+                "Status: " + status;
     }
 }

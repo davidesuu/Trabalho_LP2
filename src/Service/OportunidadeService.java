@@ -1,24 +1,30 @@
 package Service;
 
-import Entity.Docente;
-import Entity.Usuario;
+import Entity.*;
 import Enum.Status; //coment 16: Nao precisaria fazer isso
 import Enum.TipoOportunidade;
 import Enum.Modalidade;
-import Entity.Oportunidade;
+import Repository.InscricaoRepository;
+import Repository.impl.InscricoesRepositoryImpl;
+import Service.MatriculaService;
+import Repository.impl.AproveitamentoRepositoryImpl;
 import Repository.impl.OportunidadeRepositoryImpl;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
 public class OportunidadeService {
 
     private final OportunidadeRepositoryImpl repository;
+    private final InscricoesRepositoryImpl inscricoesRepository;
+    private final MatriculaService matriculaService;
 
-    public OportunidadeService(OportunidadeRepositoryImpl repository){
-
+    public OportunidadeService(OportunidadeRepositoryImpl repository, InscricoesRepositoryImpl inscricoesRepository, MatriculaService matriculaService) {
+        this.matriculaService = matriculaService;
         this.repository = repository;
+        this.inscricoesRepository = inscricoesRepository;
 
     }
 
@@ -50,26 +56,26 @@ public class OportunidadeService {
         //falta tbm a verificao do status e etc
     }
 
-    public Oportunidade buscar(long id){
+    public Oportunidade buscar(long id) {
 
         return repository.buscaPorId(id);
 
     }
 
-    public List<Oportunidade> listarPublicadas(){
+    public List<Oportunidade> listarPublicadas() {
 
         return repository.listarPorStatus(Status.PUBLICADA);
 
     }
 
-    public List<Oportunidade> listarPendentes(){
+    public List<Oportunidade> listarPendentes() {
 
         return repository.listarPorStatus(Status.PENDENTE);
 
     }
 
     public Oportunidade criarOportunidade(String titulo, String descricao, TipoOportunidade tipo,
-                                          Modalidade modalidade, int cargaHoraria, int vagas,
+                                          Modalidade modalidade, int cargaHoraria, int vagas, LocalDate inicio, LocalDate fim,
                                           Usuario autor) throws IOException {
 
         Oportunidade o = autor.criarOportunidade(
@@ -80,10 +86,16 @@ public class OportunidadeService {
                 cargaHoraria,
                 vagas
         );
+        o.setInicio(inicio);
+        o.setFim(fim);
 
         repository.salvar(o);
 
         return o;
+    }
+
+    public void salvarOportunidade(Oportunidade o){
+
     }
 
     public List<Long> ListarIndice(List<Oportunidade> oportunidades) {
@@ -91,8 +103,8 @@ public class OportunidadeService {
         List<Long> ids = repository.listarKeys(oportunidades);   ///explicando o fluxo
         Integer menuIndex = 1;                                   ///Faz uma lista com todos ids com o filtro selecionado
 
-        for(Long realId : ids) {
-                                                                 ///itera no ids, e usa o buscarporid para conseguir pegar
+        for (Long realId : ids) {
+            ///itera no ids, e usa o buscarporid para conseguir pegar
             System.out.println(                                  /// O valor no hashmap enquando mostra um id "falso"
                     "[" + menuIndex + "]\n"
                             + repository.buscaPorId(realId)
@@ -103,5 +115,48 @@ public class OportunidadeService {
         }
 
         return ids;
+    }
+
+    public void atualizarOportunidade(Oportunidade oportunidade) {
+        try {
+            repository.salvar(oportunidade);
+        }
+        catch (Exception e) {
+            System.out.println("Erro ao atualizar oportunidade");
+        }
+    }
+
+    public void verificarOportunidadesExpiradas(LocalDate dataAtual) {
+        List<Oportunidade> publicadas = repository.listarPorStatus(Status.PUBLICADA);
+
+        for (Oportunidade o : publicadas) {
+            if (o.getFim() != null && o.getFim().isBefore(dataAtual)) {
+                o.setStatus(Status.FINALIZADO);
+                try {
+                    repository.salvar(o);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void finalizarOportunidades() {
+        List<Oportunidade> oportunidades = repository.listarPorStatus(Status.FINALIZADO);
+
+        for (Oportunidade o : oportunidades) {
+            List<Inscricao> inscricoes = inscricoesRepository.buscarPorOportunidade(o);
+            for (Inscricao inscricao : inscricoes) {
+                if (inscricao.getStatus().equals(Status.APROVADO)) {
+                    matriculaService.adicionarHoras(inscricao.getDiscente(), o.getCarga_horaria());
+                }
+            }
+            o.setStatus(Status.HORAS_CONTABILIZADAS);
+            try {
+                repository.salvar(o);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -26,10 +26,19 @@ public class DiscenteDiretor extends Discente {
         this.data_inicio = LocalDate.now();
         this.data_fim = LocalDate.now().plusYears(duracao);
         this.setAtivo(true);
+        this.setVinculo(disc.getVinculo());
     }
 
     public Cargo getCargo() {
         return cargo;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
     }
 
     @Override

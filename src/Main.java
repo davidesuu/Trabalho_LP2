@@ -1,11 +1,12 @@
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 import Entity.*;
 import Repository.impl.*;
 import Service.*;
 import Telas.*;
-import Enum.*;
 
 public class Main {
 
@@ -77,20 +78,26 @@ public class Main {
         GrupoRepositoryImpl grupoRepository = new GrupoRepositoryImpl();
         AproveitamentoRepositoryImpl aproveitamentoRepository = new AproveitamentoRepositoryImpl();
         CertificadoRepositoryImpl certificadoRepository = new CertificadoRepositoryImpl();
+        CursoRepositoryImpl cursoRepository = new CursoRepositoryImpl();
+        PPCRepositoryImpl ppcRepository = new PPCRepositoryImpl();
+        LogRepositoryImpl logRepository = new LogRepositoryImpl();
 
-        //Services
+        CursoService cursoService = new CursoService(cursoRepository);
+        PPCService ppcService = new PPCService(ppcRepository);
+        MatriculaService matriculaService = new MatriculaService(usuarioRepository, ppcService);
         AuthService authService = new AuthService(usuarioRepository);
-        UsuarioService usuarioService = new UsuarioService(usuarioRepository);
-        GrupoService grupoService = new GrupoService(grupoRepository);
-        OportunidadeService oportunidadeService = new OportunidadeService(oportunidadeRepository);
+        UsuarioService usuarioService = new UsuarioService(usuarioRepository, matriculaService);
+        GrupoService grupoService = new GrupoService(grupoRepository, logRepository, usuarioRepository);
+        OportunidadeService oportunidadeService = new OportunidadeService(oportunidadeRepository, inscricoesRepository, matriculaService);
         AproveitamentoService aproveitamentoService = new AproveitamentoService(aproveitamentoRepository);
-        InscricaoService inscricaoService = new InscricaoService(inscricoesRepository);
+        InscricaoService inscricaoService = new InscricaoService(inscricoesRepository, oportunidadeService);
         CertificadoService certificadoService = new CertificadoService(certificadoRepository);
 
-        // Usuários de teste
-        Curso curso = new Curso("Ciência da Computação", 123320);
-        // Oportunidade oportunidade = oportunidadeService.criarOportunidade("titulo", "descriçao", TipoOportunidade.CURSO, Modalidade.HIBRIDO, 10, 10, usuarioService.getId(2L));
         Scanner scanner = new Scanner(System.in);
+
+
+        //Dia Atual
+        LocalDate data = LocalDate.now();
 
 
         while (true) {
@@ -106,17 +113,42 @@ public class Main {
                 case "1":
                     try {
                         Login(authService);
-                        TelaPrincipal(authService, oportunidadeService, aproveitamentoService, grupoService, inscricaoService, usuarioService);
+                        TelaPrincipal(authService, oportunidadeService, aproveitamentoService, grupoService, inscricaoService, usuarioService, ppcService, data);
                     } catch (RuntimeException e) {
                         System.out.println("Erro: " + e.getMessage());
                     }
                     break;
 
                 case "2":
-                    Cadastro(usuarioService);
+                    Cadastro(usuarioService, cursoService);
                     break;
                 case "3":
-                    // certificadoService.criarCertificado(oportunidade, (Discente) usuarioService.getId(2L), 1);
+                    System.out.println("Data atual: " + data);
+                    System.out.println("1 - Pular um dia");
+                    System.out.println("2 - Pular um mês");
+                    System.out.println("3 - Pular um ano");
+                    System.out.println("0 - Voltar");
+
+                    String opc3 = scanner.nextLine();
+
+                    switch (opc3) {
+                        case "1":
+                            data = data.plusDays(1);
+                            System.out.println("Nova data: " + data);
+                            break;
+                        case "2":
+                            data = data.plusMonths(1);
+                            System.out.println("Nova data: " + data);
+                            break;
+                        case "3":
+                            data = data.plusYears(1);
+                            System.out.println("Nova data: " + data);
+                            break;
+                        case "0":
+                            break;
+                        default:
+                            System.out.println("Opção inválida");
+                    }
                     break;
                 case "0":
                     System.out.println("Encerrando...");
@@ -128,7 +160,7 @@ public class Main {
         }
     }
 
-    public static void Cadastro(UsuarioService usuarioService) {
+    public static void Cadastro(UsuarioService usuarioService, CursoService cursoService) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Nome:");
@@ -140,24 +172,60 @@ public class Main {
         System.out.println("Senha:");
         String senha = scanner.nextLine();
 
-        System.out.println("Tipo (Discente/Docente/DiscDiretor):");
-        String opc = scanner.nextLine();
 
-        Curso curso = new Curso("ccomp", 123);
+
+
+        System.out.println("Digite (1 - Discente / 2 - Docente):");
+        int opc;
+        try {
+            opc = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Opção inválida.");
+            return;
+        }
 
         switch (opc) {
-            case "Discente":
-                System.out.println("Matricula:");
-                String mat = scanner.nextLine();
-
+            case 1:
                 System.out.println("Semestre:");
-                int sem = scanner.nextInt();
-                scanner.nextLine();
+                int sem;
+                try {
+                    sem = Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Semestre inválido.");
+                    return;
+                }
 
-                usuarioService.cadastrarDiscente(nome, email, senha, mat, sem, curso);
+                List<Curso> cursos = cursoService.listarTodos();
+                if (cursos.isEmpty()) {
+                    System.out.println("Nenhum curso cadastrado.");
+                    return;
+                }
+
+                System.out.println("\nCursos disponíveis:");
+                for (int i = 0; i < cursos.size(); i++) {
+                    System.out.println("[" + (i + 1) + "] " + cursos.get(i).getNome());
+                }
+
+                System.out.println("Escolha o número do curso:");
+                int opcCurso;
+                try {
+                    opcCurso = Integer.parseInt(scanner.nextLine());
+                    if (opcCurso < 1 || opcCurso > cursos.size()) {
+                        System.out.println("Opção inválida.");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Opção inválida.");
+                    return;
+                }
+
+                Curso curso = cursos.get(opcCurso - 1);
+                usuarioService.cadastrarDiscente(nome, email, senha, sem, curso);
+                System.out.println("Discente cadastrado com sucesso!");
                 break;
 
-            case "Docente":
+
+            case 2:
                 System.out.println("Siape:");
                 String siape = scanner.nextLine();
 
@@ -193,7 +261,9 @@ public class Main {
             AproveitamentoService aproveitamentoService,
             GrupoService grupoService,
             InscricaoService inscricaoService,
-            UsuarioService usuarioService
+            UsuarioService usuarioService,
+            PPCService ppcService,
+            LocalDate data
     ) {
         Usuario usuario = authService.getUsuarioLogado();
 
@@ -202,27 +272,28 @@ public class Main {
         if (usuario instanceof DiscenteDiretor dd) {
             tela = new TelaDiscenteDiretor(
                     oportunidadeService, aproveitamentoService,
-                    inscricaoService, grupoService, usuarioService, dd);
+                    inscricaoService, grupoService, usuarioService, dd, ppcService, data);
 
         } else if (usuario instanceof Discente d) {
             tela = new TelaDiscente(
                     oportunidadeService, aproveitamentoService,
-                    inscricaoService, grupoService, usuarioService, d);
+                    inscricaoService, grupoService, usuarioService, d, ppcService, data);
 
         }else if (usuario instanceof Coordenador coo){
             tela = new TelaCoordenador(oportunidadeService, aproveitamentoService,
-                    inscricaoService, grupoService, usuarioService, coo);
+                    inscricaoService, grupoService, usuarioService,ppcService,coo, data);
 
         } else if (usuario instanceof Docente doc) {
             tela = new TelaDocente(
                     oportunidadeService, aproveitamentoService,
-                    inscricaoService, grupoService, usuarioService, doc);
+                    inscricaoService, grupoService, usuarioService, ppcService, doc, data);
 
         } else {
             System.out.println("Tipo de usuário não reconhecido.");
             return;
         }
-
+        oportunidadeService.verificarOportunidadesExpiradas(data);
+        oportunidadeService.finalizarOportunidades();
         tela.mostrarTela();
 
         authService.logout();
