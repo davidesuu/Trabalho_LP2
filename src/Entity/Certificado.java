@@ -27,7 +27,7 @@ public class Certificado {
                         Integer hora){
         this.uuid_hash = UUID.randomUUID().toString();
         this.oportunidade = oportunidade;
-        this.horas = horas;
+        this.horas = hora;
         this.status_assinatura = status_assinatura.PENDENTE;  // depois faz uma funçao pro docente aprovar
         this.data_emissao = LocalDate.now();                  // Tira isso. quando o docente aprovar, isso aqui acontece
         this.discente = discente;

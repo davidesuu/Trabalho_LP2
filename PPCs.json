@@ -1,0 +1,14 @@
+{
+  "1": {
+    "id": 1,
+    "cursoId": 1,
+    "anoVigencia": 2022,
+    "cargaHorariaTotal": 200
+  },
+  "2": {
+    "id": 2,
+    "cursoId": 1,
+    "anoVigencia": 2026,
+    "cargaHorariaTotal": 300
+  }
+}

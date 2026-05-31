@@ -29,7 +29,7 @@ public class LogRepositoryImpl {
                 this.logs = dados;
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logs = new ArrayList<>();
         }
     }
 
