@@ -5,83 +5,37 @@ import Enum.Status;
 import java.time.LocalDate;
 
 public class Inscricao {
-    private Oportunidade oportunidade;
-    private Discente discente;
+    private Long oportunidadeId;
+    private Long discenteId;
     private Status status;
     private String motivacao;
     private LocalDate created_at;
     private Long id;
 
-    public Inscricao(Oportunidade oportunidade, Discente discente, String motivacao) {
-        this.oportunidade = oportunidade;
-        this.discente = discente;
-        this.status = status.PENDENTE;
+    public Inscricao(Long oportunidadeId, Long discenteId, String motivacao) {
+        this.oportunidadeId = oportunidadeId;
+        this.discenteId = discenteId;
+        this.status = Status.PENDENTE;
         this.motivacao = motivacao;
         this.created_at = LocalDate.now();
+        this.id = 0L;
     }
 
-    public Oportunidade getOportunidade() {
-        return oportunidade;
-    }
+    public Long getOportunidadeId() { return oportunidadeId; }
+    public Long getDiscenteId() { return discenteId; }
+    public Status getStatus() { return status; }
+    public void setStatus(Status status) { this.status = status; }
+    public String getMotivacao() { return motivacao; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public LocalDate getCreated_at() { return created_at; }
 
-    public void setOportunidade(Oportunidade oportunidade) {
-        this.oportunidade = oportunidade;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getMotivacao() {
-        return motivacao;
-    }
-
-    public void setMotivacao(String motivacao) {
-        this.motivacao = motivacao;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Discente getDiscente() {
-        return discente;
-    }
-
-    public void setDiscente(Discente discente) {
-        this.discente = discente;
-    }
-
-
-    public void aprovar(){
-        this.status = Status.APROVADO;
-    }
-
-    public void rejeitar(){
-        this.status = Status.REJEITADO;
-    }
-
-    public LocalDate getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(LocalDate created_at) {
-        this.created_at = created_at;
-    }
+    public void aprovar() { this.status = Status.APROVADO; }
+    public void rejeitar() { this.status = Status.REJEITADO; }
 
     @Override
     public String toString() {
         return "ID: " + id + "\n" +
-                "Discente: " + discente.getNome() + " (" + discente.getMatricula() + ")\n" +
-                "Oportunidade: " + oportunidade.getTitulo() + "\n" +
                 "Status: " + status + "\n" +
                 "Motivação: " + motivacao + "\n" +
                 "Data: " + created_at;

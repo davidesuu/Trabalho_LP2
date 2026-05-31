@@ -61,13 +61,13 @@ public class TelaDiscente extends Tela{
                     //Falta Inscriçao
                     break;
                 case 2:
-                    verInscricoes(this.inscricaoService, discente);
+                    verInscricoes(this.inscricaoService, oportunidadeService, discente);
                     break;
                 case 3:
                     TelaAproveitamento.mostrarTela(aproveitamentoService, scanner, discente);
                     break;
                 case 4:
-                    cancelarInscricao(inscricaoService, scanner, discente);
+                    cancelarInscricao(inscricaoService,oportunidadeService, scanner, discente);
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -77,7 +77,7 @@ public class TelaDiscente extends Tela{
 
     }
 
-    static void verInscricoes(InscricaoService inscricaoService, Discente discente){
+    static void verInscricoes(InscricaoService inscricaoService, OportunidadeService oportunidadeService, Discente discente){
         List<Inscricao> inscricoes = inscricaoService.listarDiscente(discente);
         if (inscricoes.isEmpty()) {
             System.out.println("Você não possui inscrições");
@@ -85,19 +85,20 @@ public class TelaDiscente extends Tela{
         }
 
         System.out.println("\nMINHAS INSCRIÇÕES");
-        inscricoes.forEach(i -> {
+
+        for(Inscricao i : inscricoes){
+            Oportunidade o = oportunidadeService.buscar(i.getOportunidadeId());
             System.out.println("─────────────────────────────");
             System.out.println("ID: "            + i.getId());
-            System.out.println("Oportunidade: "  + i.getOportunidade());
+            System.out.println("Oportunidade: "  + o.getTitulo());
             System.out.println("Status: "        + i.getStatus());
             System.out.println("Motivação: "     + i.getMotivacao());
-
-        });
+        }
         System.out.println("─────────────────────────────");
     }
 
-    static void cancelarInscricao(InscricaoService inscricaoService, Scanner scanner, Discente discente){
-        List<Inscricao> inscricoes = inscricaoService.listarDiscente(discente);
+    static void cancelarInscricao(InscricaoService inscricaoService,OportunidadeService oportunidadeService, Scanner scanner, Discente discente){
+        List<Inscricao> inscricoes = inscricaoService.listarAprovadasEPendentePorDiscente(discente);
         List<Long> keyset = inscricaoService.ListarIndice(inscricoes);
 
         if (inscricoes.isEmpty()) {
@@ -105,9 +106,14 @@ public class TelaDiscente extends Tela{
             return;
         }
 
-        inscricoes.forEach(o ->
-                System.out.println("[" + o.getId() + "] " + o.getOportunidade() + " | " + o.getStatus()));
-        System.out.println("─────────────────────────────");
+        for(Inscricao i : inscricoes){
+            Oportunidade o = oportunidadeService.buscar(i.getOportunidadeId());
+            System.out.println("─────────────────────────────");
+            System.out.println("ID: "            + i.getId());
+            System.out.println("Oportunidade: "  + o.getTitulo());
+            System.out.println("Status: "        + i.getStatus());
+            System.out.println("Motivação: "     + i.getMotivacao());
+        }
         System.out.println("Digite o ID da oportunidade (0 para voltar): ");
 
         int id;

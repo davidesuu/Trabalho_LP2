@@ -74,6 +74,19 @@ public class OportunidadeService {
 
     }
 
+    public List<Oportunidade> listarOportunidadesPossiveis(Discente discente) {
+        List<Oportunidade> publicadas = repository.listarPorStatus(Status.PUBLICADA);
+        List<Long> idsInscritos = inscricoesRepository.listarPorDiscente(discente)
+                .stream()
+                    .filter(i -> i.getStatus() != Status.CANCELADA)
+                .map(i -> i.getOportunidadeId())
+                .toList();
+
+        return publicadas.stream()
+                .filter(o -> !idsInscritos.contains(o.getId()))
+                .toList();
+    }                                          ///Serve pra nao mostrar a oportunidade pra quem ja se inscreveu, mas mostra se foi rejeitada pra permitir reenviar
+
     public Oportunidade criarOportunidade(String titulo, String descricao, TipoOportunidade tipo,
                                           Modalidade modalidade, int cargaHoraria, int vagas, LocalDate inicio, LocalDate fim,
                                           Usuario autor) throws IOException {
@@ -148,7 +161,7 @@ public class OportunidadeService {
             List<Inscricao> inscricoes = inscricoesRepository.buscarPorOportunidade(o);
             for (Inscricao inscricao : inscricoes) {
                 if (inscricao.getStatus().equals(Status.APROVADO)) {
-                    matriculaService.adicionarHoras(inscricao.getDiscente(), o.getCarga_horaria());
+                    matriculaService.adicionarHoras(inscricao.getDiscenteId(), o.getCarga_horaria());
                 }
             }
             o.setStatus(Status.HORAS_CONTABILIZADAS);

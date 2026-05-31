@@ -59,7 +59,7 @@ public class Discente extends Usuario{
     }
 
     public Inscricao criarInscricao(Oportunidade oportunidade, Discente discente, String motivacao){
-        return new Inscricao(oportunidade, discente, motivacao);
+        return new Inscricao(oportunidade.getId(), discente.getId(), motivacao);
     }
 
     public Aproveitamento criarAproveitamento(Discente discente, int horas, String descricao, String instituicao, String certificado_path){

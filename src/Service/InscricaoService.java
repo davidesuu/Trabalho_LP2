@@ -23,7 +23,7 @@ public class InscricaoService {
         banco.salvar(inscricao);
     }
 
-    public Inscricao buscar(long id){
+    public Inscricao buscar(Long id){
 
         return banco.buscarPorId(id);
 
@@ -36,6 +36,13 @@ public class InscricaoService {
 
     public List<Inscricao> listarDiscente(Discente discente){
         return banco.listarPorDiscente(discente);
+    }
+
+    public List<Inscricao> listarAprovadasEPendentePorDiscente(Discente discente){
+        List<Inscricao>  inscricoes = banco.listarPorDiscente(discente);
+        List<Inscricao> filtrada = inscricoes.stream().filter(i -> i.getStatus() == Status.PENDENTE ||
+                i.getStatus() == Status.APROVADO).toList();
+        return filtrada;
     }
 
     public void rejeitar(Long id){
@@ -57,9 +64,10 @@ public class InscricaoService {
     }
 
     public void cancelarInscricao(Inscricao inscricao){
+        Oportunidade oportunidade = oportunidadeService.buscar(inscricao.getOportunidadeId());
         inscricao.setStatus(Status.CANCELADA);
-        inscricao.getOportunidade().incrementaVagasOcupadas(1);
-        oportunidadeService.atualizarOportunidade(inscricao.getOportunidade());
+        oportunidade.decrementaVagasOcupadas(1);
+        oportunidadeService.atualizarOportunidade(oportunidade);
         banco.salvar(inscricao);
     }
 

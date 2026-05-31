@@ -41,6 +41,7 @@ public class TelaDiscenteDiretor extends TelaDiscente{
             System.out.println("3 - Ver Certificados");
             System.out.println("4 - Nova Iniciativa");  //feito
             System.out.println("5 - Ver Inscrições");
+            System.out.println("6 - Cancelar Inscricao");
             System.out.println("0 - Sair");
             try {
                 opt = Integer.parseInt(scanner.nextLine());
@@ -62,7 +63,10 @@ public class TelaDiscenteDiretor extends TelaDiscente{
                     TelaOportunidade.CriarOportunidade(oportunidadeService, scanner, diretor, dataAtual); //Feito
                     break;
                 case 5:
-                    verInscricoes(this.inscricaoService, diretor);
+                    verInscricoes(this.inscricaoService,oportunidadeService, diretor);
+                    break;
+                case 6:
+                    cancelarInscricao(inscricaoService, oportunidadeService, scanner, diretor);
                     break;
                 case 0:
                     System.out.println("Saindo...");
