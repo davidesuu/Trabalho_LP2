@@ -22,7 +22,8 @@ public class MatriculaService {
         return vinculo;
     }
 
-    public void adicionarHoras(Discente discente, int horas) {
+    public void adicionarHoras(Long discenteId, int horas) {
+        Discente discente = (Discente) usuarioRepository.buscarPorId(discenteId);
         Vinculo vinculo = discente.getVinculo();
         vinculo.setChTotalCumprida(vinculo.getChTotalCumprida() + horas);
         usuarioRepository.salvar(discente);
