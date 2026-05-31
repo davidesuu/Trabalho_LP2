@@ -218,27 +218,19 @@ public class TelaCoordenador extends TelaDocente{
 
     static void verificarInscricoes(InscricaoService inscricaoService, Scanner scanner){
         List<Inscricao> inscricoes = inscricaoService.listarPendente();
-
-        inscricoes.forEach(i -> {
-            System.out.println("─────────────────────────────");
-            System.out.println("ID: "            + i.getId());
-            System.out.println("Discente: "      + i.getDiscente());
-            System.out.println("Oportunidade: "  + i.getOportunidade());
-            System.out.println("Status: "        + i.getStatus());
-            System.out.println("Motivação: "     + i.getMotivacao());
-
-        });
-        System.out.println("─────────────────────────────");
-        Long id;
+        List<Long> keyset = inscricaoService.ListarIndice(inscricoes);
+        int id;
 
         try{
-            id = Long.parseLong(scanner.nextLine());
+            id = Integer.parseInt(scanner.nextLine());
         }catch (NumberFormatException e){
             System.out.println("ID invalido");
             return;
         }
         if (id == 0) return;
 
+        Inscricao i = inscricaoService.buscar(keyset.get(id - 1));
+        Long index = i.getId();
         System.out.println("1 - Aprovar");
         System.out.println("2 - Rejeitar");
         System.out.println("0 - Voltar");
@@ -251,11 +243,11 @@ public class TelaCoordenador extends TelaDocente{
         }
         switch (opc){
             case 1:
-                inscricaoService.aprovar(id);
+                inscricaoService.aprovar(index);
                 System.out.println("Inscrição aprovado com sucesso!");
                 break;
             case 2:
-                inscricaoService.rejeitar(id);
+                inscricaoService.rejeitar(index);
                 System.out.println("Inscrição rejeitada com sucesso!");
                 break;
             case 3:
@@ -264,8 +256,7 @@ public class TelaCoordenador extends TelaDocente{
             default:
                 System.out.println("Opção invalida");
                 break;
-        };
-
+        }
     }
 
     static void criarGruposTela(GrupoService grupoService, UsuarioService usuarioService, Scanner scanner, Coordenador coordenador){

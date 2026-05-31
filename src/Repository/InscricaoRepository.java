@@ -15,5 +15,6 @@ public interface InscricaoRepository {
     List<Inscricao> buscarPorOportunidade(Oportunidade oportunidade);
     List<Inscricao> listarTodas();
     List<Inscricao> listarStatus(Status status);
+    public List<Long> listarKeys(List<Inscricao> inscricoes);
 }
 

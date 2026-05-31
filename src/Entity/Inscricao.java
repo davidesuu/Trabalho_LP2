@@ -76,4 +76,14 @@ public class Inscricao {
     public void setCreated_at(LocalDate created_at) {
         this.created_at = created_at;
     }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + "\n" +
+                "Discente: " + discente.getNome() + " (" + discente.getMatricula() + ")\n" +
+                "Oportunidade: " + oportunidade.getTitulo() + "\n" +
+                "Status: " + status + "\n" +
+                "Motivação: " + motivacao + "\n" +
+                "Data: " + created_at;
+    }
 }
