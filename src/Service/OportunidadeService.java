@@ -1,7 +1,7 @@
 package Service;
 
 import Entity.*;
-import Enum.Status; //coment 16: Nao precisaria fazer isso
+import Enum.*; //coment 16: Nao precisaria fazer isso
 import Enum.TipoOportunidade;
 import Enum.Modalidade;
 import Repository.InscricaoRepository;
@@ -64,21 +64,21 @@ public class OportunidadeService {
 
     public List<Oportunidade> listarPublicadas() {
 
-        return repository.listarPorStatus(Status.PUBLICADA);
+        return repository.listarPorStatus(StatusOportunidade.PUBLICADA);
 
     }
 
     public List<Oportunidade> listarPendentes() {
 
-        return repository.listarPorStatus(Status.PENDENTE);
+        return repository.listarPorStatus(StatusOportunidade.PENDENTE);
 
     }
 
     public List<Oportunidade> listarOportunidadesPossiveis(Discente discente) {
-        List<Oportunidade> publicadas = repository.listarPorStatus(Status.PUBLICADA);
+        List<Oportunidade> publicadas = repository.listarPorStatus(StatusOportunidade.PUBLICADA);
         List<Long> idsInscritos = inscricoesRepository.listarPorDiscente(discente)
                 .stream()
-                    .filter(i -> i.getStatus() != Status.CANCELADA)
+                    .filter(i -> i.getStatus() != StatusInscricao.REJEITADA)
                 .map(i -> i.getOportunidadeId())
                 .toList();
 
@@ -140,11 +140,11 @@ public class OportunidadeService {
     }
 
     public void verificarOportunidadesExpiradas(LocalDate dataAtual) {
-        List<Oportunidade> publicadas = repository.listarPorStatus(Status.PUBLICADA);
+        List<Oportunidade> publicadas = repository.listarPorStatus(StatusOportunidade.PUBLICADA);
 
         for (Oportunidade o : publicadas) {
             if (o.getFim() != null && o.getFim().isBefore(dataAtual)) {
-                o.setStatus(Status.FINALIZADO);
+                o.setStatus(StatusOportunidade.FINALIZADA);
                 try {
                     repository.salvar(o);
                 } catch (Exception e) {
@@ -155,16 +155,16 @@ public class OportunidadeService {
     }
 
     public void finalizarOportunidades() {
-        List<Oportunidade> oportunidades = repository.listarPorStatus(Status.FINALIZADO);
+        List<Oportunidade> oportunidades = repository.listarPorStatus(StatusOportunidade.FINALIZADA);
 
         for (Oportunidade o : oportunidades) {
             List<Inscricao> inscricoes = inscricoesRepository.buscarPorOportunidade(o);
             for (Inscricao inscricao : inscricoes) {
-                if (inscricao.getStatus().equals(Status.APROVADO)) {
+                if (inscricao.getStatus().equals(StatusInscricao.APROVADA)) {
                     matriculaService.adicionarHoras(inscricao.getDiscenteId(), o.getCarga_horaria());
                 }
             }
-            o.setStatus(Status.HORAS_CONTABILIZADAS);
+            o.setStatus(StatusOportunidade.HORAS_CONTABILIZADAS);
             try {
                 repository.salvar(o);
             } catch (Exception e) {

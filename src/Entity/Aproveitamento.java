@@ -1,12 +1,12 @@
 package Entity;
-import Enum.Status;
+import Enum.StatusAproveitamento;
 public class Aproveitamento {
     private Discente discente;
     private String descricao;
     private String instituicao;
     private int horas;
     private Long id;
-    private Status status;
+    private StatusAproveitamento status;
     private String certificado_path;
     private Usuario avaliador;
     private String motivo_rejeicao;
@@ -16,7 +16,7 @@ public class Aproveitamento {
         this.horas = horas;
         this.descricao = descricao;
         this.instituicao = instituicao;
-        this.status = Status.PENDENTE;
+        this.status = StatusAproveitamento.PENDENTE;
         this.certificado_path = certificado_path;
     }
 
@@ -26,12 +26,12 @@ public class Aproveitamento {
 
     public void rejeitar(Usuario usuario){
         avaliar(usuario);
-        this.status = Status.REJEITADO;
+        this.status = StatusAproveitamento.REJEITADO;
     }
 
     public void aprovar(Usuario usuario){
         avaliar(usuario);
-        this.status = Status.APROVADO;
+        this.status = StatusAproveitamento.APROVADO;
     }
 
 //    public void publicar(Discente discente){
@@ -71,11 +71,11 @@ public class Aproveitamento {
         this.horas = horas;
     }
 
-    public Status getStatus() {
+    public StatusAproveitamento getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(StatusAproveitamento status) {
         this.status = status;
     }
 

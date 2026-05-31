@@ -1,7 +1,7 @@
 package Entity;
 import Enum.TipoOportunidade;
 import Enum.Modalidade;
-import Enum.Status;
+import Enum.StatusOportunidade;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -14,7 +14,7 @@ public class Oportunidade {
     private int carga_horaria; //get e set
     private int vagas; //get e set
     private int vagasOcupadas;
-    private Status status; //get e set
+    private StatusOportunidade status; //get e set
     private LocalDate inicio; //get e set
     private LocalDate fim; //get e set
     private Usuario autor;
@@ -29,7 +29,7 @@ public class Oportunidade {
         this.modalidade = modalidade;
         this.carga_horaria = carga_horaria;
         this.vagas = vagas;
-        this.status = Status.PENDENTE;  //Repensa melhor depois se ela ja e pendente no começo
+        this.status = StatusOportunidade.PENDENTE;  //Repensa melhor depois se ela ja e pendente no começo
         this.autor = autor;
         this.vagasOcupadas = 0;
     }
@@ -54,7 +54,7 @@ public class Oportunidade {
         return carga_horaria;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(StatusOportunidade status) {
         this.status = status;
     }
 
@@ -86,7 +86,7 @@ public class Oportunidade {
         return tipo;
     }
 
-    public Status getStatus() {
+    public StatusOportunidade getStatus() {
         return status;
     }
 
@@ -99,7 +99,7 @@ public class Oportunidade {
     }
 
     public void publicar(Docente docente){
-        this.status = Status.PUBLICADA;
+        this.status = StatusOportunidade.PUBLICADA;
         this.responsavel = docente;
     }
 
@@ -110,7 +110,7 @@ public class Oportunidade {
 
     public void rejeitar(Docente docente){
         this.responsavel = docente;
-        this.status = Status.REJEITADO;
+        this.status = StatusOportunidade.REJEITADA;
     }
     @Override
     public String toString() {

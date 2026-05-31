@@ -31,11 +31,11 @@ public class AproveitamentoService {
     }
 
     public List<Aproveitamento> listarAprovadas(){
-        return repository.listarPorStatus(Status.APROVADO);
+        return repository.listarPorStatus(StatusAproveitamento.APROVADO);
     }
 
     public List<Aproveitamento> listarPendentes(){
-        return repository.listarPorStatus(Status.PENDENTE);
+        return repository.listarPorStatus(StatusAproveitamento.PENDENTE);
     }
 
     public List<Aproveitamento> listarTodas(){

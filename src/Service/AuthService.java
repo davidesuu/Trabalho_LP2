@@ -5,7 +5,7 @@ import Entity.Oportunidade;
 import Entity.Usuario;
 import Repository.impl.OportunidadeRepositoryImpl;
 import Repository.impl.InscricoesRepositoryImpl;
-import Enum.Status;
+
 import Repository.impl.UsuarioRepositoryImpl;
 
 import java.time.LocalDate;

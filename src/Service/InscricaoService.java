@@ -1,7 +1,7 @@
 package Service;
 
 import Entity.Inscricao;
-import Enum.Status;
+import Enum.StatusInscricao;
 import Repository.impl.InscricoesRepositoryImpl;
 import Entity.Discente;
 import Entity.Oportunidade;
@@ -31,7 +31,7 @@ public class InscricaoService {
 
 
     public List<Inscricao> listarPendente() {
-        return banco.listarStatus(Status.PENDENTE);
+        return banco.listarStatus(StatusInscricao.PENDENTE);
     }
 
     public List<Inscricao> listarDiscente(Discente discente){
@@ -40,8 +40,8 @@ public class InscricaoService {
 
     public List<Inscricao> listarAprovadasEPendentePorDiscente(Discente discente){
         List<Inscricao>  inscricoes = banco.listarPorDiscente(discente);
-        List<Inscricao> filtrada = inscricoes.stream().filter(i -> i.getStatus() == Status.PENDENTE ||
-                i.getStatus() == Status.APROVADO).toList();
+        List<Inscricao> filtrada = inscricoes.stream().filter(i -> i.getStatus() == StatusInscricao.PENDENTE ||
+                i.getStatus() == StatusInscricao.APROVADA).toList();
         return filtrada;
     }
 
@@ -65,7 +65,7 @@ public class InscricaoService {
 
     public void cancelarInscricao(Inscricao inscricao){
         Oportunidade oportunidade = oportunidadeService.buscar(inscricao.getOportunidadeId());
-        inscricao.setStatus(Status.CANCELADA);
+        inscricao.setStatus(StatusInscricao.REJEITADA);
         oportunidade.decrementaVagasOcupadas(1);
         oportunidadeService.atualizarOportunidade(oportunidade);
         banco.salvar(inscricao);

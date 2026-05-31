@@ -10,14 +10,14 @@ public class Grupo {
     private String nome;
     private String email;
     private String descricao;
-    private Status status;
+    private StatusGrupo status;
     private Docente responsavel;
     private List<Long> membroIds = new ArrayList<>();
     public Grupo(String nome, String email, String descricao, Docente responsavel) {
         this.nome = nome;
         this.email = email;
         this.descricao = descricao;
-        this.status = Status.ATIVO;
+        this.status = StatusGrupo.ATIVO;
         this.responsavel = responsavel;
         this.id = 0L;
     }
@@ -62,11 +62,11 @@ public class Grupo {
         this.descricao = descricao;
     }
 
-    public Status getStatus() {
+    public StatusGrupo getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(StatusGrupo status) {
         this.status = status;
     }
 

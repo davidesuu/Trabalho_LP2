@@ -26,7 +26,7 @@ public class AproveitamentoRepositoryImpl implements AproveitamentoRepository {
     }
 
     @Override
-    public List<Aproveitamento> listarPorStatus(Status status) {
+    public List<Aproveitamento> listarPorStatus(StatusAproveitamento status) {
         return banco.values().stream().filter(o -> o.getStatus().equals(status)).collect(Collectors.toList());
     }
 

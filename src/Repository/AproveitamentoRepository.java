@@ -10,7 +10,7 @@ public interface AproveitamentoRepository {
 
     public Aproveitamento buscaPorId(Long id);
 
-    public List<Aproveitamento> listarPorStatus(Status aproveitamento);
+    public List<Aproveitamento> listarPorStatus(StatusAproveitamento aproveitamento);
 
 
 

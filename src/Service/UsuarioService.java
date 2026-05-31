@@ -5,7 +5,7 @@ import Repository.impl.InscricoesRepositoryImpl;
 import Repository.impl.LogRepositoryImpl;
 import Repository.impl.OportunidadeRepositoryImpl;
 import Repository.impl.UsuarioRepositoryImpl;
-import Enum.Status;
+
 
 import java.time.LocalDate;
 import java.util.Optional;

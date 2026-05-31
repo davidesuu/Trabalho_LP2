@@ -82,7 +82,7 @@ public class InscricoesRepositoryImpl implements InscricaoRepository {
     }
 
     @Override
-    public List<Inscricao> listarStatus(Status status){
+    public List<Inscricao> listarStatus(StatusInscricao status){
         return banco.values().stream().filter(inscricao ->
                 inscricao.getStatus().equals(status)).collect(Collectors.toList());
     }

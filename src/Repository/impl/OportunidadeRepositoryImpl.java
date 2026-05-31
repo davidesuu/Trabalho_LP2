@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileWriter;
 import java.io.FileReader;
 
-import Enum.Status;
+import Enum.StatusOportunidade;
 
 public class OportunidadeRepositoryImpl{
 
@@ -70,7 +70,7 @@ public class OportunidadeRepositoryImpl{
     }
 
 
-    public List<Oportunidade> listarPorStatus(Status status) {
+    public List<Oportunidade> listarPorStatus(StatusOportunidade status) {
 
         return banco.values()
                 .stream()
