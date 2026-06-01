@@ -1,112 +1,34 @@
 {
   "1": {
     "titulo": "Acalourada",
-    "descricao": "snidkas",
+    "descricao": "intro dos calouros",
     "id": 1,
-    "tipo": "PROJETO",
-    "modalidade": "REMOTO",
-    "carga_horaria": 1234,
-    "vagas": 1234,
-    "status": "PUBLICADA",
-    "autor": {
-      "tipo": "DOCENTE",
-      "siape": "SIAPE123",
-      "departamento": "Comp",
-      "nome": "Prof. Geraldo",
-      "email": "geraldo@",
-      "senha": "senha",
-      "ativo": true
-    },
-    "responsavel": {
-      "siape": "SIAPE123",
-      "departamento": "Comp",
-      "nome": "Prof. Geraldo",
-      "email": "geraldo@",
-      "senha": "senha",
-      "ativo": true
-    }
-  },
-  "2": {
-    "titulo": "VipLab",
-    "descricao": "wsdasd",
-    "id": 2,
     "tipo": "EVENTO",
-    "modalidade": "HIBRIDO",
-    "carga_horaria": 1234,
-    "vagas": 1244,
-    "status": "PUBLICADA",
-    "autor": {
-      "tipo": "DOCENTE",
-      "siape": "SIAPE123",
-      "departamento": "Comp",
-      "nome": "Prof. Geraldo",
-      "email": "geraldo@",
-      "senha": "senha",
-      "ativo": true
-    },
-    "responsavel": {
-      "siape": "SIAPE123",
-      "departamento": "Comp",
-      "nome": "Prof. Geraldo",
-      "email": "geraldo@",
-      "senha": "senha",
-      "ativo": true
-    }
-  },
-  "3": {
-    "titulo": "My chemical Romance",
-    "descricao": "sdmaslf",
-    "id": 3,
-    "tipo": "EVENTO",
-    "modalidade": "HIBRIDO",
-    "carga_horaria": 1234,
-    "vagas": 1234,
-    "status": "PENDENTE",
-    "autor": {
-      "tipo": "DISCENTE_DIRETOR",
-      "cargo": "Diretora",
-      "data_inicio": "2026-05-22",
-      "data_fim": "2028-05-22",
-      "matricula": "2022005678",
-      "semestre": 5,
-      "curso": {
-        "nome": "Ciência da Computação",
-        "codigo": 123,
-        "carga_horaria": 3200,
-        "versao_ppc": "PPC 2023",
-        "alunos": []
-      },
-      "nome": "David Martins",
-      "email": "dvd@",
-      "senha": "senha",
-      "ativo": true
-    }
-  },
-  "4": {
-    "titulo": "The smiths",
-    "descricao": "now i know how joan of arc felt",
-    "id": 4,
-    "tipo": "PROJETO",
     "modalidade": "PRESENCIAL",
-    "carga_horaria": 1234,
-    "vagas": 1234,
+    "carga_horaria": 15,
+    "vagas": 100,
+    "vagasOcupadas": 0,
     "status": "PUBLICADA",
+    "inicio": "2026-08-15",
+    "fim": "2026-08-20",
     "autor": {
       "tipo": "DOCENTE",
-      "siape": "SIAPE123",
-      "departamento": "Comp",
-      "nome": "Prof. Geraldo",
+      "siape": "123",
+      "departamento": "NCA",
+      "nome": "geraldo",
       "email": "geraldo@",
       "senha": "senha",
-      "ativo": true
+      "ativo": true,
+      "id": 3
     },
     "responsavel": {
-      "siape": "SIAPE123",
-      "departamento": "Comp",
-      "nome": "Prof. Geraldo",
+      "siape": "123",
+      "departamento": "NCA",
+      "nome": "geraldo",
       "email": "geraldo@",
       "senha": "senha",
-      "ativo": true
+      "ativo": true,
+      "id": 3
     }
   }
 }

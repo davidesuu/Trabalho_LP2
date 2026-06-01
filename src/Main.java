@@ -232,6 +232,7 @@ public class Main {
                 String dep = scanner.nextLine();
 
                 usuarioService.cadastrarDocente(nome, email, senha, siape, dep);
+                System.out.println("Docente cadastrado com sucesso!");
                 break;
 
             default:

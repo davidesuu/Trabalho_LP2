@@ -561,6 +561,12 @@ public class TelaDocente extends Tela{
     static void verificarInscricoes(InscricaoService inscricaoService, Scanner scanner){
         List<Inscricao> inscricoes = inscricaoService.listarPendente();
         List<Long> keyset = inscricaoService.ListarIndice(inscricoes);
+
+        if (inscricoes.isEmpty()){
+            System.out.println("Não há inscrições pendentes.");
+            return;
+        }
+
         int id;
 
         try{
