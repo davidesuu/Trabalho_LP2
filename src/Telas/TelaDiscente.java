@@ -106,14 +106,6 @@ public class TelaDiscente extends Tela{
             return;
         }
 
-        for(Inscricao i : inscricoes){
-            Oportunidade o = oportunidadeService.buscar(i.getOportunidadeId());
-            System.out.println("─────────────────────────────");
-            System.out.println("ID: "            + i.getId());
-            System.out.println("Oportunidade: "  + o.getTitulo());
-            System.out.println("Status: "        + i.getStatus());
-            System.out.println("Motivação: "     + i.getMotivacao());
-        }
         System.out.println("Digite o ID da oportunidade (0 para voltar): ");
 
         int id;

@@ -10,5 +10,11 @@
     "cursoId": 1,
     "anoVigencia": 2026,
     "cargaHorariaTotal": 300
+  },
+  "3": {
+    "id": 3,
+    "cursoId": 1,
+    "anoVigencia": 2027,
+    "cargaHorariaTotal": 350
   }
 }

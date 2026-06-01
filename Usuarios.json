@@ -1,20 +1,5 @@
 {
   "1": {
-    "tipo": "DISCENTE",
-    "matricula": "1234",
-    "semestre": 3,
-    "curso": {
-      "nome": "ccomp",
-      "codigo": 123,
-      "alunos": []
-    },
-    "nome": "Perla",
-    "email": "perla@",
-    "senha": "123",
-    "ativo": true,
-    "id": 1
-  },
-  "2": {
     "tipo": "COORDENADOR",
     "siape": "123",
     "departamento": "123",
@@ -22,138 +7,37 @@
     "email": "Darlan",
     "senha": "123",
     "ativo": true,
+    "id": 1
+  },
+  "2": {
+    "tipo": "DISCENTE",
+    "matricula": "20269339",
+    "semestre": 2,
+    "curso": {
+      "cursoId": 1,
+      "nome": "Ciência da Computação",
+      "codigo": 123320
+    },
+    "vinculo": {
+      "ppcId": 2,
+      "situacao": "Ativo",
+      "chTotalCumprida": 0
+    },
+    "hasSpecialPermission": false,
+    "nome": "pedro",
+    "email": "pedro@",
+    "senha": "senha",
+    "ativo": true,
     "id": 2
   },
   "3": {
     "tipo": "DOCENTE",
-    "siape": "SIAPE123",
-    "departamento": "Comp",
-    "nome": "Prof. Geraldo",
+    "siape": "345",
+    "departamento": "NCA",
+    "nome": "geraldo",
     "email": "geraldo@",
     "senha": "senha",
     "ativo": true,
     "id": 3
-  },
-  "4": {
-    "tipo": "DISCENTE",
-    "matricula": "1235",
-    "semestre": 3,
-    "curso": {
-      "nome": "ccomp",
-      "codigo": 123,
-      "alunos": []
-    },
-    "nome": "Nicolas",
-    "email": "nicolas@",
-    "senha": "123",
-    "ativo": true,
-    "id": 4
-  },
-  "5": {
-    "tipo": "DISCENTE",
-    "matricula": "190",
-    "semestre": 3,
-    "curso": {
-      "nome": "ccomp",
-      "codigo": 123,
-      "alunos": []
-    },
-    "nome": "Samantha",
-    "email": "sam@",
-    "senha": "123",
-    "ativo": true,
-    "id": 5
-  },
-  "6": {
-    "tipo": "DISCENTE_DIRETOR",
-    "grupo": {
-      "nome": "PetComp",
-      "email": "PetComp@",
-      "descricao": "Os melhorzinhos que ta tendo",
-      "status": "ATIVO",
-      "responsavel": {
-        "siape": "SIAPE123",
-        "departamento": "Comp",
-        "nome": "Prof. Geraldo",
-        "email": "geraldo@",
-        "senha": "senha",
-        "ativo": true,
-        "id": 3
-      },
-      "id": 1,
-      "membros": [
-        {
-          "matricula": "1234",
-          "semestre": 3,
-          "curso": {
-            "nome": "ccomp",
-            "codigo": 123,
-            "alunos": []
-          },
-          "nome": "Perla",
-          "email": "perla@",
-          "senha": "123",
-          "ativo": true,
-          "id": 1
-        },
-        {
-          "matricula": "1771",
-          "semestre": 3,
-          "curso": {
-            "nome": "ccomp",
-            "codigo": 123,
-            "alunos": []
-          },
-          "nome": "David",
-          "email": "dvd@",
-          "senha": "123",
-          "ativo": true,
-          "id": 6
-        },
-        {
-          "matricula": "190",
-          "semestre": 3,
-          "curso": {
-            "nome": "ccomp",
-            "codigo": 123,
-            "alunos": []
-          },
-          "nome": "Samantha",
-          "email": "sam@",
-          "senha": "123",
-          "ativo": true,
-          "id": 5
-        },
-        {
-          "matricula": "1235",
-          "semestre": 3,
-          "curso": {
-            "nome": "ccomp",
-            "codigo": 123,
-            "alunos": []
-          },
-          "nome": "Nicolas",
-          "email": "nicolas@",
-          "senha": "123",
-          "ativo": true,
-          "id": 4
-        }
-      ]
-    },
-    "cargo": "PRESIDENTE",
-    "data_inicio": "2026-05-28",
-    "data_fim": "2036-05-28",
-    "matricula": "1771",
-    "semestre": 3,
-    "curso": {
-      "nome": "ccomp",
-      "codigo": 123,
-      "alunos": []
-    },
-    "nome": "David",
-    "email": "dvd@",
-    "senha": "123",
-    "ativo": true,
-    "id": 6
   }
 }
