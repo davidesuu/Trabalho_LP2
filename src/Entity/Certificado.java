@@ -1,61 +1,49 @@
 package Entity;
 
+import Enum.StatusAssinatura;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import Enum.StatusAssinatura;
-
 public class Certificado {
+    private Long id;
     private String uuid_hash;
-    private Discente discente;
-    private Oportunidade oportunidade;
-    private LocalDate data_emissao;
+    private Long discenteId;
+    private Long oportunidadeId;
     private Integer horas;
     private String path;
     private StatusAssinatura status_assinatura;
-    private Long id;
+    private LocalDate data_emissao;
 
-    public StatusAssinatura getStatus_assinatura() {
-        return status_assinatura;
-    }
-
-    public void setStatus_assinatura(StatusAssinatura status_assinatura) {
-        this.status_assinatura = status_assinatura;
-    }
-
-    public Certificado (Oportunidade oportunidade, Discente discente,
-                        Integer hora){
+    public Certificado(Long oportunidadeId, Long discenteId, Integer horas) {
         this.uuid_hash = UUID.randomUUID().toString();
-        this.oportunidade = oportunidade;
-        this.horas = hora;
-        this.status_assinatura = status_assinatura.PENDENTE;  // depois faz uma funçao pro docente aprovar
-        this.data_emissao = LocalDate.now();                  // Tira isso. quando o docente aprovar, isso aqui acontece
-        this.discente = discente;
+        this.oportunidadeId = oportunidadeId;
+        this.discenteId = discenteId;
+        this.horas = horas;
+        this.status_assinatura = StatusAssinatura.PENDENTE;
     }
+
+    public void assinar() {
+        this.status_assinatura = StatusAssinatura.ASSINADO;
+        this.data_emissao = LocalDate.now();
+    }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getUuid_hash() { return uuid_hash; }
+    public Long getDiscenteId() { return discenteId; }
+    public Long getOportunidadeId() { return oportunidadeId; }
+    public Integer getHoras() { return horas; }
+    public String getPath() { return path; }
+    public void setPath(String path) { this.path = path; }
+    public StatusAssinatura getStatus_assinatura() { return status_assinatura; }
+    public LocalDate getData_emissao() { return data_emissao; }
 
     @Override
     public String toString() {
-        return "uuid_hash: "+ uuid_hash + "\n"+
-                "Discente: " + discente + "\n" +
-                "Oportunidade: " + oportunidade + "\n" +
-                "Data de Emissao: " + data_emissao + "\n"+
-                "Horas: " + horas + "\n"+
-                "Status da Assinatura: " + status_assinatura;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId (Long id) {
-        this.id = id;
-    }
-
-    public String getUuid_hash() {
-        return uuid_hash;
-    }
-
-    public Discente getDiscente() {
-        return discente;
+        return "ID: " + id + "\n" +
+                "Hash: " + uuid_hash + "\n" +
+                "Horas: " + horas + "\n" +
+                "Status: " + status_assinatura + "\n" +
+                "Emissão: " + data_emissao;
     }
 }

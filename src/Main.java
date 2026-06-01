@@ -88,11 +88,10 @@ public class Main {
         AuthService authService = new AuthService(usuarioRepository);
         UsuarioService usuarioService = new UsuarioService(usuarioRepository, matriculaService);
         GrupoService grupoService = new GrupoService(grupoRepository, logRepository, usuarioRepository);
-        OportunidadeService oportunidadeService = new OportunidadeService(oportunidadeRepository, inscricoesRepository, matriculaService);
+        CertificadoService certificadoService = new CertificadoService(certificadoRepository, oportunidadeRepository, usuarioRepository);
+        OportunidadeService oportunidadeService = new OportunidadeService(oportunidadeRepository, inscricoesRepository, matriculaService, certificadoService);
         AproveitamentoService aproveitamentoService = new AproveitamentoService(aproveitamentoRepository);
         InscricaoService inscricaoService = new InscricaoService(inscricoesRepository, oportunidadeService);
-        CertificadoService certificadoService = new CertificadoService(certificadoRepository);
-
         Scanner scanner = new Scanner(System.in);
 
 

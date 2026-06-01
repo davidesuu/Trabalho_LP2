@@ -20,12 +20,13 @@ public class OportunidadeService {
     private final OportunidadeRepositoryImpl repository;
     private final InscricoesRepositoryImpl inscricoesRepository;
     private final MatriculaService matriculaService;
-
-    public OportunidadeService(OportunidadeRepositoryImpl repository, InscricoesRepositoryImpl inscricoesRepository, MatriculaService matriculaService) {
+    private final CertificadoService certificadoService;
+    public OportunidadeService(OportunidadeRepositoryImpl repository, InscricoesRepositoryImpl inscricoesRepository, MatriculaService matriculaService, CertificadoService certificadoService) {
         this.matriculaService = matriculaService;
         this.repository = repository;
         this.inscricoesRepository = inscricoesRepository;
 
+        this.certificadoService = certificadoService;
     }
 
     public void publicarOpurtunidade(long id, Docente docente) throws IOException {
@@ -162,6 +163,7 @@ public class OportunidadeService {
             for (Inscricao inscricao : inscricoes) {
                 if (inscricao.getStatus().equals(StatusInscricao.APROVADA)) {
                     matriculaService.adicionarHoras(inscricao.getDiscenteId(), o.getCarga_horaria());
+                    certificadoService.criarCertificado(o.getId(), inscricao.getDiscenteId(), o.getCarga_horaria());
                 }
             }
             o.setStatus(StatusOportunidade.HORAS_CONTABILIZADAS);
