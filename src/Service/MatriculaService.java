@@ -1,5 +1,6 @@
 package Service;
 import Entity.Discente;
+import Entity.Usuario;
 import Entity.Vinculo;
 import Repository.impl.UsuarioRepositoryImpl;
 
@@ -23,7 +24,12 @@ public class MatriculaService {
     }
 
     public void adicionarHoras(Long discenteId, int horas) {
-        Discente discente = (Discente) usuarioRepository.buscarPorId(discenteId);
+        Usuario u = usuarioRepository.buscarPorId(discenteId);
+
+        if (!(u instanceof Discente discente)) {
+            throw new RuntimeException("ID " + discenteId + " não pertence a um discente");
+        }
+
         Vinculo vinculo = discente.getVinculo();
         vinculo.setChTotalCumprida(vinculo.getChTotalCumprida() + horas);
         usuarioRepository.salvar(discente);

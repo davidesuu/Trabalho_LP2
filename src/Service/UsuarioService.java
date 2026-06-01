@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioService {
     private UsuarioRepositoryImpl usuarioRepository;
@@ -103,6 +105,12 @@ public class UsuarioService {
         } while (usuarioRepository.buscarPorMatricula(matricula).isPresent());
         return matricula;
     }
+
+    public List<Usuario> listarTodos() {
+        return usuarioRepository.listarTodos();
+    }
+
+
 
     public Docente buscarSiape(String siape){
         return usuarioRepository.buscarPorSiape(siape).orElseThrow(null);

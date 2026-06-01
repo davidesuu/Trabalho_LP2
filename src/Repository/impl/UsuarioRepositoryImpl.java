@@ -10,8 +10,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioRepositoryImpl {
 
@@ -78,6 +81,7 @@ public class UsuarioRepositoryImpl {
                 .findFirst();
     }
 
+
     public void salvar(Usuario u) {
 
         if (u.getId() == 0) {
@@ -97,5 +101,28 @@ public class UsuarioRepositoryImpl {
             e.printStackTrace();
 
         }
+    }
+
+    public void remover(Long id) {
+
+        banco.remove(id);
+
+        try (FileWriter escritor = new FileWriter("Usuarios.json")) {
+
+            Type tipo = new TypeToken<HashMap<Long, Usuario>>() {}.getType();
+
+            GsonUtil.GSON.toJson(banco, tipo, escritor);
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        }
+    }
+
+    public List<Usuario> listarTodos() {
+
+        return new ArrayList<>(banco.values());
+
     }
 }

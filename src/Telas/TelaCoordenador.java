@@ -252,7 +252,7 @@ public class TelaCoordenador extends TelaDocente{
                 inscricaoService.rejeitar(index);
                 System.out.println("Inscrição rejeitada com sucesso!");
                 break;
-            case 3:
+            case 0:
                 System.out.println("Voltando...");
                 break;
             default:
@@ -300,7 +300,7 @@ public class TelaCoordenador extends TelaDocente{
             System.out.println("3 - Promover Membros");
             System.out.println("4 - Remover Membros");
             System.out.println("5 - Criar Novo Grupo");
-            System.out.println("6 - Sair");
+            System.out.println("0 - Sair");
             try {
                 opt = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
@@ -323,11 +323,11 @@ public class TelaCoordenador extends TelaDocente{
                 case 5:
                     criarGruposTela(grupoService, usuarioService, scanner, coordenador); //Feito
                     break;
-                case 6:
+                case 0:
                     System.out.println("Saindo...");
                     break;
             }
-        }while (opt != 6);
+        }while (opt != 0);
     }
     static void promoverMembroTela(
             GrupoService grupoService,

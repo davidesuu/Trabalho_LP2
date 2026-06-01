@@ -177,7 +177,7 @@ public class TelaDocente extends Tela{
                 aproveitamentoService.rejeitarAproveitamento(id, docente);
                 System.out.println("Aproveitamento negado com sucesso!");
                 break;
-            case 3:
+            case 0:
                 System.out.println("Voltando...");
                 break;
             default:
@@ -194,7 +194,7 @@ public class TelaDocente extends Tela{
             System.out.println("2 - Adicionar novos membros");
             System.out.println("3 - Promover Membros");
             System.out.println("4 - Remover Membros");
-            System.out.println("5 - Sair");
+            System.out.println("0 - Sair");
             try {
                 opt = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
@@ -213,11 +213,11 @@ public class TelaDocente extends Tela{
                     break;
                 case 4:
                     removerMembroTela(grupoService, usuarioService, scanner, docente);
-                case 5:
+                case 0:
                     System.out.println("Saindo...");
                     break;
             }
-        }while (opt != 5);
+        }while (opt != 0);
     }
     static void promoverMembroTela(
             GrupoService grupoService,
