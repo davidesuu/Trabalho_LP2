@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "docente")
 @PrimaryKeyJoinColumn(name = "id_usuario")
 @Data
-public class Docente extends Usuario{
+public class Docente extends Usuario {
     @Column(name = "siape")
     private String siape;
     @Column(name = "departamento")

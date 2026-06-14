@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "discente")
 @PrimaryKeyJoinColumn(name = "id_usuario")
 @Data
-public class Discente extends Usuario{
+public class Discente extends Usuario {
     @Column(name = "matricula")
     private String matricula;
     @Column(name = "semestre")
@@ -23,7 +23,7 @@ public class Discente extends Usuario{
     @JoinColumn(name = "id_curso")
     private Curso curso;
 
-    //@Column(name = "vinculo")
-    //private Vinculo vinculo;
-    //private boolean hasSpecialPermission;
+    // @Column(name = "vinculo")
+    // private Vinculo vinculo;
+    // private boolean hasSpecialPermission;
 }

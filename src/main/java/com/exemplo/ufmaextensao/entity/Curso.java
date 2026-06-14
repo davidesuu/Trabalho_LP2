@@ -20,5 +20,8 @@ public class Curso {
     private Integer codigo;
 
     @OneToMany(mappedBy = "curso")
+    private List<PPC> ppcs;
+
+    @OneToMany(mappedBy = "curso")
     private List<Discente> discentes;
 }
