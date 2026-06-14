@@ -12,7 +12,7 @@ public class Grupo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_grupo")
-    private Long id;
+    private Integer id;
     @Column(name = "nome")
     private String nome;
     @Column(name = "email")

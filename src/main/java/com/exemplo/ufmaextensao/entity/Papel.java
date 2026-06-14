@@ -1,14 +1,20 @@
 package com.exemplo.ufmaextensao.entity;
 
+import java.util.List;
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Table(name = "papel")
+@Data
 public class Papel {
     @Id
-    private Long id;
-    String papel;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_papel")
+    private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
+    private String nome; // "COORDENADOR", "ADMIN", "DOCENTE"
+
+    @ManyToMany(mappedBy = "papeis")
+    private List<Usuario> usuarios;
 }
