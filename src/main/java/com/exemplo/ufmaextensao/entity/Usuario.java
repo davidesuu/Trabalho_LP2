@@ -19,8 +19,9 @@ public class Usuario {
     @Column(name = "email")
     protected String email;
 
-    @OneToMany(mappedBy = "usuario")
-    private List<Papel> papel;
+    @ManyToMany
+    @JoinTable(name = "usuario_papel", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_papel"))
+    private List<Papel> papeis;
 
     protected String senha;
     private boolean ativo;
