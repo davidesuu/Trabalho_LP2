@@ -1,10 +1,13 @@
 package com.exemplo.ufmaextensao.service;
 
+import com.exemplo.ufmaextensao.DTO.CursoDTO;
 import com.exemplo.ufmaextensao.entity.Curso;
 import com.exemplo.ufmaextensao.entity.Usuario;
 import com.exemplo.ufmaextensao.repository.CursoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CursoService {
@@ -31,16 +34,25 @@ public class CursoService {
      * @param idUsuario Id do usuario que está criando o curso
      * @return retorna Curso após salvar no repositorio
      */
-    public Curso criarCurso(Curso curso, Integer idUsuario)
+    public Curso criarCurso(CursoDTO cursoDTO, Integer idUsuario)
             throws RegraDeNegocioException {
         Usuario usuario = usuarioService.obterUsuarioPorId(idUsuario);
         securityService.validarPermissao(usuario, "ADMIN", "COORDENADOR");
-        if (curso.getNome() == null || curso.getNome().isBlank()) {
+        if (cursoDTO.getNome() == null || cursoDTO.getNome().isBlank()) {
             throw new RegraDeNegocioException("Nome do curso é obrigatório");
         }
-        if (curso.getCodigo() == null) {
+        if (cursoDTO.getCodigo() == null) {
             throw new RegraDeNegocioException("Código do curso é obrigatório");
         }
-        return cursoRepo.save(curso);
+        Curso curso1 = Curso.builder()
+                .nome(cursoDTO.getNome())
+                .codigo(cursoDTO.getCodigo())
+                .build();
+        return cursoRepo.save(curso1);
+    }
+
+    public List<Curso> obterCursos(){
+        List<Curso> cursos = cursoRepo.findAll();
+        return  cursos;
     }
 }
