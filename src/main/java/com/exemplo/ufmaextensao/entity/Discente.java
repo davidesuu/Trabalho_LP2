@@ -16,6 +16,9 @@ public class Discente extends Usuario {
     @Column(name = "semestre")
     private Integer semestre;
 
+    @Column(name = "CH")
+    private Float banco_de_horas;
+
     @ManyToMany(mappedBy = "discentes")
     private List<Grupo> grupos;
 
@@ -23,7 +26,9 @@ public class Discente extends Usuario {
     @JoinColumn(name = "id_curso")
     private Curso curso;
 
-    // @Column(name = "vinculo")
-    // private Vinculo vinculo;
-    // private boolean hasSpecialPermission;
+    @Column(name = "ch_total_cumprida")
+    private Integer ch_total_cumprida;
+
+    private PPC ppc;
+
 }
