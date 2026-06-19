@@ -1,5 +1,6 @@
 package com.exemplo.ufmaextensao.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,9 +26,11 @@ public class Curso {
     @Column(name = "codigo")
     private Integer codigo;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "curso")
     private List<PPC> ppcs;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "curso")
     private List<Discente> discentes;
 }

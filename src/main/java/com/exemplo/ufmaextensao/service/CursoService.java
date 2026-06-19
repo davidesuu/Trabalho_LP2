@@ -44,15 +44,22 @@ public class CursoService {
         if (cursoDTO.getCodigo() == null) {
             throw new RegraDeNegocioException("Código do curso é obrigatório");
         }
-        Curso curso1 = Curso.builder()
+        Curso curso = Curso.builder()
                 .nome(cursoDTO.getNome())
                 .codigo(cursoDTO.getCodigo())
                 .build();
-        return cursoRepo.save(curso1);
+        return cursoRepo.save(curso);
     }
 
-    public List<Curso> obterCursos(){
+    /**
+     * Essa função retorna todos os cursos cadastrados no Banco de dados
+     * @return
+     */
+    public List<Curso> obterCursos() throws RegraDeNegocioException {
         List<Curso> cursos = cursoRepo.findAll();
+        if (cursos.isEmpty()) {
+            throw new RegraDeNegocioException("Nenhum curso encontrado");
+        }
         return  cursos;
     }
 }

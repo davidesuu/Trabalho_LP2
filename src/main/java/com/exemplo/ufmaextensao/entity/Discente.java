@@ -29,6 +29,4 @@ public class Discente extends Usuario {
     @Column(name = "ch_total_cumprida")
     private Integer ch_total_cumprida;
 
-    private PPC ppc;
-
 }

@@ -18,13 +18,8 @@ public class CursoController {
     @Autowired
     private CursoService cursoService;
 
-    @ExceptionHandler(RegraDeNegocioException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
-    public String handleRegraDeNegocio(RegraDeNegocioException e) {
-        return e.getMessage();
-    }
 
-    @GetMapping
+    @GetMapping("/listar")
     @ResponseStatus(HttpStatus.OK)
     public List<Curso> listarCursos() {
         return cursoService.obterCursos();
