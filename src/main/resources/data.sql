@@ -1,30 +1,37 @@
 -- Usuario base
-INSERT OR IGNORE INTO usuario (nome, email, senha, ativo)
-VALUES ('João Docente', 'joao@ufma.br', '123', 1);
+INSERT INTO usuario (nome, email, senha, ativo)
+VALUES ('João Docente', 'joao@ufma.br', '123', true)
+ON CONFLICT DO NOTHING;
 
-INSERT OR IGNORE INTO usuario (nome, email, senha, ativo)
-VALUES ('Maria Discente', 'maria@ufma.br', '123', 1);
+INSERT INTO usuario (nome, email, senha, ativo)
+VALUES ('Maria Discente', 'maria@ufma.br', '123', true)
+ON CONFLICT DO NOTHING;
 
 -- Docente
-INSERT OR IGNORE INTO docente (id_usuario, siape, departamento)
-VALUES (1, '1234567', 'DEINF');
+INSERT INTO docente (id_usuario, siape, departamento)
+VALUES (1, '1234567', 'DEINF')
+ON CONFLICT DO NOTHING;
 
 -- Curso
-INSERT OR IGNORE INTO curso (nome, codigo) VALUES ('Ciência da Computação', 1);
+INSERT INTO curso (nome, codigo) VALUES ('Ciência da Computação', 1)
+ON CONFLICT DO NOTHING;
 
 -- Discente
-INSERT OR IGNORE INTO discente (id_usuario, matricula, semestre, id_curso)
-VALUES (2, '2023001001', 3, 1);
+INSERT INTO discente (id_usuario, matricula, semestre, id_curso)
+VALUES (2, '2023001001', 3, 1)
+ON CONFLICT DO NOTHING;
 
 -- Grupo
-INSERT OR IGNORE INTO grupo (nome, email, descricao, id_usuario)
-VALUES ('PETComp', 'petcomp@ufma.br', 'Grupo de estudos', 1);
+INSERT INTO grupo (nome, email, descricao, id_usuario)
+VALUES ('PETComp', 'petcomp@ufma.br', 'Grupo de estudos', 1)
+ON CONFLICT DO NOTHING;
 
 -- Papeis
-INSERT OR IGNORE INTO papel (nome) VALUES ('ADMIN');
-INSERT OR IGNORE INTO papel (nome) VALUES ('COORDENADOR');
-INSERT OR IGNORE INTO papel (nome) VALUES ('DOCENTE');
-INSERT OR IGNORE INTO papel (nome) VALUES ('DISCENTE');
+INSERT INTO papel (nome) VALUES ('ADMIN') ON CONFLICT DO NOTHING;
+INSERT INTO papel (nome) VALUES ('COORDENADOR') ON CONFLICT DO NOTHING;
+INSERT INTO papel (nome) VALUES ('DOCENTE') ON CONFLICT DO NOTHING;
+INSERT INTO papel (nome) VALUES ('DISCENTE') ON CONFLICT DO NOTHING;
 
 -- Vincula João como COORDENADOR
-INSERT OR IGNORE INTO usuario_papel (id_usuario, id_papel) VALUES (1, 2);
+INSERT INTO usuario_papel (id_usuario, id_papel) VALUES (1, 2)
+ON CONFLICT DO NOTHING;
