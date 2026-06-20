@@ -9,5 +9,5 @@ import lombok.Data;
 @Data
 public class PPCDTO {
     private Integer anoVigencia;
-    private Integer cargaHorariaTotal;
+    private Float cargaHorariaTotal;
 }

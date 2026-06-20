@@ -32,5 +32,5 @@ public class PPC {
     @Column(name = "ano_vigencia")
     private Integer anoVigencia;
     @Column(name = "carga_horaria")
-    private Integer cargaHorariaTotal;
+    private Float cargaHorariaTotal;
 }

@@ -1,7 +1,9 @@
 package com.exemplo.ufmaextensao.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -9,6 +11,11 @@ import java.util.List;
 @Table(name = "usuario")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Data
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +30,9 @@ public class Usuario {
     @JoinTable(name = "usuario_papel", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_papel"))
     private List<Papel> papeis;
 
+    @JsonIgnore
     protected String senha;
+
     private boolean ativo;
 
 }
