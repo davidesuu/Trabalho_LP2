@@ -2,7 +2,8 @@ package com.exemplo.ufmaextensao.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -10,6 +11,11 @@ import java.util.List;
 @Table(name = "docente")
 @PrimaryKeyJoinColumn(name = "id_usuario")
 @Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Docente extends Usuario {
     @Column(name = "siape")
     private String siape;
