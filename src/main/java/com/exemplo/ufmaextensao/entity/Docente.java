@@ -15,6 +15,10 @@ public class Docente extends Usuario {
     @Column(name = "departamento")
     private String departamento;
 
-    @OneToMany(mappedBy = "responsavel")
+    @ManyToOne
+    @JoinColumn(name = "id_oportunidade")
+    private Oportunidade oportunidade;
+
+    @OneToMany(mappedBy = "responsavel_grupo")
     private List<Grupo> grupos;
 }

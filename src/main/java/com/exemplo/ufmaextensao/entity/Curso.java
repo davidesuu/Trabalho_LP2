@@ -1,11 +1,13 @@
 package com.exemplo.ufmaextensao.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 
@@ -25,9 +27,10 @@ public class Curso {
     @Column(name = "codigo")
     private Integer codigo;
 
-    @OneToMany(mappedBy = "curso")
+    @OneToMany(mappedBy = "curso", FetchMode=FetchType.LAZY)
     private List<PPC> ppcs;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "curso")
     private List<Discente> discentes;
 }
