@@ -1,5 +1,6 @@
 package com.exemplo.ufmaextensao.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class Docente extends Usuario {
     @Column(name = "departamento")
     private String departamento;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "responsavel")
     private List<Grupo> grupos;
 }

@@ -2,7 +2,8 @@ package com.exemplo.ufmaextensao.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -10,9 +11,15 @@ import java.util.List;
 @Table(name = "discente")
 @PrimaryKeyJoinColumn(name = "id_usuario")
 @Data
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Discente extends Usuario {
     @Column(name = "matricula")
     private String matricula;
+
     @Column(name = "semestre")
     private Integer semestre;
 
