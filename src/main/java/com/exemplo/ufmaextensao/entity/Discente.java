@@ -29,11 +29,13 @@ public class Discente extends Usuario {
     @ManyToMany(mappedBy = "discentes")
     private List<Grupo> grupos;
 
+    @ManyToMany(mappedBy = "diretoria")
+    private List<Grupo> gruposDiretor;
+
     @ManyToOne
     @JoinColumn(name = "id_curso")
     private Curso curso;
 
     @Column(name = "ch_total_cumprida")
     private Integer ch_total_cumprida;
-
 }
