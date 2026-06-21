@@ -80,6 +80,9 @@ public class GrupoService {
         List<Discente> m = grupo.getDiscentes();
         m.add(discente);
         grupo.setDiscentes(m);
+
+        grupoRepo.save(grupo);
+        discenteRepo.save(discente);
     }
 
     /**
@@ -116,6 +119,8 @@ public class GrupoService {
         List<Grupo> grupo_director = discente.getGruposDiretor();
         grupo_director.add(grupo);
         discente.setGruposDiretor(grupo_director);
+        grupoRepo.save(grupo);
+        discenteRepo.save(discente);
     }
 
     /**
@@ -158,5 +163,7 @@ public class GrupoService {
         List<Discente> m = grupo.getDiscentes();
         m.remove(discente);
         grupo.setDiscentes(m);
+        grupoRepo.save(grupo);
+        discenteRepo.save(discente);
     }
 }
