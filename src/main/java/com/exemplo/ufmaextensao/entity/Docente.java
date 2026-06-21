@@ -12,6 +12,7 @@ import java.util.List;
 public class Docente extends Usuario {
     @Column(name = "siape")
     private String siape;
+
     @Column(name = "departamento")
     private String departamento;
 
@@ -21,4 +22,7 @@ public class Docente extends Usuario {
 
     @OneToMany(mappedBy = "responsavel_grupo")
     private List<Grupo> grupos;
+
+    @OneToMany(mappedBy = "respondavel_oportunidade")
+    private List<Oportunidade> oportunidadesResponsavel;
 }
