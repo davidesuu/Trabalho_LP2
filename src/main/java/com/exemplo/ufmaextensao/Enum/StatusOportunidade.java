@@ -1,0 +1,5 @@
+package com.exemplo.ufmaextensao.Enum;
+
+public enum StatusOportunidade {
+    PUBLICADA, REJEITADA, PENDENTE, EM_PROGRESSO, HORAS_CONTABILIZADAS, FINALIZADA
+}
