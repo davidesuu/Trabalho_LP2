@@ -25,4 +25,8 @@ public class Docente extends Usuario {
     @JsonIgnore
     @OneToMany(mappedBy = "responsavel")
     private List<Grupo> grupos;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "responsavel_oportunidade")
+    private List<Oportunidade> oportunidades;
 }
