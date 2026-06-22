@@ -26,5 +26,37 @@ public class GrupoController {
         return grupoService.criarGrupo(grupoDTO, idUsuario, idDocente);
     }
 
+    @PostMapping("/adicionar")
+    @ResponseStatus(HttpStatus.OK)
+    public void adicionarMembro(@RequestParam Integer idGrupo,
+                                @RequestParam Integer idDiscente,
+                                @RequestParam Integer idDocente){
+        return;
+    }
 
+    @PostMapping("/promover")
+    @ResponseStatus(HttpStatus.OK)
+    public void promoverMembro(@RequestParam Integer idGrupo,
+                                @RequestParam Integer idDiscente,
+                                @RequestParam Integer idDocente,
+                                @RequestParam String cargo){
+        return;
+    }
+
+    @PostMapping("/remover")
+    @ResponseStatus(HttpStatus.OK)
+    public void removerMembro(@RequestParam Integer idGrupo,
+                                @RequestParam Integer idDiscente,
+                                @RequestParam Integer idDocente){
+        return;
+    }
+
+    @PostMapping("/rebaixar")
+    @ResponseStatus(HttpStatus.OK)
+    public void rebaixarMembro(@RequestParam Integer idGrupo,
+                                @RequestParam Integer idDiscente,
+                                @RequestParam Integer idDocente,
+                                @RequestParam String cargo){
+        return;
+    }
 }

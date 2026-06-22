@@ -8,8 +8,6 @@ import com.exemplo.ufmaextensao.repository.GrupoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class GrupoService {
     @Autowired
@@ -73,16 +71,13 @@ public class GrupoService {
         }
 
         Discente discente = discenteRepo.findById(idDiscente).orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
-        List<Grupo> g = discente.getGrupos();
-        g.add(grupo);
-        discente.setGrupos(g);
 
-        List<Discente> m = grupo.getDiscentes();
-        m.add(discente);
-        grupo.setDiscentes(m);
+        if (grupo.getDiscentes().contains(discente)) {
+            throw new RegraDeNegocioException("Discente já é membro desse grupo");
+        }
 
+        grupo.getDiscentes().add(discente);
         grupoRepo.save(grupo);
-        discenteRepo.save(discente);
     }
 
     /**
@@ -106,19 +101,24 @@ public class GrupoService {
         }
 
         Discente discente = discenteRepo.findById(idDiscente).orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
-        List<Papel> papeis = discente.getPapeis();
-        Papel p = new Papel();
-        p.setNome(cargo);
-        papeis.add(p);
-        discente.setPapeis(papeis);
 
-        List<Discente> d = grupo.getDiretoria();
-        d.add(discente);
-        grupo.setDiretoria(d);
+        if (!grupo.getDiscentes().contains(discente)) {
+            throw new RegraDeNegocioException("Discente precisa ser membro do grupo antes de receber um cargo");
+        }
 
-        List<Grupo> grupo_director = discente.getGruposDiretor();
-        grupo_director.add(grupo);
-        discente.setGruposDiretor(grupo_director);
+        if (grupo.getDiretoria().contains(discente)) {
+            throw new RegraDeNegocioException("Discente já faz parte da diretoria desse grupo");
+        }
+
+        Papel papel = new Papel();
+        papel.setNome(cargo);
+
+        if (!discente.getPapeis().contains(papel)) {
+            discente.getPapeis().add(papel);
+        }
+
+        grupo.getDiretoria().add(discente);
+
         grupoRepo.save(grupo);
         discenteRepo.save(discente);
     }
@@ -140,30 +140,55 @@ public class GrupoService {
 
         Discente discente = discenteRepo.findById(idDiscente).orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
 
-        grupo.getDiscentes().stream().filter(d -> discente.equals(d)).findFirst()
-                .orElseThrow(()-> new RegraDeNegocioException("Discente não faz parte do grupo"));
+        if (!grupo.getDiscentes().remove(discente)) {
+            throw new RegraDeNegocioException("Discente não pertence a esse grupo");
+        }
 
-        grupo.getDiretoria().stream().filter(d -> discente.equals(d)).findFirst()
-                .orElseThrow(()-> new RegraDeNegocioException("Discente não faz parte da diretoria do grupo"));
+        // se o discente também for diretoria
+        grupo.getDiretoria().remove(discente);
 
-        //List<Papel> papeis = discente.getPapeis();
-        //papeis.remove();
-        //papeis.add(p);
-        //discente.setPapeis(papeis);
-        //fazer funcao p rebaixar algm
+        grupoRepo.save(grupo);
+    }
 
-        List<Discente> d = grupo.getDiretoria();
-        d.remove(discente);
-        grupo.setDiretoria(d);
+    /**
+     * essa funcao rebaixa o cargo de um discente de um grupo
+     * @param idGrupo id do grupo a que o discente pertence
+     * @param idDiscente id do discente que sera rebaixado
+     * @param idDocente id do docente responsavel pelo grupo
+     * @param cargo string com o cargo que discente tem e perderá
+     * @throws RegraDeNegocioException
+     */
+    public void rebaixarMembro(Integer idGrupo, Integer idDiscente, Integer idDocente, String cargo) throws RegraDeNegocioException{
+        if (cargo == null || cargo.isBlank()){
+            throw new RegraDeNegocioException("Cargo precisa ser um cargo válido");
+        }
 
-        List<Grupo> g = discente.getGrupos();
-        g.remove(grupo);
-        discente.setGrupos(g);
+        Grupo grupo = grupoRepo.findById(idGrupo).orElseThrow(() -> new RegraDeNegocioException("Grupo não encontrado"));
+        Docente docente = docenteRepo.findById(idDocente).orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
 
-        List<Discente> m = grupo.getDiscentes();
-        m.remove(discente);
-        grupo.setDiscentes(m);
+        if (!grupo.getResponsavel().equals(docente)) {
+            throw new RegraDeNegocioException("Este Docente não é responsavel por esse grupo");
+        }
+
+        Discente discente = discenteRepo.findById(idDiscente).orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
+
+        if (!grupo.getDiretoria().remove(discente)) {
+            throw new RegraDeNegocioException("Discente não faz parte da diretoria desse grupo");
+        }
+
+        //só remove o Papel se o discente não for mais diretor em NENHUM outro grupo
+        boolean aindaEDiretorEmOutroGrupo = grupoRepo.findByDiretoriaContaining(discente)
+                .stream()
+                .anyMatch(g -> !g.getId().equals(idGrupo));
+
+        if (!aindaEDiretorEmOutroGrupo) {
+            Papel papel = new Papel();
+            papel.setNome(cargo);
+            discente.getPapeis().remove(papel);
+        }
+
         grupoRepo.save(grupo);
         discenteRepo.save(discente);
     }
+
 }
