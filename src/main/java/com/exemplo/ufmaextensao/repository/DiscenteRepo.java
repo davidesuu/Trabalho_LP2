@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface DiscenteRepo extends JpaRepository<Discente, Integer> {
     public Optional<Discente> findByMatricula(String matricula);
-
 }
