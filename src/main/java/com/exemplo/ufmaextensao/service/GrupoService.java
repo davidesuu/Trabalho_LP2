@@ -19,15 +19,16 @@ public class GrupoService {
     private UsuarioService usuarioService;
 
     @Autowired
-    private DocenteRepo docenteRepo;
+    private DocenteService docenteService;
 
     @Autowired
     private PapelRepo papelRepo;
 
     @Autowired
     private SecurityService securityService;
+
     @Autowired
-    private DiscenteRepo discenteRepo;
+    private DiscenteService discenteService;
 
     /**
      * Essa função cria um novo grupo
@@ -50,7 +51,8 @@ public class GrupoService {
         if (grupoDTO.getDescricao() == null || grupoDTO.getDescricao().isBlank()) {
             throw new RegraDeNegocioException("Descricao do grupo é obrigatória");
         }
-        Docente docente = docenteRepo.findById(idDocente).orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
+        //
+        Docente docente = docenteService.buscarPorId(idDocente);
 
         Grupo grupo = Grupo.builder()
                 .nome(grupoDTO.getNome())
@@ -71,13 +73,13 @@ public class GrupoService {
     @Transactional
     public Grupo adicionarMembro(Integer idGrupo, Integer idDiscente, Integer idDocente) throws RegraDeNegocioException{
         Grupo grupo = grupoRepo.findById(idGrupo).orElseThrow(() -> new RegraDeNegocioException("Grupo não encontrado"));
-        Docente docente = docenteRepo.findById(idDocente).orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
+        Docente docente = docenteService.buscarPorId(idDocente);
 
         if (!grupo.getResponsavel().equals(docente)) {
             throw new RegraDeNegocioException("Este Docente não é responsavel por esse grupo");
         }
 
-        Discente discente = discenteRepo.findById(idDiscente).orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
+        Discente discente = discenteService.buscarPorId(idDiscente);
 
         if (grupo.getDiscentes().contains(discente)) {
             throw new RegraDeNegocioException("Discente já é membro desse grupo");
@@ -101,14 +103,13 @@ public class GrupoService {
         }
 
         Grupo grupo = grupoRepo.findById(idGrupo).orElseThrow(() -> new RegraDeNegocioException("Grupo não encontrado"));
-        Docente docente = docenteRepo.findById(idDocente).orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
+        Docente docente = docenteService.buscarPorId(idDocente);
 
         if (!grupo.getResponsavel().equals(docente)) {
             throw new RegraDeNegocioException("Este Docente não é responsavel por esse grupo");
         }
 
-        Discente discente = discenteRepo.findById(idDiscente).orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
-
+        Discente discente = discenteService.buscarPorId(idDiscente);
         if (!grupo.getDiscentes().contains(discente)) {
             throw new RegraDeNegocioException("Discente precisa ser membro do grupo antes de receber um cargo");
         }
@@ -127,7 +128,7 @@ public class GrupoService {
         grupo.getDiretoria().add(discente);
 
         grupoRepo.save(grupo);
-        discenteRepo.save(discente);
+        discenteService.atualizar(discente);
         return grupo;
     }
 
@@ -140,13 +141,12 @@ public class GrupoService {
      */
     public Grupo removerMembro(Integer idGrupo, Integer idDiscente, Integer idDocente) throws RegraDeNegocioException{
         Grupo grupo = grupoRepo.findById(idGrupo).orElseThrow(() -> new RegraDeNegocioException("Grupo não encontrado"));
-        Docente docente = docenteRepo.findById(idDocente).orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
-
+        Docente docente = docenteService.buscarPorId(idDocente);
         if (!grupo.getResponsavel().equals(docente)) {
             throw new RegraDeNegocioException("Este Docente não é responsavel por esse grupo");
         }
 
-        Discente discente = discenteRepo.findById(idDiscente).orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
+        Discente discente = discenteService.buscarPorId(idDiscente);
 
         if (!grupo.getDiscentes().remove(discente)) {
             throw new RegraDeNegocioException("Discente não pertence a esse grupo");
@@ -172,13 +172,13 @@ public class GrupoService {
         }
 
         Grupo grupo = grupoRepo.findById(idGrupo).orElseThrow(() -> new RegraDeNegocioException("Grupo não encontrado"));
-        Docente docente = docenteRepo.findById(idDocente).orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
+        Docente docente = docenteService.buscarPorId(idDocente);
 
         if (!grupo.getResponsavel().equals(docente)) {
             throw new RegraDeNegocioException("Este Docente não é responsavel por esse grupo");
         }
 
-        Discente discente = discenteRepo.findById(idDiscente).orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
+        Discente discente = discenteService.buscarPorId(idDiscente);
 
         if (!grupo.getDiretoria().remove(discente)) {
             throw new RegraDeNegocioException("Discente não faz parte da diretoria desse grupo");
@@ -195,7 +195,7 @@ public class GrupoService {
         }
 
         grupoRepo.save(grupo);
-        discenteRepo.save(discente);
+        discenteService.atualizar(discente);
         return grupo;
     }
 

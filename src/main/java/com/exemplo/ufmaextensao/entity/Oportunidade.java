@@ -53,14 +53,6 @@ public class Oportunidade {
     @Column(name = "data_fim")
     private LocalDate fim;
 
-    @ManyToMany
-    @JoinTable(
-            name = "oportunidade_autor",
-            joinColumns = @JoinColumn(name = "oportunidade_id"),
-            inverseJoinColumns = @JoinColumn(name = "usuario_id")
-    )
-    private List<Usuario> autor;
-
     @ManyToOne
     @JoinColumn(name = "docente_id")
     private Docente responsavel_oportunidade;

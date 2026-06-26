@@ -2,11 +2,9 @@ package com.exemplo.ufmaextensao.service;
 
 import com.exemplo.ufmaextensao.DTO.OportunidadeDTO;
 import com.exemplo.ufmaextensao.Enum.StatusOportunidade;
-import com.exemplo.ufmaextensao.entity.Discente;
-import com.exemplo.ufmaextensao.entity.Docente;
-import com.exemplo.ufmaextensao.entity.Oportunidade;
-import com.exemplo.ufmaextensao.entity.Usuario;
+import com.exemplo.ufmaextensao.entity.*;
 import com.exemplo.ufmaextensao.repository.OportunidadeRepo;
+import com.exemplo.ufmaextensao.service.TipoOportunidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -26,6 +24,8 @@ public class OportunidadeService {
     private UsuarioService usuarioService;
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private TipoOportunidadeService tipoOportunidadeService;
 
     /**
      * Essa função salva uma oportunidade no repositorio após validar as informações da oportunidade instanciada e validar permisão do usuario
@@ -35,12 +35,11 @@ public class OportunidadeService {
      * @throws RegraDeNegocioException se as validacoes de dados ou de permissao falharem
      */
 
-    public Oportunidade criarOportunidade(OportunidadeDTO oportunidadeDTO, Integer usuarioId)
+    public Oportunidade criarOportunidade(OportunidadeDTO oportunidadeDTO, Integer usuarioId, String tipo)
             throws RegraDeNegocioException {
 
         Usuario usuario = usuarioService.obterUsuarioPorId(usuarioId);
-        securityService.validarPermissao(usuario, "DOCENTE", "COORDENADOR");
-
+        securityService.validarPermissao(usuario, "DOCENTE", "COORDENADOR", "ADMIN");
 
         if (oportunidadeDTO == null) {
             throw new RegraDeNegocioException("Os dados da oportunidade não foram informados.");
@@ -52,9 +51,10 @@ public class OportunidadeService {
             throw new RegraDeNegocioException("A descrição não pode ser vazia.");
         }
 
-        if (oportunidadeDTO.getOportunidade() == null) {
+        if (oportunidadeDTO.getTipoOportunidade() == null) {
             throw new RegraDeNegocioException("O tipo de oportunidade deve ser informado.");
         }
+
         if (oportunidadeDTO.getModalidade() == null) {
             throw new RegraDeNegocioException("A modalidade deve ser informada.");
         }
@@ -68,7 +68,7 @@ public class OportunidadeService {
         if (oportunidadeDTO.getVagas() == null || oportunidadeDTO.getVagas() <= 0) {
             throw new RegraDeNegocioException("A quantidade de vagas deve ser maior que zero.");
         }
-        if (oportunidadeDTO.getVagasOocupadas() == null) {
+        if (oportunidadeDTO.getVagasOcupadas() == null) {
             throw new RegraDeNegocioException("A quantidade de vagas ocupadas deve ser informada.");
         }
 
@@ -81,26 +81,26 @@ public class OportunidadeService {
         if (oportunidadeDTO.getFim().isBefore(oportunidadeDTO.getIncio())) {
             throw new RegraDeNegocioException("A data de fim não pode ser anterior à data de início.");
         }
-
-        if (oportunidadeDTO.getAutor() == null || oportunidadeDTO.getAutor().isEmpty()) {
-            throw new RegraDeNegocioException("A oportunidade deve ter pelo menos um autor.");
-        }
         if (oportunidadeDTO.getResponsavel_oportunidade() == null) {
             throw new RegraDeNegocioException("O docente responsável deve ser informado.");
         }
 
+        if(tipoOportunidadeService.buscarPorTipo(tipo)==null){
+            throw new RegraDeNegocioException("Tipo de Oportunidade invalido");
+        }
+        TipoOportunidade tipoOportunidade = tipoOportunidadeService.buscarPorTipo(tipo);
+
         Oportunidade oportunidade = Oportunidade.builder()
                 .titulo(oportunidadeDTO.getNome())
                 .descricao(oportunidadeDTO.getDescricao())
-                .oportunidade(oportunidadeDTO.getOportunidade())
+                .oportunidade(tipoOportunidade)
                 .modalidade(oportunidadeDTO.getModalidade())
                 .carga_horaria(oportunidadeDTO.getCarga_horaria())
                 .vagas(oportunidadeDTO.getVagas())
-                .vagasOocupadas(oportunidadeDTO.getVagasOocupadas())
+                .vagasOocupadas(oportunidadeDTO.getVagasOcupadas())
                 .status(oportunidadeDTO.getStatus())
                 .incio(oportunidadeDTO.getIncio())
                 .fim(oportunidadeDTO.getFim())
-                .autor(oportunidadeDTO.getAutor())
                 .responsavel_oportunidade(oportunidadeDTO.getResponsavel_oportunidade())
                 .build();
 

@@ -32,8 +32,9 @@ public class OportunidadeController {
     @ResponseStatus(HttpStatus.CREATED)
     public Oportunidade criarNOvaOportunidade(
             @RequestBody OportunidadeDTO oportunidadeDTO,
-            @RequestParam Integer idUsuario) {
-        return oportunidadeService.criarOportunidade(oportunidadeDTO, idUsuario);
+            @RequestParam Integer idUsuario,
+            @RequestParam String tipo) throws RegraDeNegocioException {
+        return oportunidadeService.criarOportunidade(oportunidadeDTO, idUsuario,tipo);
     }
 
     @GetMapping("/{id}")

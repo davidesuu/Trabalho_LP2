@@ -13,6 +13,9 @@ public class TipoOportunidade {
     @Column(name = "id_tipoOportunidade")
     private Integer id;
 
+    @Column
+    private String tipo; //evento, oficina, curso e projeto...
+
     @OneToMany(mappedBy = "oportunidade")
     @Column(name = "oportunidade")
     private List<Oportunidade> oportunidades;

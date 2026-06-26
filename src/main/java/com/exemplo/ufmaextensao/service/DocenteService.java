@@ -7,6 +7,8 @@ import com.exemplo.ufmaextensao.repository.DocenteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class DocenteService {
     @Autowired
@@ -46,6 +48,11 @@ public class DocenteService {
                 .departamento(docenteDTO.getDepartamento()).build();
         docente.setAtivo(true);
         return docenteRepo.save(docente);
+    }
+
+    public Docente buscarPorId(Integer docenteId) throws RegraDeNegocioException{
+        return docenteRepo.findDocenteById(docenteId)
+                .orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
     }
 
 }
