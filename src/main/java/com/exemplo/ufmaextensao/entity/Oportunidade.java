@@ -26,7 +26,7 @@ public class Oportunidade {
     private Integer id;
     @Column(name = "Titulo")
     private String titulo;
-    @Column(name = "descri��o")
+    @Column(name = "descricao")
     private String descricao;
 
     @ManyToOne

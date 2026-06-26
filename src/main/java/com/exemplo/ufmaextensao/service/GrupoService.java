@@ -5,6 +5,8 @@ import com.exemplo.ufmaextensao.entity.*;
 import com.exemplo.ufmaextensao.repository.DiscenteRepo;
 import com.exemplo.ufmaextensao.repository.DocenteRepo;
 import com.exemplo.ufmaextensao.repository.GrupoRepo;
+import com.exemplo.ufmaextensao.repository.PapelRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,9 @@ public class GrupoService {
     private DocenteRepo docenteRepo;
 
     @Autowired
+    private PapelRepo papelRepo;
+
+    @Autowired
     private SecurityService securityService;
     @Autowired
     private DiscenteRepo discenteRepo;
@@ -32,6 +37,7 @@ public class GrupoService {
      * @return retorna Grupo após salvar no repositorio
      * @throws RegraDeNegocioException
      */
+    @Transactional
     public Grupo criarGrupo(GrupoDTO grupoDTO, Integer idUsuario, Integer idDocente) throws RegraDeNegocioException {
         Usuario usuario = usuarioService.obterUsuarioPorId(idUsuario);
         securityService.validarPermissao(usuario, "ADMIN", "COORDENADOR");
@@ -62,7 +68,8 @@ public class GrupoService {
      * @param idDocente id do docente responsavel pelo grupo
      * @throws RegraDeNegocioException
      */
-    public void adicionarMembro(Integer idGrupo, Integer idDiscente, Integer idDocente) throws RegraDeNegocioException{
+    @Transactional
+    public Grupo adicionarMembro(Integer idGrupo, Integer idDiscente, Integer idDocente) throws RegraDeNegocioException{
         Grupo grupo = grupoRepo.findById(idGrupo).orElseThrow(() -> new RegraDeNegocioException("Grupo não encontrado"));
         Docente docente = docenteRepo.findById(idDocente).orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
 
@@ -77,7 +84,7 @@ public class GrupoService {
         }
 
         grupo.getDiscentes().add(discente);
-        grupoRepo.save(grupo);
+        return grupoRepo.save(grupo);
     }
 
     /**
@@ -88,7 +95,7 @@ public class GrupoService {
      * @param cargo string com o cargo que discente recebe
      * @throws RegraDeNegocioException
      */
-    public void promoverMembro(Integer idGrupo, Integer idDiscente, Integer idDocente, String cargo) throws RegraDeNegocioException{
+    public Grupo promoverMembro(Integer idGrupo, Integer idDiscente, Integer idDocente, String cargo) throws RegraDeNegocioException{
         if (cargo == null || cargo.isBlank()){
             throw new RegraDeNegocioException("Cargo precisa ser um cargo válido");
         }
@@ -110,8 +117,8 @@ public class GrupoService {
             throw new RegraDeNegocioException("Discente já faz parte da diretoria desse grupo");
         }
 
-        Papel papel = new Papel();
-        papel.setNome(cargo);
+        Papel papel = papelRepo.findByNome(cargo).orElseThrow(()-> new RegraDeNegocioException("Papel Invalido"));
+
 
         if (!discente.getPapeis().contains(papel)) {
             discente.getPapeis().add(papel);
@@ -121,6 +128,7 @@ public class GrupoService {
 
         grupoRepo.save(grupo);
         discenteRepo.save(discente);
+        return grupo;
     }
 
     /**
@@ -130,7 +138,7 @@ public class GrupoService {
      * @param idDocente id do docente responsavel pelo grupo
      * @throws RegraDeNegocioException
      */
-    public void removerMembro(Integer idGrupo, Integer idDiscente, Integer idDocente) throws RegraDeNegocioException{
+    public Grupo removerMembro(Integer idGrupo, Integer idDiscente, Integer idDocente) throws RegraDeNegocioException{
         Grupo grupo = grupoRepo.findById(idGrupo).orElseThrow(() -> new RegraDeNegocioException("Grupo não encontrado"));
         Docente docente = docenteRepo.findById(idDocente).orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
 
@@ -147,7 +155,7 @@ public class GrupoService {
         // se o discente também for diretoria
         grupo.getDiretoria().remove(discente);
 
-        grupoRepo.save(grupo);
+        return grupoRepo.save(grupo);
     }
 
     /**
@@ -158,7 +166,7 @@ public class GrupoService {
      * @param cargo string com o cargo que discente tem e perderá
      * @throws RegraDeNegocioException
      */
-    public void rebaixarMembro(Integer idGrupo, Integer idDiscente, Integer idDocente, String cargo) throws RegraDeNegocioException{
+    public Grupo rebaixarMembro(Integer idGrupo, Integer idDiscente, Integer idDocente, String cargo) throws RegraDeNegocioException{
         if (cargo == null || cargo.isBlank()){
             throw new RegraDeNegocioException("Cargo precisa ser um cargo válido");
         }
@@ -182,13 +190,13 @@ public class GrupoService {
                 .anyMatch(g -> !g.getId().equals(idGrupo));
 
         if (!aindaEDiretorEmOutroGrupo) {
-            Papel papel = new Papel();
-            papel.setNome(cargo);
+            Papel papel = papelRepo.findByNome(cargo).orElseThrow(() -> new RegraDeNegocioException("Papel Invalido"));
             discente.getPapeis().remove(papel);
         }
 
         grupoRepo.save(grupo);
         discenteRepo.save(discente);
+        return grupo;
     }
 
 }
