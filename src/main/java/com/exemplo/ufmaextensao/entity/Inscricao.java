@@ -3,6 +3,7 @@ package com.exemplo.ufmaextensao.entity;
 import com.exemplo.ufmaextensao.Enum.StatusInscricao;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -18,11 +19,13 @@ public class Inscricao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "id_oportunidade")
-    private Integer oportunidadeId;
+    @ManyToOne
+    @JoinColumn(name = "id_oportunidade")
+    private Oportunidade oportunidade;
 
-    @Column(name = "id_discente")
-    private Long discenteId;
+    @ManyToOne
+    @JoinColumn(name = "id_discente")
+    private Discente discente;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_inscricao")
@@ -31,10 +34,11 @@ public class Inscricao {
     @Column(name = "motivacao")
     private String motivacao;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDate createdAt;
 
-    public void ajeitar(){
+    public void aprovar(){
         this.status = StatusInscricao.APROVADA;
     }
 
