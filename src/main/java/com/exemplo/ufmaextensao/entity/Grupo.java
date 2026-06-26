@@ -37,4 +37,10 @@ public class Grupo {
             inverseJoinColumns = @JoinColumn(name = "id_usuario"))
     private List<Discente> discentes;
     //private List<Long> membroIds = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "diretoria",
+            joinColumns = @JoinColumn(name = "id_grupo"),
+            inverseJoinColumns = @JoinColumn(name = "id_usuario"))
+    private List<Discente> diretoria;
 }

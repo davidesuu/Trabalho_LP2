@@ -14,7 +14,7 @@ public class TipoOportunidade {
     private Integer id;
 
     @OneToMany(mappedBy = "oportunidade")
-    @JoinColumn(name = "oportunidade")
+    @Column(name = "oportunidade")
     private List<Oportunidade> oportunidades;
 
 }

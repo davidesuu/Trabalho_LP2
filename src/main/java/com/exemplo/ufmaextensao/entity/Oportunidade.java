@@ -26,7 +26,7 @@ public class Oportunidade {
     private Integer id;
     @Column(name = "Titulo")
     private String titulo;
-    @Column(name = "descri��o")
+    @Column(name = "descricao")
     private String descricao;
 
     @ManyToOne
@@ -53,12 +53,16 @@ public class Oportunidade {
     @Column(name = "data_fim")
     private LocalDate fim;
 
-    @ManyToMany(mappedBy = "Usuario")
-    @JoinColumn(name = "autor")
+    @ManyToMany
+    @JoinTable(
+            name = "oportunidade_autor",
+            joinColumns = @JoinColumn(name = "oportunidade_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
     private List<Usuario> autor;
 
-    @OneToMany(mappedBy = "Docentes")
-    @JoinColumn(name = "responsavel")
+    @ManyToOne
+    @JoinColumn(name = "docente_id")
     private Docente responsavel_oportunidade;
 
 
