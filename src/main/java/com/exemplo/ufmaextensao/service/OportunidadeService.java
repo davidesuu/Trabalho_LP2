@@ -97,7 +97,7 @@ public class OportunidadeService {
                 .modalidade(oportunidadeDTO.getModalidade())
                 .carga_horaria(oportunidadeDTO.getCarga_horaria())
                 .vagas(oportunidadeDTO.getVagas())
-                .vagasOocupadas(oportunidadeDTO.getVagasOcupadas())
+                .vagasOcupadas(oportunidadeDTO.getVagasOcupadas())
                 .status(oportunidadeDTO.getStatus())
                 .incio(oportunidadeDTO.getIncio())
                 .fim(oportunidadeDTO.getFim())
