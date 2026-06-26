@@ -42,7 +42,7 @@ public class Oportunidade {
     @Column(name = "vagas")
     private Integer vagas;
     @Column(name = "vagasOcupadas")
-    private Integer vagasOocupadas;
+    private Integer vagasOcupadas;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
