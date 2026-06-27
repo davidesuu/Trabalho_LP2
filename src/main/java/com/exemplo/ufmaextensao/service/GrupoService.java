@@ -6,7 +6,9 @@ import com.exemplo.ufmaextensao.repository.DiscenteRepo;
 import com.exemplo.ufmaextensao.repository.DocenteRepo;
 import com.exemplo.ufmaextensao.repository.GrupoRepo;
 import com.exemplo.ufmaextensao.repository.PapelRepo;
+import com.exemplo.ufmaextensao.repository.LogRepo;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ public class GrupoService {
     private SecurityService securityService;
     @Autowired
     private DiscenteRepo discenteRepo;
+    @Autowired
+    private LogRepo logRepo;
 
     /**
      * Essa função cria um novo grupo
@@ -84,7 +88,20 @@ public class GrupoService {
         }
 
         grupo.getDiscentes().add(discente);
-        return grupoRepo.save(grupo);
+        grupo = grupoRepo.save(grupo);
+
+        logRepo.save(Log.builder()
+                .nomeAutor(docente.getNome())
+                .matriculaAutor(docente.getSiape())
+                .nomeAfetado(discente.getNome())
+                .matriculaAfetado(discente.getMatricula())
+                .nomeGrupo(grupo.getNome())
+                .cargo("Membro")
+                .operacao("ADICIONAR")
+                .dataHora(LocalDateTime.now())
+                .build());
+
+        return grupo;
     }
 
     /**
@@ -128,6 +145,18 @@ public class GrupoService {
 
         grupoRepo.save(grupo);
         discenteRepo.save(discente);
+        
+        logRepo.save(Log.builder()
+                .nomeAutor(docente.getNome())
+                .matriculaAutor(docente.getSiape())
+                .nomeAfetado(discente.getNome())
+                .matriculaAfetado(discente.getMatricula())
+                .nomeGrupo(grupo.getNome())
+                .cargo(cargo)
+                .operacao("PROMOVER")
+                .dataHora(LocalDateTime.now())
+                .build());
+
         return grupo;
     }
 
@@ -155,7 +184,20 @@ public class GrupoService {
         // se o discente também for diretoria
         grupo.getDiretoria().remove(discente);
 
-        return grupoRepo.save(grupo);
+        grupo = grupoRepo.save(grupo);
+
+        logRepo.save(Log.builder()
+                .nomeAutor(docente.getNome())
+                .matriculaAutor(docente.getSiape())
+                .nomeAfetado(discente.getNome())
+                .matriculaAfetado(discente.getMatricula())
+                .nomeGrupo(grupo.getNome())
+                .cargo("Membro")
+                .operacao("REMOVER")
+                .dataHora(LocalDateTime.now())
+                .build());
+
+        return grupo;
     }
 
     /**
@@ -196,6 +238,18 @@ public class GrupoService {
 
         grupoRepo.save(grupo);
         discenteRepo.save(discente);
+
+        logRepo.save(Log.builder()
+                .nomeAutor(docente.getNome())
+                .matriculaAutor(docente.getSiape())
+                .nomeAfetado(discente.getNome())
+                .matriculaAfetado(discente.getMatricula())
+                .nomeGrupo(grupo.getNome())
+                .cargo(cargo)
+                .operacao("REBAIXAR")
+                .dataHora(LocalDateTime.now())
+                .build());
+
         return grupo;
     }
 
