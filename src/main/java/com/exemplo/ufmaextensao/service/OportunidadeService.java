@@ -26,6 +26,8 @@ public class OportunidadeService {
     private SecurityService securityService;
     @Autowired
     private TipoOportunidadeService tipoOportunidadeService;
+    @Autowired
+    private GrupoService grupoService;
 
     /**
      * Essa função salva uma oportunidade no repositorio após validar as informações da oportunidade instanciada e validar permisão do usuario
@@ -35,11 +37,11 @@ public class OportunidadeService {
      * @throws RegraDeNegocioException se as validacoes de dados ou de permissao falharem
      */
 
-    public Oportunidade criarOportunidade(OportunidadeDTO oportunidadeDTO, Integer usuarioId, String tipo)
+    public Oportunidade criarOportunidade(OportunidadeDTO oportunidadeDTO, Integer usuarioId, String tipo, Integer idGrupo)
             throws RegraDeNegocioException {
 
         Usuario usuario = usuarioService.obterUsuarioPorId(usuarioId);
-        securityService.validarPermissao(usuario, "DOCENTE", "COORDENADOR", "ADMIN");
+        securityService.validarPermissao(usuario, "DOCENTE", "COORDENADOR", "ADMIN", "D_DIRETOR");
 
         if (oportunidadeDTO == null) {
             throw new RegraDeNegocioException("Os dados da oportunidade não foram informados.");
@@ -50,18 +52,9 @@ public class OportunidadeService {
         if (oportunidadeDTO.getDescricao() == null || oportunidadeDTO.getDescricao().isBlank()) {
             throw new RegraDeNegocioException("A descrição não pode ser vazia.");
         }
-
-        if (oportunidadeDTO.getTipoOportunidade() == null) {
-            throw new RegraDeNegocioException("O tipo de oportunidade deve ser informado.");
-        }
-
         if (oportunidadeDTO.getModalidade() == null) {
             throw new RegraDeNegocioException("A modalidade deve ser informada.");
         }
-        if (oportunidadeDTO.getStatus() == null) {
-            throw new RegraDeNegocioException("O status da oportunidade deve ser informado.");
-        }
-
         if (oportunidadeDTO.getCarga_horaria() == null || oportunidadeDTO.getCarga_horaria() <= 0) {
             throw new RegraDeNegocioException("A carga horária deve ser maior que zero.");
         }
@@ -71,7 +64,6 @@ public class OportunidadeService {
         if (oportunidadeDTO.getVagasOcupadas() == null) {
             throw new RegraDeNegocioException("A quantidade de vagas ocupadas deve ser informada.");
         }
-
         if (oportunidadeDTO.getIncio() == null) {
             throw new RegraDeNegocioException("A data de início deve ser informada.");
         }
@@ -81,30 +73,48 @@ public class OportunidadeService {
         if (oportunidadeDTO.getFim().isBefore(oportunidadeDTO.getIncio())) {
             throw new RegraDeNegocioException("A data de fim não pode ser anterior à data de início.");
         }
-        if (oportunidadeDTO.getResponsavel_oportunidade() == null) {
-            throw new RegraDeNegocioException("O docente responsável deve ser informado.");
+
+        // corrigido: tipo.toUpperCase() não modifica a variável original
+        TipoOportunidade tipoOportunidade = tipoOportunidadeService.buscarPorTipo(tipo.toUpperCase());
+        if (tipoOportunidade == null) {
+            throw new RegraDeNegocioException("Tipo de oportunidade inválido.");
         }
 
-        if(tipoOportunidadeService.buscarPorTipo(tipo)==null){
-            throw new RegraDeNegocioException("Tipo de Oportunidade invalido");
+        boolean isDiretor = usuario.getPapeis().stream()
+                .anyMatch(p -> p.getNome().equals("D_DIRETOR"));
+
+        Grupo grupo = null;
+        if (isDiretor) {
+            if (idGrupo == null) {
+                throw new RegraDeNegocioException("Discente diretor precisa informar o grupo.");
+            }
+            grupo = grupoService.buscarPorId(idGrupo);
+
+            if (!grupo.getDiretoria().contains(usuario)) {
+                throw new RegraDeNegocioException("Discente não é diretor desse grupo.");
+            }
         }
-        TipoOportunidade tipoOportunidade = tipoOportunidadeService.buscarPorTipo(tipo);
 
         Oportunidade oportunidade = Oportunidade.builder()
                 .titulo(oportunidadeDTO.getNome())
                 .descricao(oportunidadeDTO.getDescricao())
-                .oportunidade(tipoOportunidade)
+                .tipoOportunidade(tipoOportunidade)
                 .modalidade(oportunidadeDTO.getModalidade())
                 .carga_horaria(oportunidadeDTO.getCarga_horaria())
                 .vagas(oportunidadeDTO.getVagas())
                 .vagasOcupadas(oportunidadeDTO.getVagasOcupadas())
-                .status(oportunidadeDTO.getStatus())
                 .incio(oportunidadeDTO.getIncio())
                 .fim(oportunidadeDTO.getFim())
-                .responsavel_oportunidade(oportunidadeDTO.getResponsavel_oportunidade())
+                .grupo(grupo)
+                .autor(usuario)
                 .build();
-
-
+        if (isDiretor){
+            oportunidade.setStatus(StatusOportunidade.PENDENTE);
+        }
+        else {
+            oportunidade.setResponsavel_oportunidade(usuario);
+            oportunidade.setStatus(StatusOportunidade.PUBLICADA);
+        }
         return oportunidadeRepo.save(oportunidade);
     }
 
@@ -149,36 +159,51 @@ public class OportunidadeService {
 
     /**
      * Essa funçao altera o status de uma oportunidade para PUBLICADA e vincula o docente responsavel
-     * @param id ID da oportunidade que vai ser publicada
-     * @param docente instancia de docente que se tornara responsavel pela oportunidade publicada
+     * @param oportunidadeId ID da oportunidade que vai ser publicada
+     * @param responsavelId id do docente que se tornara responsavel pela oportunidade publicada
      * @throws RegraDeNegocioException se o docente for nulo ou se a oportunidade ja estiver publicada
      */
-    public void publicarOportunidade(Integer id, Docente docente) throws RegraDeNegocioException{
-        if(docente == null) throw new RegraDeNegocioException("Um docente responsavel deve ser informado para publicar.");
-        Oportunidade op = buscar(id);
+    public Oportunidade publicarOportunidade(Integer oportunidadeId, Integer responsavelId) throws RegraDeNegocioException {
+        Usuario usuario = usuarioService.obterUsuarioPorId(responsavelId);
+        securityService.validarPermissao(usuario, "DOCENTE", "COORDENADOR", "ADMIN");
 
-        if(op.getStatus() == StatusOportunidade.PUBLICADA){
-            throw new RegraDeNegocioException("esta oportunidade já está publicada.");
+        Oportunidade op = buscar(oportunidadeId);
+
+        if (op.getStatus() != StatusOportunidade.PENDENTE) {
+            throw new RegraDeNegocioException("Apenas oportunidades aguardando aprovação podem ser publicadas.");
         }
+
+
+        if (op.getGrupo() != null && !op.getGrupo().getResponsavel().getId().equals(responsavelId)) {
+            throw new RegraDeNegocioException("Apenas o docente responsável pelo grupo pode aprovar essa oportunidade.");
+        }
+
         op.setStatus(StatusOportunidade.PUBLICADA);
-        op.setResponsavel_oportunidade(docente);
-        oportunidadeRepo.save(op);
+        op.setResponsavel_oportunidade(usuario);
+        return oportunidadeRepo.save(op);
     }
 
     /**
      * Essa funcao altera o status da oportunidade para REJEITADA caso ela esteja pendente
-     * @param id ID da oportunidade a ser rejeitada
-     * @param docente instancia do docente que esta executando a ação de rejeição
+     * @param oportunidadeId ID da oportunidade a ser rejeitada
+     * @param responsavelId instancia do responsavel que esta executando a ação de rejeição
      * @throws RegraDeNegocioException se a oportunidade nao estiver com status PEBDENTE
      */
-    public void rejeitarOportunidade(Integer id, Docente docente) throws RegraDeNegocioException{
-        Oportunidade op = buscar(id);
+    public Oportunidade rejeitarOportunidade(Integer oportunidadeId, Integer responsavelId) throws RegraDeNegocioException{
+        Oportunidade op = buscar(oportunidadeId);
+        Usuario usuario = usuarioService.obterUsuarioPorId(responsavelId);
+        securityService.validarPermissao(usuario, "DOCENTE", "COORDENADOR", "ADMIN");
+        if (op.getStatus() != StatusOportunidade.PENDENTE) {
+            throw new RegraDeNegocioException("Apenas oportunidades aguardando aprovação podem ser publicadas.");
+        }
 
-        if(op.getStatus() != StatusOportunidade.PENDENTE){
-            throw new RegraDeNegocioException("Apenas oportunidades pendentes podem ser rejeitadas");
+
+        if (op.getGrupo() != null && !op.getGrupo().getResponsavel().getId().equals(responsavelId)) {
+            throw new RegraDeNegocioException("Apenas o docente responsável pelo grupo pode aprovar essa oportunidade.");
         }
         op.setStatus(StatusOportunidade.REJEITADA);
-        oportunidadeRepo.save(op);
+        op.setResponsavel_oportunidade(usuario);
+        return oportunidadeRepo.save(op);
     }
 
     //public List<Oportunidade> listarOportunidadesPossiveis(Discente discente) throws RegraDeNegocioException {

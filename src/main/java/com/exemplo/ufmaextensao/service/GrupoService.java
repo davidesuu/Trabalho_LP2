@@ -199,4 +199,7 @@ public class GrupoService {
         return grupo;
     }
 
+    public Grupo buscarPorId(Integer grupoId) throws RegraDeNegocioException{
+        return grupoRepo.findById(grupoId).orElseThrow(() -> new RegraDeNegocioException("Grupo não encontrado"));
+    }
 }
