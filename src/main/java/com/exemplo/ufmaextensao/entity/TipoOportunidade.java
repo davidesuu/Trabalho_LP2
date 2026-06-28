@@ -1,11 +1,12 @@
 package com.exemplo.ufmaextensao.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
 @Entity
-@Table(name = "Tipo Oportunidade")
+@Table(name = "tipo_oportunidade")
 @Data
 public class TipoOportunidade {
     @Id
@@ -13,7 +14,11 @@ public class TipoOportunidade {
     @Column(name = "id_tipoOportunidade")
     private Integer id;
 
-    @OneToMany(mappedBy = "oportunidade")
+    @Column
+    private String tipo; //evento, oficina, curso e projeto...
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "tipoOportunidade")
     @Column(name = "oportunidade")
     private List<Oportunidade> oportunidades;
 

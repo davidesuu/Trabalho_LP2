@@ -93,4 +93,12 @@ public class DiscenteService {
         return discenteRepo.save(discente);
     }
 
+    public Discente buscarPorId(Integer discenteId) throws RegraDeNegocioException {
+        return discenteRepo.findById(discenteId)
+                .orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
+    }
+
+    public Discente atualizar(Discente discente) throws RegraDeNegocioException {
+        return discenteRepo.save(discente);
+    }
 }
