@@ -30,7 +30,9 @@ public class GrupoService {
     private SecurityService securityService;
 
     @Autowired
-    private LogRepo logRepo;
+    private LogService logService;
+
+    @Autowired
     private DiscenteService discenteService;
 
     /**
@@ -91,7 +93,7 @@ public class GrupoService {
         grupo.getDiscentes().add(discente);
         grupo = grupoRepo.save(grupo);
 
-        logRepo.save(Log.builder()
+        Log log = Log.builder()
                 .nomeAutor(docente.getNome())
                 .matriculaAutor(docente.getSiape())
                 .nomeAfetado(discente.getNome())
@@ -100,7 +102,8 @@ public class GrupoService {
                 .cargo("Membro")
                 .operacao("ADICIONAR")
                 .dataHora(LocalDateTime.now())
-                .build());
+                .build();
+        logService.salvarLog(log);
 
         return grupo;
     }
@@ -113,6 +116,7 @@ public class GrupoService {
      * @param cargo string com o cargo que discente recebe
      * @throws RegraDeNegocioException
      */
+    @Transactional
     public Grupo promoverMembro(Integer idGrupo, Integer idDiscente, Integer idDocente, String cargo) throws RegraDeNegocioException{
         if (cargo == null || cargo.isBlank()){
             throw new RegraDeNegocioException("Cargo precisa ser um cargo válido");
@@ -145,7 +149,7 @@ public class GrupoService {
 
         grupoRepo.save(grupo);
         
-        logRepo.save(Log.builder()
+        Log log = Log.builder()
                 .nomeAutor(docente.getNome())
                 .matriculaAutor(docente.getSiape())
                 .nomeAfetado(discente.getNome())
@@ -154,9 +158,12 @@ public class GrupoService {
                 .cargo(cargo)
                 .operacao("PROMOVER")
                 .dataHora(LocalDateTime.now())
-                .build());
+                .build();
 
         discenteService.atualizar(discente);
+
+        logService.salvarLog(log);
+
         return grupo;
     }
 
@@ -167,6 +174,7 @@ public class GrupoService {
      * @param idDocente id do docente responsavel pelo grupo
      * @throws RegraDeNegocioException
      */
+    @Transactional
     public Grupo removerMembro(Integer idGrupo, Integer idDiscente, Integer idDocente) throws RegraDeNegocioException{
         Grupo grupo = grupoRepo.findById(idGrupo).orElseThrow(() -> new RegraDeNegocioException("Grupo não encontrado"));
         Docente docente = docenteService.buscarPorId(idDocente);
@@ -185,7 +193,7 @@ public class GrupoService {
 
         grupo = grupoRepo.save(grupo);
 
-        logRepo.save(Log.builder()
+        Log log = Log.builder()
                 .nomeAutor(docente.getNome())
                 .matriculaAutor(docente.getSiape())
                 .nomeAfetado(discente.getNome())
@@ -194,7 +202,8 @@ public class GrupoService {
                 .cargo("Membro")
                 .operacao("REMOVER")
                 .dataHora(LocalDateTime.now())
-                .build());
+                .build();
+        logService.salvarLog(log);
 
         return grupo;
     }
@@ -207,6 +216,7 @@ public class GrupoService {
      * @param cargo string com o cargo que discente tem e perderá
      * @throws RegraDeNegocioException
      */
+    @Transactional
     public Grupo rebaixarMembro(Integer idGrupo, Integer idDiscente, Integer idDocente, String cargo) throws RegraDeNegocioException{
         if (cargo == null || cargo.isBlank()){
             throw new RegraDeNegocioException("Cargo precisa ser um cargo válido");
@@ -238,7 +248,7 @@ public class GrupoService {
         grupoRepo.save(grupo);
 
 
-        logRepo.save(Log.builder()
+        Log log = Log.builder()
                 .nomeAutor(docente.getNome())
                 .matriculaAutor(docente.getSiape())
                 .nomeAfetado(discente.getNome())
@@ -247,9 +257,9 @@ public class GrupoService {
                 .cargo(cargo)
                 .operacao("REBAIXAR")
                 .dataHora(LocalDateTime.now())
-                .build());
-
+                .build();
         discenteService.atualizar(discente);
+        logService.salvarLog(log);
         return grupo;
     }
 
