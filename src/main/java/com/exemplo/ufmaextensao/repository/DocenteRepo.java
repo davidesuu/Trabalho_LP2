@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface DocenteRepo extends JpaRepository<Docente, Integer> {
-    Optional<Docente> findDocenteById(Integer integer);
+    public Optional<Docente> findDocenteById(Integer docente_id);
+
 }
