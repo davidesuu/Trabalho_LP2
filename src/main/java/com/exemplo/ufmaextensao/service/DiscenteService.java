@@ -7,6 +7,7 @@ import com.exemplo.ufmaextensao.entity.PPC;
 import com.exemplo.ufmaextensao.entity.Usuario;
 import com.exemplo.ufmaextensao.repository.DiscenteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -83,12 +84,17 @@ public class DiscenteService {
         if (ppc == null) {
             throw new RegraDeNegocioException("PPC invalido");
         }
+
+
         Discente discente = Discente.builder().nome(discenteDTO.getNome()).email(discenteDTO.getEmail())
-                .senha(discenteDTO.getSenha()).semestre(discenteDTO.getSemestre()).build();
+                .semestre(discenteDTO.getSemestre()).build();
         discente.setCurso(curso);
         discente.setBanco_de_horas(ppc.getCargaHorariaTotal());
         discente.setMatricula(gerarNumeroMatricula());
         discente.setAtivo(true);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        discente.setSenha(encoder.encode(discenteDTO.getSenha()));
+
 
         return discenteRepo.save(discente);
     }
