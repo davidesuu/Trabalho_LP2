@@ -48,4 +48,9 @@ public class DocenteService {
         return docenteRepo.save(docente);
     }
 
+    public Docente buscarPorId(Integer docenteId) throws RegraDeNegocioException{
+        return docenteRepo.findDocenteById(docenteId)
+                .orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
+    }
+
 }
