@@ -56,7 +56,7 @@ public class CertificadoService {
                 .horas(certificadoDTO.getHoras())
                 .discente(discente)
                 .oportunidade(oportunidade)
-                .uuid_hash(gerarCodigoCertificado()) // funçao nativa do java que fabrica um identificador unico e universal
+                .uuidHash(gerarCodigoCertificado()) // funçao nativa do java que fabrica um identificador unico e universal
                 .statusAssinatura(StatusAssinatura.PENDENTE)
                 .dataEmissao(java.time.LocalDate.now())
                 .build();
@@ -99,7 +99,7 @@ public class CertificadoService {
      * @return Uma lista de certificado com status PENDENTES
      */
     public List<Certificado> listarCerticadosPendentes(CertificadoDTO certificadoDTO){
-        return certificadoRepo.findByStatus(StatusAssinatura.PENDENTE);
+        return certificadoRepo.findByStatusAssinatura(StatusAssinatura.PENDENTE);
     }
 
     /**
@@ -108,7 +108,7 @@ public class CertificadoService {
      * @return Uma lista de certificado com status ASSINADOS
      */
     public List<Certificado> listarCerticadosAssinados(CertificadoDTO certificadoDTO){
-        return certificadoRepo.findByStatus(StatusAssinatura.ASSINADO);
+        return certificadoRepo.findByStatusAssinatura(StatusAssinatura.ASSINADO);
     }
 
     /**

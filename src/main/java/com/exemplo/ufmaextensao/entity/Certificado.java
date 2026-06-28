@@ -25,7 +25,7 @@ public class Certificado {
     @Column(name = "uuid_hash", nullable = false, unique = true, updatable = false) // nullable faz com que garante q
     // ue nao vai ter nenhum qrcode sem hash, unique garante que cada hash do qrcode é unico,
     // updatable garante que depois que eu criar o qrcode eu nao posso mais modifica-lo
-    private String uuid_hash;
+    private String uuidHash;
 
     @ManyToOne
     @JoinColumn(name = "id_discente")
