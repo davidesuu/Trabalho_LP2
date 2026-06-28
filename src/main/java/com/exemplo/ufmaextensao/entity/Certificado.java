@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "Certificado")
@@ -26,10 +27,12 @@ public class Certificado {
     // updatable garante que depois que eu criar o qrcode eu nao posso mais modifica-lo
     private String uuid_hash;
 
-    @OneToMany(mappedBy = "id_discente")
+    @ManyToOne
+    @JoinColumn(name = "id_discente")
     private Discente discente; //ok
 
-    @OneToMany(mappedBy = "id_oportunidade")
+    @ManyToOne
+    @JoinColumn(name = "id_oportunidade")
     private Oportunidade oportunidade; //ok
 
     @Column(name = "horas")
