@@ -2,6 +2,7 @@ package com.exemplo.ufmaextensao.Controller;
 
 import com.exemplo.ufmaextensao.DTO.DiscenteDTO;
 import com.exemplo.ufmaextensao.DTO.DocenteDTO;
+import com.exemplo.ufmaextensao.DTO.HorasDiscenteDTO;
 import com.exemplo.ufmaextensao.DTO.LoginDTO;
 import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.Docente;
@@ -51,5 +52,14 @@ public class UsuarioController {
     @ResponseStatus(HttpStatus.OK)
     public List<Usuario> listarUsuarios(){
         return usuarioService.listarUsuarios();
+    }
+
+    @GetMapping("/painelHoras/{usuarioId}")
+    @ResponseStatus(HttpStatus.OK)
+    public HorasDiscenteDTO listarHorasDiscente(
+            @PathVariable Integer usuarioId
+    )
+    {
+        return discenteService.mostrarPainelDeHoras(usuarioId);
     }
 }
