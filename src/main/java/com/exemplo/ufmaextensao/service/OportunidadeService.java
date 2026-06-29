@@ -61,9 +61,6 @@ public class OportunidadeService {
         if (oportunidadeDTO.getVagas() == null || oportunidadeDTO.getVagas() <= 0) {
             throw new RegraDeNegocioException("A quantidade de vagas deve ser maior que zero.");
         }
-        if (oportunidadeDTO.getVagasOcupadas() == null) {
-            throw new RegraDeNegocioException("A quantidade de vagas ocupadas deve ser informada.");
-        }
         if (oportunidadeDTO.getIncio() == null) {
             throw new RegraDeNegocioException("A data de início deve ser informada.");
         }
@@ -102,12 +99,14 @@ public class OportunidadeService {
                 .modalidade(oportunidadeDTO.getModalidade())
                 .carga_horaria(oportunidadeDTO.getCarga_horaria())
                 .vagas(oportunidadeDTO.getVagas())
-                .vagasOcupadas(oportunidadeDTO.getVagasOcupadas())
                 .incio(oportunidadeDTO.getIncio())
                 .fim(oportunidadeDTO.getFim())
                 .grupo(grupo)
                 .autor(usuario)
                 .build();
+
+        oportunidade.setVagasOcupadas(0);
+
         if (isDiretor){
             oportunidade.setStatus(StatusOportunidade.PENDENTE);
         }

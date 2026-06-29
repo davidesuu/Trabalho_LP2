@@ -3,14 +3,17 @@ package com.exemplo.ufmaextensao.service;
 import com.exemplo.ufmaextensao.DTO.InscricaoDTO;
 import com.exemplo.ufmaextensao.Enum.StatusInscricao;
 import com.exemplo.ufmaextensao.entity.Discente;
+import com.exemplo.ufmaextensao.entity.Docente;
 import com.exemplo.ufmaextensao.entity.Inscricao;
 import com.exemplo.ufmaextensao.entity.Oportunidade;
 import com.exemplo.ufmaextensao.repository.DiscenteRepo;
+import com.exemplo.ufmaextensao.repository.DocenteRepo;
 import com.exemplo.ufmaextensao.repository.InscricaoRepo;
 import com.exemplo.ufmaextensao.repository.OportunidadeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,36 +26,58 @@ public class InscricaoService {
     private OportunidadeRepo oportunidadeRepo;
     @Autowired
     private DiscenteRepo discenteRepo;
+    @Autowired
+    private DocenteService docenteService;
 
     /**
      * Essa função auxilia na busca
-     * @param id Id da inscrição que se quer buscar
+     * @param id_inscricao Id da inscrição que se quer buscar
      * @return A inscrição do id recebido
      * @throws RegraDeNegocioException
      */
-    public Inscricao buscar(Integer id) throws RegraDeNegocioException {
-        return inscricaoRepo.findById(id).orElseThrow(() -> new RegraDeNegocioException("Inscrição não encontrada"));
+    public Inscricao buscar(Integer id_inscricao) throws RegraDeNegocioException {
+        return inscricaoRepo.findById(id_inscricao).orElseThrow(() -> new RegraDeNegocioException("Inscrição não encontrada"));
     }
 
     /**
      * Essa função aprova uma inscrição
-     * @param id ID da inscrição que vai ser aprovado
+     * @param id_inscricao ID da inscrição que vai ser aprovado
+     * @param idDocente id do docente responsavel pela oportunidade
+     * @return inscricao aprovada
      * @throws RegraDeNegocioException
      */
-    public Inscricao aprovar(Integer id) throws RegraDeNegocioException {
-        Inscricao inscricao = buscar(id);
+    public Inscricao aprovar(Integer id_inscricao, Integer idDocente) throws RegraDeNegocioException {
+        Inscricao inscricao = buscar(id_inscricao);
+        Docente docente = docenteService.buscarPorId(idDocente);
+        Oportunidade oportunidade = inscricao.getOportunidade();
+        if (!oportunidade.getResponsavel_oportunidade().equals(docente)) {
+            throw new RegraDeNegocioException("Este Docente não é responsavel por essa oportunidade");
+        }
+        if (oportunidade.getVagas().equals(oportunidade.getVagasOcupadas())){
+            throw new RegraDeNegocioException("Esta oportunidade não tem vagas livres");
+        }
         inscricao.aprovar();
+        oportunidade.getListaInscritos().add(inscricao);
+        oportunidade.getListaEspera().remove(inscricao);
         return inscricaoRepo.save(inscricao);
     }
 
     /**
      * Essa função rejeita uma inscrição
-     * @param id ID da inscrição que vai ser rejeitada
+     * @param id_inscricao ID da inscrição que vai ser rejeitada
+     * @param idDocente id do docente responsavel pela oportunidade
+     * @return inscricao rejeitada
      * @throws RegraDeNegocioException
      */
-    public Inscricao rejeitar(Integer id) throws RegraDeNegocioException {
-        Inscricao inscricao = buscar(id);
+    public Inscricao rejeitar(Integer id_inscricao, Integer idDocente) throws RegraDeNegocioException {
+        Inscricao inscricao = buscar(id_inscricao);
+        Docente docente = docenteService.buscarPorId(idDocente);
+        Oportunidade oportunidade = inscricao.getOportunidade();
+        if (!oportunidade.getResponsavel_oportunidade().equals(docente)) {
+            throw new RegraDeNegocioException("Este Docente não é responsavel por essa oportunidade");
+        }
         inscricao.rejeitar();
+        oportunidade.getListaEspera().remove(inscricao);
         return inscricaoRepo.save(inscricao);
     }
 
@@ -100,17 +125,22 @@ public class InscricaoService {
 
     /**
      * Essa função cria uma nova inscrição
-     * @param dto DTO da isncrição
+     * @param dto DTO da inscrição
+     * @param oportunidadeId Id da oportunidade que vai ser checada
+     * @param discenteId Id do discente que vai ser checado
      * @return  Nova inscrição
      * @throws RegraDeNegocioException
      */
-    public Inscricao criarInscricao(InscricaoDTO dto) throws RegraDeNegocioException {
-        Oportunidade oportunidade = oportunidadeRepo.findById(dto.getOportunidadeId())
+    public Inscricao criarInscricao(InscricaoDTO dto, Integer oportunidadeId, Integer discenteId) throws RegraDeNegocioException {
+        Oportunidade oportunidade = oportunidadeRepo.findById(oportunidadeId)
                 .orElseThrow(() -> new RegraDeNegocioException("Oportunidade não encontrada"));
 
-        Discente discente = discenteRepo.findById(dto.getDiscenteId())
-                .orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
+        if(!oportunidade.getFim().isAfter(LocalDate.now())){
+            throw new RegraDeNegocioException("Não é possivel se inscrever após o fim de uma oportunidade");
+        }
 
+        Discente discente = discenteRepo.findById(discenteId)
+                .orElseThrow(() -> new RegraDeNegocioException("Discente não encontrado"));
         Inscricao inscricao = Inscricao.builder()
                 .oportunidade(oportunidade)
                 .discente(discente)
@@ -118,8 +148,10 @@ public class InscricaoService {
                 .status(StatusInscricao.PENDENTE)
                 .build();
 
-        Integer vagasOcupadasAtual = oportunidade.getVagasOcupadas() != null ? oportunidade.getVagasOcupadas() : 0;
+        Integer vagasOcupadasAtual = oportunidade.getVagasOcupadas() != 0 ? oportunidade.getVagasOcupadas() : 0;
+
         oportunidade.setVagasOcupadas(vagasOcupadasAtual + 1);
+        oportunidade.getListaEspera().add(inscricao);
         oportunidadeRepo.save(oportunidade);
 
         return inscricaoRepo.save(inscricao);
@@ -127,21 +159,28 @@ public class InscricaoService {
 
     /**
      * Esta função cancela uma inscrição
-     * @param id Id da inscrição que vai ser cancelada
+     * @param id_inscricao Id da inscrição que vai ser cancelada
      * @throws RegraDeNegocioException
      */
-    public Inscricao cancelarInscricao(Integer id) throws RegraDeNegocioException {
-        Inscricao inscricao = buscar(id);
+    public Inscricao cancelarInscricao(Integer id_inscricao) throws RegraDeNegocioException {
+        Inscricao inscricao = buscar(id_inscricao);
         Oportunidade oportunidade = inscricao.getOportunidade();
+
+        if(!oportunidade.getFim().isAfter(LocalDate.now())){
+            throw new RegraDeNegocioException("Não é possivel cancelar inscrição após o fim de uma oportunidade");
+        }
 
         inscricao.setStatus(StatusInscricao.REJEITADA);
 
-        Integer vagasOcupadasAtual = oportunidade.getVagasOcupadas() != null ? oportunidade.getVagasOcupadas() : 0;
+        Integer vagasOcupadasAtual = oportunidade.getVagasOcupadas() != 0 ? oportunidade.getVagasOcupadas() : 0;
         if  (vagasOcupadasAtual > 0) {
             oportunidade.setVagasOcupadas(vagasOcupadasAtual-1);
         }
 
+        oportunidade.getListaInscritos().remove(inscricao);
+
         oportunidadeRepo.save(oportunidade);
         return inscricaoRepo.save(inscricao);
     }
+
 }
