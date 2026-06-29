@@ -1,6 +1,7 @@
 package com.exemplo.ufmaextensao.service;
 
 import com.exemplo.ufmaextensao.DTO.DiscenteDTO;
+import com.exemplo.ufmaextensao.DTO.HorasDiscenteDTO;
 import com.exemplo.ufmaextensao.entity.Curso;
 import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.PPC;
@@ -106,5 +107,13 @@ public class DiscenteService {
 
     public Discente atualizar(Discente discente) throws RegraDeNegocioException {
         return discenteRepo.save(discente);
+    }
+
+    public HorasDiscenteDTO mostrarPainelDeHoras(Integer discenteId) throws RegraDeNegocioException {
+        Discente discente = discenteRepo.findById(discenteId).
+                orElseThrow(() -> new RegraDeNegocioException("Discente invalido"));
+        HorasDiscenteDTO horasDiscenteDTO = HorasDiscenteDTO.builder().nome(discente.getNome()).
+                horasTotal(discente.getBanco_de_horas()).horasCompletas(discente.getCh_total_cumprida()).build();
+        return horasDiscenteDTO;
     }
 }

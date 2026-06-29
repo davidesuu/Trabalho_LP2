@@ -31,5 +31,5 @@ public class Discente extends Usuario {
     private Curso curso;
 
     @Column(name = "ch_total_cumprida")
-    private Integer ch_total_cumprida;
+    private Float ch_total_cumprida;
 }

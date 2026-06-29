@@ -194,12 +194,12 @@ public class OportunidadeService {
         Usuario usuario = usuarioService.obterUsuarioPorId(responsavelId);
         securityService.validarPermissao(usuario, "DOCENTE", "COORDENADOR", "ADMIN");
         if (op.getStatus() != StatusOportunidade.PENDENTE) {
-            throw new RegraDeNegocioException("Apenas oportunidades aguardando aprovação podem ser publicadas.");
+            throw new RegraDeNegocioException("Apenas oportunidades aguardando aprovação podem ser rejeitadas.");
         }
 
 
         if (op.getGrupo() != null && !op.getGrupo().getResponsavel().getId().equals(responsavelId)) {
-            throw new RegraDeNegocioException("Apenas o docente responsável pelo grupo pode aprovar essa oportunidade.");
+            throw new RegraDeNegocioException("Apenas o docente responsável pelo grupo pode rejeitar essa oportunidade.");
         }
         op.setStatus(StatusOportunidade.REJEITADA);
         op.setResponsavel_oportunidade(usuario);
@@ -265,8 +265,4 @@ public class OportunidadeService {
     public void finalizarOportunidade(){
         verificarOportunidadeExpiradas(LocalDate.now());
     }
-
-
-
-
 }
