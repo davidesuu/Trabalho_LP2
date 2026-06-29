@@ -138,6 +138,10 @@ public class GrupoService {
             throw new RegraDeNegocioException("Discente já faz parte da diretoria desse grupo");
         }
 
+        if (cargo.equals("DOCENTE") || cargo.equals("COORDENADOR") || cargo.equals("ADMIN")){
+            throw new RegraDeNegocioException("Não é possivel promover um discente para esse cargo");
+        }
+
         Papel papel = papelRepo.findByNome(cargo).orElseThrow(()-> new RegraDeNegocioException("Papel Invalido"));
 
 

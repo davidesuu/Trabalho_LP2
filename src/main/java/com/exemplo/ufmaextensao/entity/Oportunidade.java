@@ -64,4 +64,12 @@ public class Oportunidade {
     @ManyToOne
     @JoinColumn(name = "id_grupo")
     private Grupo grupo;
+
+    @OneToMany
+    @JoinColumn(name = "id_inscricao")
+    private List<Inscricao> listaInscritos;
+
+    @OneToMany
+    @JoinColumn(name = "id_inscricao")
+    private List<Inscricao> listaEspera;
 }

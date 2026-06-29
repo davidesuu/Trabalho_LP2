@@ -19,14 +19,16 @@ public class InscricaoController {
 
     @PostMapping("/criar")
     @ResponseStatus(HttpStatus.CREATED)
-    public Inscricao criarNovaInscricao(@RequestBody InscricaoDTO dto) {
-        return inscricaoService.criarInscricao(dto);
+    public Inscricao criarNovaInscricao(@RequestBody InscricaoDTO dto,
+                                        @RequestParam Integer oportunidadeId,
+                                        @RequestParam Integer discenteId) {
+        return inscricaoService.criarInscricao(dto, oportunidadeId, discenteId);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id_inscricao}")
     @ResponseStatus(HttpStatus.OK)
-    public Inscricao buscarPorId(@PathVariable Integer id) {
-        return inscricaoService.buscar(id);
+    public Inscricao buscarPorId(@PathVariable Integer id_inscricao) {
+        return inscricaoService.buscar(id_inscricao);
     }
 
     @GetMapping("/pendentes")
@@ -53,21 +55,23 @@ public class InscricaoController {
         return inscricaoService.listarPorOportunidade(oportunidadeId);
     }
 
-    @PatchMapping("/aprovar/{id}")
+    @PatchMapping("/aprovar/{id_inscricao}")
     @ResponseStatus(HttpStatus.OK)
-    public Inscricao aprovarInscricao(@PathVariable Integer id) {
-        return inscricaoService.aprovar(id);
+    public Inscricao aprovarInscricao(@PathVariable Integer id_inscricao,
+                                      @RequestParam Integer id_docente) {
+        return inscricaoService.aprovar(id_inscricao, id_docente);
     }
 
-    @PatchMapping("/rejeitar/{id}")
+    @PatchMapping("/rejeitar/{id_inscricao}")
     @ResponseStatus(HttpStatus.OK)
-    public Inscricao rejeitarInscricao(@PathVariable Integer id) {
-        return inscricaoService.rejeitar(id);
+    public Inscricao rejeitarInscricao(@PathVariable Integer id_inscricao,
+                                       @RequestParam Integer id_docente) {
+        return inscricaoService.rejeitar(id_inscricao, id_docente);
     }
 
-    @PatchMapping("/cancelar/{id}")
+    @PatchMapping("/cancelar/{id_inscricao}")
     @ResponseStatus(HttpStatus.OK)
-    public Inscricao cancelarInscricao(@PathVariable Integer id) {
-        return inscricaoService.cancelarInscricao(id);
+    public Inscricao cancelarInscricao(@PathVariable Integer id_inscricao) {
+        return inscricaoService.cancelarInscricao(id_inscricao);
     }
 }

@@ -21,7 +21,6 @@ public class OportunidadeDTO {
     private Modalidade modalidade;
     private Integer carga_horaria;
     private Integer vagas;
-    private Integer vagasOcupadas;
     private LocalDate incio;
     private LocalDate fim;
 }
