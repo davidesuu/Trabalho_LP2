@@ -2,6 +2,7 @@ package com.exemplo.ufmaextensao.service;
 
 
 import com.exemplo.ufmaextensao.DTO.DiscenteDTO;
+import com.exemplo.ufmaextensao.DTO.LoginDTO;
 import com.exemplo.ufmaextensao.entity.Curso;
 import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.PPC;
@@ -10,6 +11,7 @@ import com.exemplo.ufmaextensao.repository.CursoRepo;
 import com.exemplo.ufmaextensao.repository.DiscenteRepo;
 import com.exemplo.ufmaextensao.repository.UsuarioRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +26,21 @@ public class UsuarioService {
     @Autowired
     private SecurityService securityService;
 
+
+    public Usuario autenticarUsuario(LoginDTO usuario) throws RegraDeNegocioException {
+        if (usuario.getEmail() == null || usuario.getEmail().isBlank()) {
+            throw new RegraDeNegocioException("Email invalido");
+        }
+        if (usuario.getSenha() == null || usuario.getSenha().isBlank()) {
+            throw new RegraDeNegocioException("Senha invalida");
+        }
+        Usuario usuarioLogado = usuarioRepo.findByEmail(usuario.getEmail()).
+                orElseThrow(() -> new RegraDeNegocioException("Email informado não existente"));
+        if (!new BCryptPasswordEncoder().matches(usuario.getSenha(), usuarioLogado.getSenha())) {
+            throw new RegraDeNegocioException("Senha incorreta");
+        }
+        return usuarioLogado;
+    }
 
     /**
      * Essa função busca no UsuarioRepository um usuario pelo ID

@@ -31,18 +31,18 @@ public class Oportunidade {
 
     @ManyToOne
     @JoinColumn(name = "tipo_oportunidade")
-    private TipoOportunidade oportunidade;
+    private TipoOportunidade tipoOportunidade;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "mobalidade")
+    @Column(name = "mobilidade")
     private Modalidade modalidade;
 
     @Column(name = "carga_horaria")
     private Integer carga_horaria;
     @Column(name = "vagas")
     private Integer vagas;
-    @Column(name = "vagasOcupadas")
-    private Integer vagasOocupadas;
+    @Column(name = "vagas_ocupadas")
+    private Integer vagasOcupadas;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -53,21 +53,23 @@ public class Oportunidade {
     @Column(name = "data_fim")
     private LocalDate fim;
 
-    @ManyToMany
-    @JoinTable(
-            name = "oportunidade_autor",
-            joinColumns = @JoinColumn(name = "oportunidade_id"),
-            inverseJoinColumns = @JoinColumn(name = "usuario_id")
-    )
-    private List<Usuario> autor;
+    @ManyToOne
+    @JoinColumn(name = "responsavel_id")
+    private Usuario responsavel_oportunidade;
 
     @ManyToOne
-    @JoinColumn(name = "docente_id")
-    private Docente responsavel_oportunidade;
+    @JoinColumn(name = "autor_id")
+    private Usuario autor;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_grupo")
     private Grupo grupo;
 
+    @OneToMany
+    @JoinColumn(name = "id_inscricao")
+    private List<Inscricao> listaInscritos;
 
+    @OneToMany
+    @JoinColumn(name = "id_inscricao")
+    private List<Inscricao> listaEspera;
 }

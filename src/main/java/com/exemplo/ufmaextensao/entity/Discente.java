@@ -26,14 +26,10 @@ public class Discente extends Usuario {
     @Column(name = "CH")
     private Float banco_de_horas;
 
-    @ManyToMany(mappedBy = "discentes")
-    private List<Grupo> grupos;
-
     @ManyToOne
     @JoinColumn(name = "id_curso")
     private Curso curso;
 
     @Column(name = "ch_total_cumprida")
-    private Integer ch_total_cumprida;
-
+    private Float ch_total_cumprida;
 }

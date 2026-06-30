@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CertificadoRepo extends JpaRepository<Certificado, Integer> {
-    List<Certificado> findByStatus(StatusAssinatura status);
+    List<Certificado> findByStatusAssinatura(StatusAssinatura statusAssinatura);
     Optional<Certificado> findByUuidHash(String uuidHash);
 }
 

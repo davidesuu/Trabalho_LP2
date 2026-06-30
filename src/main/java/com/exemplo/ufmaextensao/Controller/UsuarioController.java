@@ -2,11 +2,14 @@ package com.exemplo.ufmaextensao.Controller;
 
 import com.exemplo.ufmaextensao.DTO.DiscenteDTO;
 import com.exemplo.ufmaextensao.DTO.DocenteDTO;
+import com.exemplo.ufmaextensao.DTO.HorasDiscenteDTO;
+import com.exemplo.ufmaextensao.DTO.LoginDTO;
 import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.Docente;
 import com.exemplo.ufmaextensao.entity.Usuario;
 import com.exemplo.ufmaextensao.service.DiscenteService;
 import com.exemplo.ufmaextensao.service.DocenteService;
+import com.exemplo.ufmaextensao.service.RegraDeNegocioException;
 import com.exemplo.ufmaextensao.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,12 @@ public class UsuarioController {
     private DiscenteService discenteService;
     @Autowired
     private DocenteService docenteService;
+
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public Usuario login(@RequestBody LoginDTO loginDTO) throws RegraDeNegocioException {
+        return usuarioService.autenticarUsuario(loginDTO);
+    }
 
     @PostMapping("/criarDiscente")
     @ResponseStatus(HttpStatus.CREATED)
@@ -43,5 +52,14 @@ public class UsuarioController {
     @ResponseStatus(HttpStatus.OK)
     public List<Usuario> listarUsuarios(){
         return usuarioService.listarUsuarios();
+    }
+
+    @GetMapping("/painelHoras/{usuarioId}")
+    @ResponseStatus(HttpStatus.OK)
+    public HorasDiscenteDTO listarHorasDiscente(
+            @PathVariable Integer usuarioId
+    )
+    {
+        return discenteService.mostrarPainelDeHoras(usuarioId);
     }
 }

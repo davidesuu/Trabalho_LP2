@@ -29,7 +29,7 @@ public class CursoService {
     }
 
     /**
-     * Essa função salva um curso no repositorio após validar as informações do Curso instanciado e validar permisão do usuario
+     * Essa função salva um curso no repositorio após validar as informações do Curso instanciado e validar permissão do usuario
      * @param cursoDTO instancia do Curso a ser adicionado no repositorio
      * @param idUsuario Id do usuario que está criando o curso
      * @return retorna Curso após salvar no repositorio

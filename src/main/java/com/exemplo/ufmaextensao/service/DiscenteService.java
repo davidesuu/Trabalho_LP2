@@ -1,12 +1,14 @@
 package com.exemplo.ufmaextensao.service;
 
 import com.exemplo.ufmaextensao.DTO.DiscenteDTO;
+import com.exemplo.ufmaextensao.DTO.HorasDiscenteDTO;
 import com.exemplo.ufmaextensao.entity.Curso;
 import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.PPC;
 import com.exemplo.ufmaextensao.entity.Usuario;
 import com.exemplo.ufmaextensao.repository.DiscenteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -83,12 +85,17 @@ public class DiscenteService {
         if (ppc == null) {
             throw new RegraDeNegocioException("PPC invalido");
         }
+
+
         Discente discente = Discente.builder().nome(discenteDTO.getNome()).email(discenteDTO.getEmail())
-                .senha(discenteDTO.getSenha()).semestre(discenteDTO.getSemestre()).build();
+                .semestre(discenteDTO.getSemestre()).build();
         discente.setCurso(curso);
         discente.setBanco_de_horas(ppc.getCargaHorariaTotal());
         discente.setMatricula(gerarNumeroMatricula());
         discente.setAtivo(true);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        discente.setSenha(encoder.encode(discenteDTO.getSenha()));
+
 
         return discenteRepo.save(discente);
     }
@@ -100,5 +107,13 @@ public class DiscenteService {
 
     public Discente atualizar(Discente discente) throws RegraDeNegocioException {
         return discenteRepo.save(discente);
+    }
+
+    public HorasDiscenteDTO mostrarPainelDeHoras(Integer discenteId) throws RegraDeNegocioException {
+        Discente discente = discenteRepo.findById(discenteId).
+                orElseThrow(() -> new RegraDeNegocioException("Discente invalido"));
+        HorasDiscenteDTO horasDiscenteDTO = HorasDiscenteDTO.builder().nome(discente.getNome()).
+                horasTotal(discente.getBanco_de_horas()).horasCompletas(discente.getCh_total_cumprida()).build();
+        return horasDiscenteDTO;
     }
 }

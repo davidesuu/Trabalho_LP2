@@ -18,15 +18,9 @@ import java.util.List;
 public class OportunidadeDTO {
     String nome;
     private String descricao;
-    private TipoOportunidade oportunidade;
     private Modalidade modalidade;
     private Integer carga_horaria;
     private Integer vagas;
-    private Integer vagasOocupadas;
-    private StatusOportunidade status;
     private LocalDate incio;
     private LocalDate fim;
-    private List<Usuario> autor;
-    private Docente responsavel_oportunidade;
-
 }
