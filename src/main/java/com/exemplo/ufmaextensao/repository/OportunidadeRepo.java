@@ -15,4 +15,6 @@ public interface OportunidadeRepo extends JpaRepository<Oportunidade,Integer> {
     List<Oportunidade> findByStatus(StatusOportunidade status);
 
     List<Oportunidade> findByModalidadeAndStatus(Modalidade modalidade, StatusOportunidade status);
+
+    Optional<Oportunidade> findById(Integer id);
 }

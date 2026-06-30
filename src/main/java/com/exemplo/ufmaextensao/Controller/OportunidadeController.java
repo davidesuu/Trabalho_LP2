@@ -7,6 +7,7 @@ import com.exemplo.ufmaextensao.service.OportunidadeService;
 import com.exemplo.ufmaextensao.service.RegraDeNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -70,5 +71,14 @@ public class OportunidadeController {
             @PathVariable Integer id,
             @RequestParam Integer responsavelId) throws RegraDeNegocioException {
         oportunidadeService.rejeitarOportunidade(id, responsavelId);
+    }
+    @PutMapping("/finalizarOportunidade/{id}")
+    public ResponseEntity<String> finalizarOportunidade(@PathVariable Integer id){
+        try {
+            oportunidadeService.finalizarOportunidade(id);
+            return ResponseEntity.ok("oportunidade finalizada com sucesso, todos os certificado gerados dos discentes matriculados estao PENDENTES");
+        } catch (RegraDeNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
