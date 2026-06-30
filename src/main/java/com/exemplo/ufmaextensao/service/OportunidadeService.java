@@ -234,9 +234,9 @@ public class OportunidadeService {
     }
 
     /**
-     * Essa fun��o finaliza oportunidade e gera um certificado para todos os discentes que estao nessa oportunidade
+     * Essa funcao finaliza oportunidade e gera um certificado para todos os discentes que estao nessa oportunidade
      * @param idOportunidade id da oportunidade que vai ser finalizada
-     * @throws RegraDeNegocioException se essa oportunidade nao existir ou se n�o tiver nenhum discente cadastrado na oportunidadde
+     * @throws RegraDeNegocioException se essa oportunidade nao existir ou se nao tiver nenhum discente cadastrado na oportunidadde
      */
     @Transactional
     // essa anota��o � usada quando um metodo faz mais de uma opera��o, se der erro, o sistema volta pro inicio, se der tudo certo, ele salva no banco de dados

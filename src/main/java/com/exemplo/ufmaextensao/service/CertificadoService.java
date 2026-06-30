@@ -26,7 +26,7 @@ public class CertificadoService {
     OportunidadeRepo oportunidadeRepo;
 
     /**
-     * Essa fun��o cria um certificado e registra no sistema um novo certificado com status de pendente
+     * Essa funcaoo cria um certificado e registra no sistema um novo certificado com status de pendente
      * gerando um hash de autenticidade que ser� ultilizado no qrcode
      * @param id_discente ID do aluno dono do certificado
      * @param id_oportunidade oportunidade que o aluno ganhou o certificado
