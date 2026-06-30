@@ -2,11 +2,9 @@ package com.exemplo.ufmaextensao.service;
 
 import com.exemplo.ufmaextensao.DTO.OportunidadeDTO;
 import com.exemplo.ufmaextensao.Enum.StatusOportunidade;
-import com.exemplo.ufmaextensao.entity.Discente;
-import com.exemplo.ufmaextensao.entity.Docente;
-import com.exemplo.ufmaextensao.entity.Oportunidade;
-import com.exemplo.ufmaextensao.entity.Usuario;
+import com.exemplo.ufmaextensao.entity.*;
 import com.exemplo.ufmaextensao.repository.OportunidadeRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -26,6 +24,8 @@ public class OportunidadeService {
     private UsuarioService usuarioService;
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private CertificadoService certificadoService;
 
     /**
      * Essa função salva uma oportunidade no repositorio após validar as informações da oportunidade instanciada e validar permisão do usuario
@@ -234,12 +234,31 @@ public class OportunidadeService {
     }
 
     /**
-     * eu acho que essa função aqui nao util pra gente ate pq ela vai atualizar so meia noite e aciona a verificação expiradas com base na data do sistema
+     * Essa fun��o finaliza oportunidade e gera um certificado para todos os discentes que estao nessa oportunidade
+     * @param idOportunidade id da oportunidade que vai ser finalizada
+     * @throws RegraDeNegocioException se essa oportunidade nao existir ou se n�o tiver nenhum discente cadastrado na oportunidadde
      */
-    @Scheduled(cron = "0 0 0 * * ?")
-    public void finalizarOportunidade(){
-        verificarOportunidadeExpiradas(LocalDate.now());
+    @Transactional
+    // essa anota��o � usada quando um metodo faz mais de uma opera��o, se der erro, o sistema volta pro inicio, se der tudo certo, ele salva no banco de dados
+    public void finalizarOportunidade(Integer idOportunidade)
+            throws RegraDeNegocioException{
+        Oportunidade oportunidade = oportunidadeRepo.findById(idOportunidade)
+                .orElseThrow(() -> new RegraDeNegocioException("oportunidade n�o encontrada."));
+
+        Grupo grupo = oportunidade.getGrupo();
+        if(grupo == null || grupo.getDiscentes() == null || grupo.getDiscentes().isEmpty()){
+            throw new RegraDeNegocioException("o grupo dessa oportunidade nao tem discentes vinculados");
+        }
+        oportunidade.setStatus(StatusOportunidade.FINALIZADA);
+        oportunidadeRepo.save(oportunidade);
+
+        for(Discente discente : grupo.getDiscentes()){
+            certificadoService.criarCertificado(discente.getId(), idOportunidade);
+        }
+
+
     }
+
 
 
 

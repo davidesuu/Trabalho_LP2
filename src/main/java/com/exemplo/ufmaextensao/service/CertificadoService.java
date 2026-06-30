@@ -7,6 +7,7 @@ import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.Docente;
 import com.exemplo.ufmaextensao.entity.Oportunidade;
 import com.exemplo.ufmaextensao.repository.CertificadoRepo;
+import com.exemplo.ufmaextensao.repository.OportunidadeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,41 +23,32 @@ public class CertificadoService {
     @Autowired
     DocenteService docenteService;
     @Autowired
-    OportunidadeService oportunidadeService;
-
+    OportunidadeRepo oportunidadeRepo;
 
     /**
-     * Essa função cria um certificado e registra no sistema um novo certificado com status de pendente
-     * gerando um hash de autenticidade que será ultilizado no qrcode
+     * Essa fun��o cria um certificado e registra no sistema um novo certificado com status de pendente
+     * gerando um hash de autenticidade que ser� ultilizado no qrcode
      * @param id_discente ID do aluno dono do certificado
-     * @param id_docente ID do docente que vai criar o certificado
-     * @param certificadoDTO Dados do certificado
-     * @param id_oportunidade ID da oportunidade que o aluno ganhou o certificado
+     * @param id_oportunidade oportunidade que o aluno ganhou o certificado
      * @return O objeto certificado salvo no banco de dados.
      * @throws RegraDeNegocioException Se os dados forem nulos, invalidos ou se o certificado ja possuir id
      */
-    public Certificado criarCertificado(Integer id_discente, Integer id_docente, CertificadoDTO certificadoDTO, Integer id_oportunidade)
+    public Certificado criarCertificado(Integer id_discente, Integer id_oportunidade)
             throws RegraDeNegocioException {
         Discente discente = discenteService.buscarPorId(id_discente);
-        Docente docente = docenteService.buscarPorId(id_docente);
-        Oportunidade oportunidade = oportunidadeService.buscar(id_oportunidade);
+        Oportunidade oportunidade = oportunidadeRepo.findById(id_oportunidade)
+                .orElseThrow(() -> new RegraDeNegocioException("Oportunidade nao encontrada."));
+        Integer horasCertificado = oportunidade.getCarga_horaria();
 
-        if (certificadoDTO == null) {
-            throw new RegraDeNegocioException("Os dados do certificado não foram informados.");
-        }
-        if (certificadoDTO.getId() != null) {
-            throw new RegraDeNegocioException("Um novo certificado não deve possuir ID já definido.");
-        }
-
-        if (certificadoDTO.getHoras() == null || certificadoDTO.getHoras() <= 0) {
-            throw new RegraDeNegocioException("A carga horária do certificado deve ser informada e maior que zero.");
+        if (horasCertificado== null || horasCertificado <= 0) {
+            throw new RegraDeNegocioException("A carga hor�ria da oportunidade e maior que zero.");
         }
 
         Certificado certificado = Certificado.builder()
-                .horas(certificadoDTO.getHoras())
+                .horas(horasCertificado)
                 .discente(discente)
                 .oportunidade(oportunidade)
-                .uuid_hash(gerarCodigoCertificado()) // funçao nativa do java que fabrica um identificador unico e universal
+                .uuidHash(gerarCodigoCertificado()) // fun�ao nativa do java que fabrica um identificador unico e universal
                 .statusAssinatura(StatusAssinatura.PENDENTE)
                 .dataEmissao(java.time.LocalDate.now())
                 .build();
@@ -144,6 +136,7 @@ public class CertificadoService {
         }
         return certificado;
     }
+
 
 
 

@@ -26,7 +26,7 @@ public class Oportunidade {
     private Integer id;
     @Column(name = "Titulo")
     private String titulo;
-    @Column(name = "descri��o")
+    @Column(name = "descricao")
     private String descricao;
 
     @ManyToOne
@@ -64,6 +64,10 @@ public class Oportunidade {
     @ManyToOne
     @JoinColumn(name = "docente_id")
     private Docente responsavel_oportunidade;
+
+    @OneToOne
+    @JoinColumn(name = "id_grupo")
+    private Grupo grupo;
 
 
 }
