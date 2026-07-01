@@ -1,7 +1,7 @@
-package com.exemplo.ufmaextensao.Controller;
+package com.exemplo.ufmaextensao.controller;
 
 import ch.qos.logback.core.model.Model;
-import com.exemplo.ufmaextensao.DTO.CursoDTO;
+import com.exemplo.ufmaextensao.dto.CursoDTO;
 import com.exemplo.ufmaextensao.entity.Curso;
 import com.exemplo.ufmaextensao.service.CursoService;
 import com.exemplo.ufmaextensao.service.RegraDeNegocioException;
@@ -30,7 +30,7 @@ public class CursoController {
     @ResponseStatus(HttpStatus.CREATED)
     public Curso criarNovoCurso(
             @RequestBody CursoDTO cursoDTO,
-            @RequestParam Integer idUsuario){
-        return cursoService.criarCurso(cursoDTO, idUsuario);
+            @RequestParam Integer usuarioId){
+        return cursoService.criarCurso(cursoDTO, usuarioId);
     }
 }

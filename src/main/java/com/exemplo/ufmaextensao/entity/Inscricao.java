@@ -1,6 +1,6 @@
 package com.exemplo.ufmaextensao.entity;
 
-import com.exemplo.ufmaextensao.Enum.StatusInscricao;
+import com.exemplo.ufmaextensao.enums.StatusInscricao;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

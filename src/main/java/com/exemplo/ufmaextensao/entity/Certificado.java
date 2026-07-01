@@ -1,6 +1,6 @@
 package com.exemplo.ufmaextensao.entity;
 
-import com.exemplo.ufmaextensao.Enum.StatusAssinatura;
+import com.exemplo.ufmaextensao.enums.StatusAssinatura;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

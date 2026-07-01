@@ -1,6 +1,6 @@
 package com.exemplo.ufmaextensao.service;
 
-import com.exemplo.ufmaextensao.DTO.PPCDTO;
+import com.exemplo.ufmaextensao.dto.PPCDTO;
 import com.exemplo.ufmaextensao.entity.Curso;
 import com.exemplo.ufmaextensao.entity.PPC;
 import com.exemplo.ufmaextensao.entity.Usuario;
@@ -24,12 +24,12 @@ public class PPCService {
 
     /**
      * Essa função encontra um PPC passando a ID
-     * @param PPCid Id do PPC
+     * @param ppcId Id do PPC
      * @return Retrona o ppc com a id especificada no banco
      * @throws RegraDeNegocioException
      */
-    public PPC obterPPCPorId(Integer PPCid) throws RegraDeNegocioException {
-        return ppcRepo.findPPCById(PPCid)
+    public PPC obterPPCPorId(Integer ppcId) throws RegraDeNegocioException {
+        return ppcRepo.findPPCById(ppcId)
                 .orElseThrow(()-> new RegraDeNegocioException("PPC não encontrado"));
     }
     /**
@@ -51,7 +51,7 @@ public class PPCService {
             throw new RegraDeNegocioException("Carga Horaria invalida");
         }
         Curso curso = cursoService.buscarCursoPorId(cursoId);
-        PPC ppc = PPC.builder().anoVigencia(ppcdto.getAnoVigencia())
+        PPC ppc = PPC.builder()
                 .anoVigencia(ppcdto.getAnoVigencia())
                 .cargaHorariaTotal(ppcdto.getCargaHorariaTotal()).build();
         ppc.setCurso(curso);
@@ -60,18 +60,18 @@ public class PPCService {
 
     /**
      * Essa função busca o PPC mais recente do curso
-     * @param idCurso Id do curso do PPC
+     * @param cursoId Id do curso do PPC
      * @return PPC mais recente do curso do parametro
      * @throws RegraDeNegocioException
      */
-    public PPC buscarPPCMaisRecente(Integer idCurso) throws RegraDeNegocioException{
-        Curso curso = cursoService.buscarCursoPorId(idCurso);
+    public PPC buscarPPCMaisRecente(Integer cursoId) throws RegraDeNegocioException{
+        Curso curso = cursoService.buscarCursoPorId(cursoId);
         return ppcRepo.findTopByCursoOrderByAnoVigenciaDesc(curso)
                 .orElseThrow(()->new RegraDeNegocioException("Nenhum PPC encontrado para este curso"));
     }
 
-    public List<PPC> listarPPCsPorCurso(Integer idCurso) throws RegraDeNegocioException{
-        Curso curso = cursoService.buscarCursoPorId(idCurso);
+    public List<PPC> listarPPCsPorCurso(Integer cursoId) throws RegraDeNegocioException{
+        Curso curso = cursoService.buscarCursoPorId(cursoId);
         List<PPC> ppcs = ppcRepo.findPPCByCurso(curso);
         if(ppcs.isEmpty()){
             throw new RegraDeNegocioException("Nenhum PPC encontrado para esse curso");

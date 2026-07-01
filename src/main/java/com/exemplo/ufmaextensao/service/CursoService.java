@@ -1,6 +1,6 @@
 package com.exemplo.ufmaextensao.service;
 
-import com.exemplo.ufmaextensao.DTO.CursoDTO;
+import com.exemplo.ufmaextensao.dto.CursoDTO;
 import com.exemplo.ufmaextensao.entity.Curso;
 import com.exemplo.ufmaextensao.entity.Usuario;
 import com.exemplo.ufmaextensao.repository.CursoRepo;
@@ -20,23 +20,23 @@ public class CursoService {
 
     /**
      * Essa função busca um Curso por id
-     * @param idCurso chave do curso única
+     * @param cursoId chave do curso única
      * @return throw exception se não encontrar, Curso na base se existir
      */
-    public Curso buscarCursoPorId(Integer idCurso) throws RegraDeNegocioException {
-        return cursoRepo.findCursoById(idCurso)
+    public Curso buscarCursoPorId(Integer cursoId) throws RegraDeNegocioException {
+        return cursoRepo.findCursoById(cursoId)
                 .orElseThrow(() -> new RegraDeNegocioException("Curso não encontrado"));
     }
 
     /**
      * Essa função salva um curso no repositorio após validar as informações do Curso instanciado e validar permissão do usuario
      * @param cursoDTO instancia do Curso a ser adicionado no repositorio
-     * @param idUsuario Id do usuario que está criando o curso
+     * @param usuarioId Id do usuario que está criando o curso
      * @return retorna Curso após salvar no repositorio
      */
-    public Curso criarCurso(CursoDTO cursoDTO, Integer idUsuario)
+    public Curso criarCurso(CursoDTO cursoDTO, Integer usuarioId)
             throws RegraDeNegocioException {
-        Usuario usuario = usuarioService.obterUsuarioPorId(idUsuario);
+        Usuario usuario = usuarioService.obterUsuarioPorId(usuarioId);
         securityService.validarPermissao(usuario, "ADMIN", "COORDENADOR");
         if (cursoDTO.getNome() == null || cursoDTO.getNome().isBlank()) {
             throw new RegraDeNegocioException("Nome do curso é obrigatório");

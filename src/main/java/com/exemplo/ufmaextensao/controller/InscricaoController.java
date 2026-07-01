@@ -1,6 +1,6 @@
-package com.exemplo.ufmaextensao.Controller;
+package com.exemplo.ufmaextensao.controller;
 
-import com.exemplo.ufmaextensao.DTO.InscricaoDTO;
+import com.exemplo.ufmaextensao.dto.InscricaoDTO;
 import com.exemplo.ufmaextensao.entity.Inscricao;
 import com.exemplo.ufmaextensao.service.InscricaoService;
 import com.exemplo.ufmaextensao.service.RegraDeNegocioException;
@@ -22,7 +22,7 @@ public class InscricaoController {
     @ResponseStatus(HttpStatus.CREATED)
     public Inscricao criarNovaInscricao(@RequestBody InscricaoDTO dto,
                                         @RequestParam Integer oportunidadeId,
-                                        @RequestParam Integer discenteId) throws ReflectiveOperationException {
+                                        @RequestParam Integer discenteId) throws RegraDeNegocioException {
         return inscricaoService.criarInscricao(dto, oportunidadeId, discenteId);
     }
 
@@ -32,7 +32,7 @@ public class InscricaoController {
         return inscricaoService.buscar(inscricaoId);
     }
 
-    @GetMapping("/pendentes")
+    @GetMapping("/pendentes/{oportunidadeId}")
     @ResponseStatus(HttpStatus.OK)
     public List<Inscricao> listarPendentes(
             @PathVariable Integer oportunidadeId

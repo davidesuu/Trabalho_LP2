@@ -1,6 +1,6 @@
-package com.exemplo.ufmaextensao.Controller;
+package com.exemplo.ufmaextensao.controller;
 
-import com.exemplo.ufmaextensao.DTO.PPCDTO;
+import com.exemplo.ufmaextensao.dto.PPCDTO;
 import com.exemplo.ufmaextensao.entity.Curso;
 import com.exemplo.ufmaextensao.entity.PPC;
 import com.exemplo.ufmaextensao.service.PPCService;
@@ -19,22 +19,20 @@ public class PPCController {
     @Autowired
     private PPCService ppcService;
 
-    @ExceptionHandler(RegraDeNegocioException.class)
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/listar")
-    public List<PPC> listar(@RequestParam Integer idCurso)
+    @ResponseStatus(HttpStatus.OK)
+    public List<PPC> listar(@RequestParam Integer cursoId)
     {
-        List<PPC> ppcs = ppcService.listarPPCsPorCurso(idCurso);
+        List<PPC> ppcs = ppcService.listarPPCsPorCurso(cursoId);
         return ppcs;
     }
 
-    @ExceptionHandler(RegraDeNegocioException.class)
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/criar")
+    @ResponseStatus(HttpStatus.CREATED)
     public PPC criarPPC(@RequestBody PPCDTO ppcDTO,
-                        @RequestParam Integer idCurso,
-                        @RequestParam Integer idUsuario)
+                        @RequestParam Integer cursoId,
+                        @RequestParam Integer usuarioId)
     {
-        return ppcService.criarPPC(ppcDTO, idCurso, idUsuario);
+        return ppcService.criarPPC(ppcDTO, cursoId, usuarioId);
     }
 }

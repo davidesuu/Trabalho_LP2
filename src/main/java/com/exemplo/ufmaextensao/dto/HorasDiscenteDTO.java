@@ -1,4 +1,4 @@
-package com.exemplo.ufmaextensao.DTO;
+package com.exemplo.ufmaextensao.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

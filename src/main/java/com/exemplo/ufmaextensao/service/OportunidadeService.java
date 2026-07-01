@@ -1,8 +1,8 @@
 package com.exemplo.ufmaextensao.service;
 
-import com.exemplo.ufmaextensao.DTO.OportunidadeDTO;
-import com.exemplo.ufmaextensao.Enum.StatusInscricao;
-import com.exemplo.ufmaextensao.Enum.StatusOportunidade;
+import com.exemplo.ufmaextensao.dto.OportunidadeDTO;
+import com.exemplo.ufmaextensao.enums.StatusInscricao;
+import com.exemplo.ufmaextensao.enums.StatusOportunidade;
 import com.exemplo.ufmaextensao.entity.*;
 import com.exemplo.ufmaextensao.repository.InscricaoRepo;
 import com.exemplo.ufmaextensao.repository.OportunidadeRepo;
@@ -44,7 +44,7 @@ public class OportunidadeService {
      * @throws RegraDeNegocioException se as validacoes de dados ou de permissao falharem
      */
 
-    public Oportunidade criarOportunidade(OportunidadeDTO oportunidadeDTO, Integer usuarioId, String tipo, Integer idGrupo)
+    public Oportunidade criarOportunidade(OportunidadeDTO oportunidadeDTO, Integer usuarioId, String tipo, Integer grupoId)
             throws RegraDeNegocioException {
 
         Usuario usuario = usuarioService.obterUsuarioPorId(usuarioId);
@@ -68,13 +68,13 @@ public class OportunidadeService {
         if (oportunidadeDTO.getVagas() == null || oportunidadeDTO.getVagas() <= 0) {
             throw new RegraDeNegocioException("A quantidade de vagas deve ser maior que zero.");
         }
-        if (oportunidadeDTO.getIncio() == null) {
+        if (oportunidadeDTO.getInicio() == null) {
             throw new RegraDeNegocioException("A data de início deve ser informada.");
         }
         if (oportunidadeDTO.getFim() == null) {
             throw new RegraDeNegocioException("A data de fim deve ser informada.");
         }
-        if (oportunidadeDTO.getFim().isBefore(oportunidadeDTO.getIncio())) {
+        if (oportunidadeDTO.getFim().isBefore(oportunidadeDTO.getInicio())) {
             throw new RegraDeNegocioException("A data de fim não pode ser anterior à data de início.");
         }
 
@@ -89,10 +89,10 @@ public class OportunidadeService {
 
         Grupo grupo = null;
         if (isDiretor) {
-            if (idGrupo == null) {
+            if (grupoId == null) {
                 throw new RegraDeNegocioException("Discente diretor precisa informar o grupo.");
             }
-            grupo = grupoService.buscarPorId(idGrupo);
+            grupo = grupoService.buscarPorId(grupoId);
 
             if (!grupo.getDiretoria().contains(usuario)) {
                 throw new RegraDeNegocioException("Discente não é diretor desse grupo.");
@@ -106,7 +106,7 @@ public class OportunidadeService {
                 .modalidade(oportunidadeDTO.getModalidade())
                 .carga_horaria(oportunidadeDTO.getCarga_horaria())
                 .vagas(oportunidadeDTO.getVagas())
-                .incio(oportunidadeDTO.getIncio())
+                .inicio(oportunidadeDTO.getInicio())
                 .fim(oportunidadeDTO.getFim())
                 .grupo(grupo)
                 .autor(usuario)
@@ -126,13 +126,13 @@ public class OportunidadeService {
 
     /**
      * Essa funçao buscas Oportunidades pelo id da oportunidade
-     * @param id ID do registro de oportunidade a ser buscado no repositorio
+     * @param oportunidadeId ID do registro de oportunidade a ser buscado no repositorio
      * @return oportunidade que estiver relacionada ao id
      * @throws RegraDeNegocioException se a oportunidade nao for encontrada
      */
-    public Oportunidade buscar(Integer id) throws RegraDeNegocioException {
-        return oportunidadeRepo.findById(id)
-                .orElseThrow(() -> new RegraDeNegocioException("Oportunidade não encontrada com o ID: " + id));
+    public Oportunidade buscar(Integer oportunidadeId) throws RegraDeNegocioException {
+        return oportunidadeRepo.findById(oportunidadeId)
+                .orElseThrow(() -> new RegraDeNegocioException("Oportunidade não encontrada com o ID: " + oportunidadeId));
     }
 
     /**
@@ -270,7 +270,7 @@ public class OportunidadeService {
      * @throws RegraDeNegocioException se essa oportunidade nao existir ou se nao tiver nenhum discente cadastrado na oportunidadde
      */
     @Transactional
-    // essa anota��o � usada quando um metodo faz mais de uma opera��o, se der erro, o sistema volta pro inicio, se der tudo certo, ele salva no banco de dados
+    // essa anotação e usada quando um metodo faz mais de uma operacao, se der erro, o sistema volta pro inicio, se der tudo certo, ele salva no banco de dados
     public void finalizarOportunidade(Integer usuarioId,Integer oportunidadeId)
             throws RegraDeNegocioException{
         Usuario usuario = usuarioService.obterUsuarioPorId(usuarioId);
@@ -289,12 +289,5 @@ public class OportunidadeService {
             certificadoService.criarCertificado(inscricao.getDiscente(), oportunidadeId);
         }
     }
-
-    public Oportunidade buscarPorId(Integer oportunidadeId) throws RegraDeNegocioException{
-        Oportunidade oportunidade = oportunidadeRepo.findById(oportunidadeId).orElseThrow(
-                () -> new RegraDeNegocioException("Oportunidade não encontrada")
-        );
-        return oportunidade;
-    }
-
 }
+

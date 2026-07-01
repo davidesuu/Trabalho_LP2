@@ -1,4 +1,4 @@
-package com.exemplo.ufmaextensao.Enum;
+package com.exemplo.ufmaextensao.enums;
 
 public enum StatusInscricao {
     PENDENTE, APROVADA, REJEITADA, CANCELADA

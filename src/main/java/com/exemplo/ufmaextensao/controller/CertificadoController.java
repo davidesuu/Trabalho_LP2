@@ -1,6 +1,6 @@
-package com.exemplo.ufmaextensao.Controller;
+package com.exemplo.ufmaextensao.controller;
 
-import com.exemplo.ufmaextensao.DTO.CertificadoDTO;
+import com.exemplo.ufmaextensao.dto.CertificadoDTO;
 import com.exemplo.ufmaextensao.entity.Certificado;
 import com.exemplo.ufmaextensao.service.CertificadoService;
 import com.exemplo.ufmaextensao.service.RegraDeNegocioException;
@@ -22,10 +22,10 @@ public class CertificadoController {
 
     @PutMapping("/assinar")
     public ResponseEntity<String> assinar(
-            @RequestParam Integer id_docente,
+            @RequestParam Integer docenteId,
             @RequestBody CertificadoDTO certificadoDTO) throws RegraDeNegocioException{
         try {
-            certificadoService.assinarCertificado(certificadoDTO, id_docente);
+            certificadoService.assinarCertificado(certificadoDTO, docenteId);
             return ResponseEntity.ok("certificado assinado com sucesso");
         } catch (RegraDeNegocioException e){
             return ResponseEntity.badRequest().body(e.getMessage());

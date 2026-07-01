@@ -28,7 +28,8 @@ public class Usuario {
 
     @ManyToMany
     @JoinTable(name = "usuario_papel", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_papel"))
-    private List<Papel> papeis;
+    @Builder.Default
+    private List<Papel> papeis = new java.util.ArrayList<>();
 
     @JsonIgnore
     protected String senha;

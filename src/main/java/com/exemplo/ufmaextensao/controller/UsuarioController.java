@@ -1,9 +1,9 @@
-package com.exemplo.ufmaextensao.Controller;
+package com.exemplo.ufmaextensao.controller;
 
-import com.exemplo.ufmaextensao.DTO.DiscenteDTO;
-import com.exemplo.ufmaextensao.DTO.DocenteDTO;
-import com.exemplo.ufmaextensao.DTO.HorasDiscenteDTO;
-import com.exemplo.ufmaextensao.DTO.LoginDTO;
+import com.exemplo.ufmaextensao.dto.DiscenteDTO;
+import com.exemplo.ufmaextensao.dto.DocenteDTO;
+import com.exemplo.ufmaextensao.dto.HorasDiscenteDTO;
+import com.exemplo.ufmaextensao.dto.LoginDTO;
 import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.Docente;
 import com.exemplo.ufmaextensao.entity.Usuario;

@@ -1,6 +1,7 @@
 package com.exemplo.ufmaextensao.repository;
 
-import com.exemplo.ufmaextensao.Enum.StatusInscricao;
+import com.exemplo.ufmaextensao.enums.StatusInscricao;
+import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.Inscricao;
 import com.exemplo.ufmaextensao.entity.Oportunidade;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,5 @@ public interface InscricaoRepo extends JpaRepository<Inscricao, Integer> {
     List<Inscricao> findByDiscenteId(Integer discenteId);
     List<Inscricao> findByOportunidadeId(Integer oportunidadeId);
     List<Inscricao> findByOportunidadeAndStatus(Oportunidade oportunidade, StatusInscricao status);
+    boolean existsByOportunidadeAndDiscente(Oportunidade oportunidade, Discente discente);
 }

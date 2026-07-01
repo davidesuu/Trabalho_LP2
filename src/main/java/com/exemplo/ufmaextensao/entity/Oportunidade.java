@@ -1,8 +1,8 @@
 package com.exemplo.ufmaextensao.entity;
 
 
-import com.exemplo.ufmaextensao.Enum.Modalidade;
-import com.exemplo.ufmaextensao.Enum.StatusOportunidade;
+import com.exemplo.ufmaextensao.enums.Modalidade;
+import com.exemplo.ufmaextensao.enums.StatusOportunidade;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,7 +49,7 @@ public class Oportunidade {
     private StatusOportunidade status;
 
     @Column(name = "data_inicio")
-    private LocalDate incio;
+    private LocalDate inicio;
     @Column(name = "data_fim")
     private LocalDate fim;
 

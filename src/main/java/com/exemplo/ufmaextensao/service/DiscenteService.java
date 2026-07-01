@@ -1,7 +1,7 @@
 package com.exemplo.ufmaextensao.service;
 
-import com.exemplo.ufmaextensao.DTO.DiscenteDTO;
-import com.exemplo.ufmaextensao.DTO.HorasDiscenteDTO;
+import com.exemplo.ufmaextensao.dto.DiscenteDTO;
+import com.exemplo.ufmaextensao.dto.HorasDiscenteDTO;
 import com.exemplo.ufmaextensao.entity.Curso;
 import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.PPC;
@@ -32,6 +32,9 @@ public class DiscenteService {
 
     @Autowired
     private PPCService ppcService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     /**
      * Essa função gera um numero de matricula único para o usuario
@@ -93,8 +96,7 @@ public class DiscenteService {
         discente.setBanco_de_horas(ppc.getCargaHorariaTotal());
         discente.setMatricula(gerarNumeroMatricula());
         discente.setAtivo(true);
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        discente.setSenha(encoder.encode(discenteDTO.getSenha()));
+        discente.setSenha(passwordEncoder.encode(discenteDTO.getSenha()));
 
 
         return discenteRepo.save(discente);

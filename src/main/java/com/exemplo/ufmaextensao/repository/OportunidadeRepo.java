@@ -1,7 +1,7 @@
 package com.exemplo.ufmaextensao.repository;
 
-import com.exemplo.ufmaextensao.Enum.Modalidade;
-import com.exemplo.ufmaextensao.Enum.StatusOportunidade;
+import com.exemplo.ufmaextensao.enums.Modalidade;
+import com.exemplo.ufmaextensao.enums.StatusOportunidade;
 import com.exemplo.ufmaextensao.entity.Oportunidade;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

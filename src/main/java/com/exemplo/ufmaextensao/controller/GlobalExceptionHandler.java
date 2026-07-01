@@ -1,4 +1,4 @@
-package com.exemplo.ufmaextensao.Controller;
+package com.exemplo.ufmaextensao.controller;
 
 import com.exemplo.ufmaextensao.service.RegraDeNegocioException;
 import org.springframework.http.HttpStatus;

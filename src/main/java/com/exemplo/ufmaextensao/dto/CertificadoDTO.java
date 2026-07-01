@@ -1,6 +1,6 @@
-package com.exemplo.ufmaextensao.DTO;
+package com.exemplo.ufmaextensao.dto;
 
-import com.exemplo.ufmaextensao.Enum.StatusAssinatura;
+import com.exemplo.ufmaextensao.enums.StatusAssinatura;
 import lombok.Data;
 
 import java.time.LocalDate;

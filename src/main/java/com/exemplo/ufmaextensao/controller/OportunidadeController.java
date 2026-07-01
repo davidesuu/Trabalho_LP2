@@ -1,6 +1,6 @@
-package com.exemplo.ufmaextensao.Controller;
+package com.exemplo.ufmaextensao.controller;
 
-import com.exemplo.ufmaextensao.DTO.OportunidadeDTO;
+import com.exemplo.ufmaextensao.dto.OportunidadeDTO;
 import com.exemplo.ufmaextensao.entity.Docente;
 import com.exemplo.ufmaextensao.entity.Oportunidade;
 import com.exemplo.ufmaextensao.service.OportunidadeService;
@@ -35,14 +35,14 @@ public class OportunidadeController {
             @RequestBody OportunidadeDTO oportunidadeDTO,
             @RequestParam Integer usuarioId,
             @RequestParam String tipo,
-            @RequestParam(required = false) Integer idGrupo) throws RegraDeNegocioException {
-        return oportunidadeService.criarOportunidade(oportunidadeDTO, usuarioId, tipo, idGrupo);
+            @RequestParam(required = false) Integer grupoId) throws RegraDeNegocioException {
+        return oportunidadeService.criarOportunidade(oportunidadeDTO, usuarioId, tipo, grupoId);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{oportunidadeId}")
     @ResponseStatus(HttpStatus.OK)
-    public Oportunidade buscarPorId(@PathVariable Integer id) {
-        return oportunidadeService.buscar(id);
+    public Oportunidade buscarPorId(@PathVariable Integer oportunidadeId) {
+        return oportunidadeService.buscar(oportunidadeId);
     }
 
     @GetMapping("/publicadas")
@@ -57,20 +57,20 @@ public class OportunidadeController {
         return oportunidadeService.listarPendentes();
     }
 
-    @PutMapping("/publicar/{id}")
+    @PutMapping("/publicar/{oportunidadeId}")
     @ResponseStatus(HttpStatus.OK)
     public void publicarOportunidade(
-            @PathVariable Integer id,
+            @PathVariable Integer oportunidadeId,
             @RequestParam Integer responsavelId) throws RegraDeNegocioException {
-        oportunidadeService.publicarOportunidade(id, responsavelId);
+        oportunidadeService.publicarOportunidade(oportunidadeId, responsavelId);
     }
 
-    @PutMapping("/rejeitar/{id}")
+    @PutMapping("/rejeitar/{oportunidadeId}")
     @ResponseStatus(HttpStatus.OK)
     public void rejeitarOportunidade(
-            @PathVariable Integer id,
+            @PathVariable Integer oportunidadeId,
             @RequestParam Integer responsavelId) throws RegraDeNegocioException {
-        oportunidadeService.rejeitarOportunidade(id, responsavelId);
+        oportunidadeService.rejeitarOportunidade(oportunidadeId, responsavelId);
     }
     @PutMapping("/finalizarOportunidade/{usuarioId}/{oportunidadeId}")
     public ResponseEntity<String> finalizarOportunidade(@PathVariable Integer usuarioId,

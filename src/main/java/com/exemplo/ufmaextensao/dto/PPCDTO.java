@@ -1,4 +1,4 @@
-package com.exemplo.ufmaextensao.DTO;
+package com.exemplo.ufmaextensao.dto;
 
 import com.exemplo.ufmaextensao.entity.Curso;
 import jakarta.persistence.Column;

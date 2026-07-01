@@ -1,7 +1,7 @@
 package com.exemplo.ufmaextensao.service;
 
-import com.exemplo.ufmaextensao.DTO.CertificadoDTO;
-import com.exemplo.ufmaextensao.Enum.StatusAssinatura;
+import com.exemplo.ufmaextensao.dto.CertificadoDTO;
+import com.exemplo.ufmaextensao.enums.StatusAssinatura;
 import com.exemplo.ufmaextensao.entity.Certificado;
 import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.Docente;
@@ -27,15 +27,15 @@ public class CertificadoService {
 
     /**
      * Essa funcaoo cria um certificado e registra no sistema um novo certificado com status de pendente
-     * gerando um hash de autenticidade que ser� ultilizado no qrcode
+     * gerando um hash de autenticidade que sera ultilizado no qrcode
      * @param discente aluno dono do certificado
-     * @param id_oportunidade oportunidade que o aluno ganhou o certificado
+     * @param oportunidadeId oportunidade que o aluno ganhou o certificado
      * @return O objeto certificado salvo no banco de dados.
      * @throws RegraDeNegocioException Se os dados forem nulos, invalidos ou se o certificado ja possuir id
      */
-    public Certificado criarCertificado(Discente discente, Integer id_oportunidade)
+    public Certificado criarCertificado(Discente discente, Integer oportunidadeId)
             throws RegraDeNegocioException {
-        Oportunidade oportunidade = oportunidadeRepo.findById(id_oportunidade)
+        Oportunidade oportunidade = oportunidadeRepo.findById(oportunidadeId)
                 .orElseThrow(() -> new RegraDeNegocioException("Oportunidade nao encontrada."));
         Integer horasCertificado = oportunidade.getCarga_horaria();
 
@@ -60,12 +60,12 @@ public class CertificadoService {
      * Realiza a assinatura digital de um certificado pendente, alterando seu status para assinado
      * além disso verifica se quem está assinando é o docente que é respondavel pela oportunidade
      * @param certificadoDTO dados do certificado
-     * @param id_docente id do docente que vai assinar o certificado
+     * @param docenteId id do docente que vai assinar o certificado
      * @throws RegraDeNegocioException se o certificado não existir, se já estiver assinado ou se o docente não é o respponsavel pela oportunidade
      */
-    public void assinarCertificado(CertificadoDTO certificadoDTO, Integer id_docente)
+    public void assinarCertificado(CertificadoDTO certificadoDTO, Integer docenteId)
             throws RegraDeNegocioException{
-        Docente docente = docenteService.buscarPorId(id_docente);
+        Docente docente = docenteService.buscarPorId(docenteId);
         Certificado certificado = certificadoRepo.findById(certificadoDTO.getId())
                 .orElseThrow(() -> new RegraDeNegocioException("certificado não encontrado"));
 

@@ -1,8 +1,8 @@
 package com.exemplo.ufmaextensao.service;
 
 
-import com.exemplo.ufmaextensao.DTO.DiscenteDTO;
-import com.exemplo.ufmaextensao.DTO.LoginDTO;
+import com.exemplo.ufmaextensao.dto.DiscenteDTO;
+import com.exemplo.ufmaextensao.dto.LoginDTO;
 import com.exemplo.ufmaextensao.entity.Curso;
 import com.exemplo.ufmaextensao.entity.Discente;
 import com.exemplo.ufmaextensao.entity.PPC;
@@ -26,6 +26,9 @@ public class UsuarioService {
     @Autowired
     private SecurityService securityService;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
 
     public Usuario autenticarUsuario(LoginDTO usuario) throws RegraDeNegocioException {
         if (usuario.getEmail() == null || usuario.getEmail().isBlank()) {
@@ -36,7 +39,7 @@ public class UsuarioService {
         }
         Usuario usuarioLogado = usuarioRepo.findByEmail(usuario.getEmail()).
                 orElseThrow(() -> new RegraDeNegocioException("Email informado não existente"));
-        if (!new BCryptPasswordEncoder().matches(usuario.getSenha(), usuarioLogado.getSenha())) {
+        if (!passwordEncoder.matches(usuario.getSenha(), usuarioLogado.getSenha())) {
             throw new RegraDeNegocioException("Senha incorreta");
         }
         return usuarioLogado;
@@ -44,12 +47,12 @@ public class UsuarioService {
 
     /**
      * Essa função busca no UsuarioRepository um usuario pelo ID
-     * @param id Id do usuario que está sendo buscado
+     * @param usuarioId Id do usuario que está sendo buscado
      * @return  Retorna o usuario buscado se achar, lança regra de negocio casa não
      * @throws RegraDeNegocioException
      */
-    public Usuario obterUsuarioPorId(Integer id) throws RegraDeNegocioException{
-        return usuarioRepo.findById(id).orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
+    public Usuario obterUsuarioPorId(Integer usuarioId) throws RegraDeNegocioException{
+        return usuarioRepo.findById(usuarioId).orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
     }
 
     /**

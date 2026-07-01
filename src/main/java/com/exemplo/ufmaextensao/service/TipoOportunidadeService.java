@@ -13,6 +13,6 @@ public class TipoOportunidadeService {
 
     public TipoOportunidade buscarPorTipo(String tipo) throws RegraDeNegocioException {
         return tipoOportunidadeRepo.findByTipo(tipo)
-                .orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
+                .orElseThrow(() -> new RegraDeNegocioException("Tipo de oportunidade não encontrado"));
     }
 }

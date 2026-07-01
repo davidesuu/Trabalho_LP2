@@ -1,8 +1,8 @@
-package com.exemplo.ufmaextensao.DTO;
+package com.exemplo.ufmaextensao.dto;
 
 
-import com.exemplo.ufmaextensao.Enum.Modalidade;
-import com.exemplo.ufmaextensao.Enum.StatusOportunidade;
+import com.exemplo.ufmaextensao.enums.Modalidade;
+import com.exemplo.ufmaextensao.enums.StatusOportunidade;
 import com.exemplo.ufmaextensao.entity.Docente;
 import com.exemplo.ufmaextensao.entity.TipoOportunidade;
 import com.exemplo.ufmaextensao.entity.Usuario;
@@ -21,6 +21,6 @@ public class OportunidadeDTO {
     private Modalidade modalidade;
     private Integer carga_horaria;
     private Integer vagas;
-    private LocalDate incio;
+    private LocalDate inicio;
     private LocalDate fim;
 }
