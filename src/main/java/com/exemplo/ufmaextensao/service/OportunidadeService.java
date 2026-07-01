@@ -35,6 +35,8 @@ public class OportunidadeService {
     private GrupoService grupoService;
     @Autowired
     private InscricaoRepo inscricaoRepo;
+    @Autowired
+    private DiscenteService discenteService;
 
     /**
      * Essa função salva uma oportunidade no repositorio após validar as informações da oportunidade instanciada e validar permisão do usuario
@@ -287,6 +289,9 @@ public class OportunidadeService {
 
         for(Inscricao inscricao : listaInscritos){
             certificadoService.criarCertificado(inscricao.getDiscente(), oportunidadeId);
+            Discente discente = inscricao.getDiscente();
+            discente.setCh_total_cumprida(discente.getCh_total_cumprida() + oportunidade.getCarga_horaria());
+            discenteService.atualizar(discente);
         }
     }
 }
