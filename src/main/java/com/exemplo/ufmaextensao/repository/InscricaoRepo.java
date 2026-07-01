@@ -15,4 +15,5 @@ public interface InscricaoRepo extends JpaRepository<Inscricao, Integer> {
     List<Inscricao> findByOportunidadeId(Integer oportunidadeId);
     List<Inscricao> findByOportunidadeAndStatus(Oportunidade oportunidade, StatusInscricao status);
     boolean existsByOportunidadeAndDiscente(Oportunidade oportunidade, Discente discente);
+    List<Inscricao> findByDiscenteAndStatus(Discente discente, StatusInscricao status);
 }

@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface GrupoRepo extends JpaRepository<Grupo, Integer> {
     public List<Grupo> findByDiretoriaContaining(Discente discente);
+    List<Grupo> findByResponsavel(Docente docente);
+    List<Grupo> findByDiscentesContaining(Discente discente);
 }

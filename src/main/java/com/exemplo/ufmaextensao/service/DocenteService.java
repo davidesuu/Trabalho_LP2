@@ -68,4 +68,5 @@ public class DocenteService {
                 .orElseThrow(() -> new RegraDeNegocioException("Docente não encontrado"));
     }
 
+
 }

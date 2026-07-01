@@ -62,4 +62,20 @@ public class UsuarioController {
     {
         return discenteService.mostrarPainelDeHoras(usuarioId);
     }
+
+    @PutMapping("/{id}/desativar")
+    @ResponseStatus(HttpStatus.OK)
+    public void desativar(
+            @PathVariable Integer id,
+            @RequestParam Integer adminId) throws RegraDeNegocioException {
+        usuarioService.desativarUsuario(id, adminId);
+    }
+
+    @PutMapping("/{id}/reativar")
+    @ResponseStatus(HttpStatus.OK)
+    public void reativar(
+            @PathVariable Integer id,
+            @RequestParam Integer adminId) throws RegraDeNegocioException {
+        usuarioService.reativarUsuario(id, adminId);
+    }
 }

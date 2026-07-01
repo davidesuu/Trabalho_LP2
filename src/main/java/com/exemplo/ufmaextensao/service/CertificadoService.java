@@ -66,13 +66,11 @@ public class CertificadoService {
     public void assinarCertificado(CertificadoDTO certificadoDTO, Integer docenteId)
             throws RegraDeNegocioException{
         Docente docente = docenteService.buscarPorId(docenteId);
-        Certificado certificado = certificadoRepo.findById(certificadoDTO.getId())
-                .orElseThrow(() -> new RegraDeNegocioException("certificado não encontrado"));
-
-
         if(certificadoDTO.getId() == null){
             throw new RegraDeNegocioException("id de certificado nao informado");
         }
+        Certificado certificado = certificadoRepo.findById(certificadoDTO.getId())
+                .orElseThrow(() -> new RegraDeNegocioException("certificado não encontrado"));
         if(certificadoDTO.getStatusAssinatura() == StatusAssinatura.ASSINADO){
             throw new RegraDeNegocioException("esse certificado ja foi assinado anteriormente");
         }
