@@ -22,7 +22,7 @@ public class PPCController {
     @GetMapping("/listar")
     @ResponseStatus(HttpStatus.OK)
     public List<PPC> listar(@RequestParam Integer cursoId)
-    {
+    throws RegraDeNegocioException{
         List<PPC> ppcs = ppcService.listarPPCsPorCurso(cursoId);
         return ppcs;
     }
@@ -32,7 +32,7 @@ public class PPCController {
     public PPC criarPPC(@RequestBody PPCDTO ppcDTO,
                         @RequestParam Integer cursoId,
                         @RequestParam Integer usuarioId)
-    {
+    throws RegraDeNegocioException{
         return ppcService.criarPPC(ppcDTO, cursoId, usuarioId);
     }
 }
