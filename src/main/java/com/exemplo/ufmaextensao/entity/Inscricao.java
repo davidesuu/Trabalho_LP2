@@ -47,5 +47,9 @@ public class Inscricao {
         this.status = StatusInscricao.REJEITADA;
     }
 
+    public void cancelar(){
+        this.status = StatusInscricao.CANCELADA;
+    }
+
 
 }

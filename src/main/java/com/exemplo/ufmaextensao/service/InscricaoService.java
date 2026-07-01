@@ -10,6 +10,7 @@ import com.exemplo.ufmaextensao.repository.DiscenteRepo;
 import com.exemplo.ufmaextensao.repository.DocenteRepo;
 import com.exemplo.ufmaextensao.repository.InscricaoRepo;
 import com.exemplo.ufmaextensao.repository.OportunidadeRepo;
+import com.exemplo.ufmaextensao.service.OportunidadeService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class InscricaoService {
     @Autowired
     private InscricaoRepo inscricaoRepo;
     @Autowired
-    private OportunidadeRepo oportunidadeRepo;
+    private OportunidadeService oportunidadeService;
     @Autowired
     private DiscenteRepo discenteRepo;
     @Autowired
@@ -58,8 +59,9 @@ public class InscricaoService {
             throw new RegraDeNegocioException("Esta oportunidade não tem vagas livres");
         }
         inscricao.aprovar();
+        oportunidade.setVagasOcupadas(oportunidade.getVagasOcupadas() + 1);
         inscricaoRepo.save(inscricao);
-        oportunidadeRepo.save(oportunidade);
+        oportunidadeService.salvarOportunidade(oportunidade);
         return inscricao;
     }
 
@@ -79,7 +81,7 @@ public class InscricaoService {
         }
         inscricao.rejeitar();
         inscricaoRepo.save(inscricao);
-        oportunidadeRepo.save(oportunidade);
+        oportunidadeService.salvarOportunidade(oportunidade);
         return inscricao;
     }
 
@@ -90,8 +92,7 @@ public class InscricaoService {
      * @throws RegraDeNegocioException
      */
     public List<Inscricao> listarPendentes(Integer oportunidadeId) throws RegraDeNegocioException {
-        Oportunidade oportunidade = oportunidadeRepo.findById(oportunidadeId).orElseThrow(
-                () -> new RegraDeNegocioException("Não foi encontrada uma oportunidade"));
+        Oportunidade oportunidade = oportunidadeService.buscarPorId(oportunidadeId);
         return inscricaoRepo.findByOportunidadeAndStatus(oportunidade,StatusInscricao.PENDENTE);
     }
 
@@ -102,8 +103,7 @@ public class InscricaoService {
      * @throws RegraDeNegocioException
      */
     public List<Inscricao> listarAprovados(Integer oportunidadeId) throws RegraDeNegocioException {
-        Oportunidade oportunidade = oportunidadeRepo.findById(oportunidadeId).orElseThrow(
-                () -> new RegraDeNegocioException("Não foi encontrada uma oportunidade"));
+        Oportunidade oportunidade = oportunidadeService.buscarPorId(oportunidadeId);
         return inscricaoRepo.findByOportunidadeAndStatus(oportunidade,StatusInscricao.APROVADA);
     }
 
@@ -151,9 +151,7 @@ public class InscricaoService {
      */
     @Transactional
     public Inscricao criarInscricao(InscricaoDTO dto, Integer oportunidadeId, Integer discenteId) throws RegraDeNegocioException {
-        Oportunidade oportunidade = oportunidadeRepo.findById(oportunidadeId)
-                .orElseThrow(() -> new RegraDeNegocioException("Oportunidade não encontrada"));
-
+        Oportunidade oportunidade = oportunidadeService.buscarPorId(oportunidadeId);
         if(!oportunidade.getFim().isAfter(LocalDate.now())){
             throw new RegraDeNegocioException("Não é possivel se inscrever após o fim de uma oportunidade");
         }
@@ -168,11 +166,6 @@ public class InscricaoService {
                 .build();
 
         inscricaoRepo.save(inscricao);
-        Integer vagasOcupadasAtual = oportunidade.getVagasOcupadas() != 0 ? oportunidade.getVagasOcupadas() : 0;
-
-        oportunidade.setVagasOcupadas(vagasOcupadasAtual + 1);
-        oportunidadeRepo.save(oportunidade);
-
         return inscricao;
     }
 
@@ -189,14 +182,14 @@ public class InscricaoService {
             throw new RegraDeNegocioException("Não é possivel cancelar inscrição após o fim de uma oportunidade");
         }
 
-        inscricao.setStatus(StatusInscricao.REJEITADA);
+        inscricao.cancelar();
 
         Integer vagasOcupadasAtual = oportunidade.getVagasOcupadas() != 0 ? oportunidade.getVagasOcupadas() : 0;
-        if  (vagasOcupadasAtual > 0) {
-            oportunidade.setVagasOcupadas(vagasOcupadasAtual-1);
+        if (inscricao.getStatus() == StatusInscricao.APROVADA && vagasOcupadasAtual > 0) {
+            oportunidade.setVagasOcupadas(vagasOcupadasAtual - 1);
         }
 
-        oportunidadeRepo.save(oportunidade);
+        oportunidadeService.salvarOportunidade(oportunidade);
         return inscricaoRepo.save(inscricao);
     }
 

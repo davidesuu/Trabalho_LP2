@@ -1,8 +1,10 @@
 package com.exemplo.ufmaextensao.service;
 
 import com.exemplo.ufmaextensao.DTO.OportunidadeDTO;
+import com.exemplo.ufmaextensao.Enum.StatusInscricao;
 import com.exemplo.ufmaextensao.Enum.StatusOportunidade;
 import com.exemplo.ufmaextensao.entity.*;
+import com.exemplo.ufmaextensao.repository.InscricaoRepo;
 import com.exemplo.ufmaextensao.repository.OportunidadeRepo;
 import jakarta.transaction.Transactional;
 import com.exemplo.ufmaextensao.service.TipoOportunidadeService;
@@ -32,7 +34,7 @@ public class OportunidadeService {
     @Autowired
     private GrupoService grupoService;
     @Autowired
-    private InscricaoService inscricaoService;
+    private InscricaoRepo inscricaoRepo;
 
     /**
      * Essa função salva uma oportunidade no repositorio após validar as informações da oportunidade instanciada e validar permisão do usuario
@@ -274,22 +276,25 @@ public class OportunidadeService {
         Usuario usuario = usuarioService.obterUsuarioPorId(usuarioId);
         Oportunidade oportunidade  = buscar(oportunidadeId);
         securityService.validarPermissao(usuario, "DOCENTE", "ADMIN");
-        if(usuario != oportunidade.getResponsavel_oportunidade()){
+        if(!usuario.equals(oportunidade.getResponsavel_oportunidade())){
             throw new RegraDeNegocioException("Docente não é responsavel");
         }
 
         oportunidade.setStatus(StatusOportunidade.FINALIZADA);
         oportunidadeRepo.save(oportunidade);
 
-        List<Inscricao> listaInscritos = inscricaoService.listarAprovados(oportunidadeId);
+        List<Inscricao> listaInscritos = inscricaoRepo.findByOportunidadeAndStatus(oportunidade, StatusInscricao.APROVADA);
 
         for(Inscricao inscricao : listaInscritos){
             certificadoService.criarCertificado(inscricao.getDiscente(), oportunidadeId);
         }
     }
 
-
-
-
+    public Oportunidade buscarPorId(Integer oportunidadeId) throws RegraDeNegocioException{
+        Oportunidade oportunidade = oportunidadeRepo.findById(oportunidadeId).orElseThrow(
+                () -> new RegraDeNegocioException("Oportunidade não encontrada")
+        );
+        return oportunidade;
+    }
 
 }
