@@ -3,6 +3,7 @@ package com.exemplo.ufmaextensao.Controller;
 import com.exemplo.ufmaextensao.DTO.InscricaoDTO;
 import com.exemplo.ufmaextensao.entity.Inscricao;
 import com.exemplo.ufmaextensao.service.InscricaoService;
+import com.exemplo.ufmaextensao.service.RegraDeNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,20 +22,22 @@ public class InscricaoController {
     @ResponseStatus(HttpStatus.CREATED)
     public Inscricao criarNovaInscricao(@RequestBody InscricaoDTO dto,
                                         @RequestParam Integer oportunidadeId,
-                                        @RequestParam Integer discenteId) {
+                                        @RequestParam Integer discenteId) throws ReflectiveOperationException {
         return inscricaoService.criarInscricao(dto, oportunidadeId, discenteId);
     }
 
-    @GetMapping("/{id_inscricao}")
+    @GetMapping("/{inscricaoId}")
     @ResponseStatus(HttpStatus.OK)
-    public Inscricao buscarPorId(@PathVariable Integer id_inscricao) {
-        return inscricaoService.buscar(id_inscricao);
+    public Inscricao buscarPorId(@PathVariable Integer inscricaoId) {
+        return inscricaoService.buscar(inscricaoId);
     }
 
     @GetMapping("/pendentes")
     @ResponseStatus(HttpStatus.OK)
-    public List<Inscricao> listarPendentes() {
-        return inscricaoService.listarPendentes();
+    public List<Inscricao> listarPendentes(
+            @PathVariable Integer oportunidadeId
+    ) {
+        return inscricaoService.listarPendentes(oportunidadeId);
     }
 
     @GetMapping("/discente/{discenteId}")
@@ -55,23 +58,23 @@ public class InscricaoController {
         return inscricaoService.listarPorOportunidade(oportunidadeId);
     }
 
-    @PatchMapping("/aprovar/{id_inscricao}")
+    @PatchMapping("/aprovar/{inscricaoId}/{docenteId}")
     @ResponseStatus(HttpStatus.OK)
-    public Inscricao aprovarInscricao(@PathVariable Integer id_inscricao,
-                                      @RequestParam Integer id_docente) {
-        return inscricaoService.aprovar(id_inscricao, id_docente);
+    public Inscricao aprovarInscricao(@PathVariable Integer inscricaoId,
+                                      @PathVariable Integer docenteId) throws RegraDeNegocioException {
+        return inscricaoService.aprovar(inscricaoId, docenteId);
     }
 
-    @PatchMapping("/rejeitar/{id_inscricao}")
+    @PatchMapping("/rejeitar/{inscricaoId}/{docenteId}")
     @ResponseStatus(HttpStatus.OK)
-    public Inscricao rejeitarInscricao(@PathVariable Integer id_inscricao,
-                                       @RequestParam Integer id_docente) {
-        return inscricaoService.rejeitar(id_inscricao, id_docente);
+    public Inscricao rejeitarInscricao(@PathVariable Integer inscricaoId,
+                                       @PathVariable Integer docenteId) throws RegraDeNegocioException {
+        return inscricaoService.rejeitar(inscricaoId, docenteId);
     }
 
-    @PatchMapping("/cancelar/{id_inscricao}")
+    @PatchMapping("/cancelar/{inscricaoId}")
     @ResponseStatus(HttpStatus.OK)
-    public Inscricao cancelarInscricao(@PathVariable Integer id_inscricao) {
-        return inscricaoService.cancelarInscricao(id_inscricao);
+    public Inscricao cancelarInscricao(@PathVariable Integer inscricaoId) throws RegraDeNegocioException {
+        return inscricaoService.cancelarInscricao(inscricaoId);
     }
 }

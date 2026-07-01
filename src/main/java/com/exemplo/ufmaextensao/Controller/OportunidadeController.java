@@ -72,10 +72,11 @@ public class OportunidadeController {
             @RequestParam Integer responsavelId) throws RegraDeNegocioException {
         oportunidadeService.rejeitarOportunidade(id, responsavelId);
     }
-    @PutMapping("/finalizarOportunidade/{id}")
-    public ResponseEntity<String> finalizarOportunidade(@PathVariable Integer id){
+    @PutMapping("/finalizarOportunidade/{usuarioId}/{oportunidadeId}")
+    public ResponseEntity<String> finalizarOportunidade(@PathVariable Integer usuarioId,
+                                                        @PathVariable Integer oportunidadeId){
         try {
-            oportunidadeService.finalizarOportunidade(id);
+            oportunidadeService.finalizarOportunidade(usuarioId, oportunidadeId);
             return ResponseEntity.ok("oportunidade finalizada com sucesso, todos os certificado gerados dos discentes matriculados estao PENDENTES");
         } catch (RegraDeNegocioException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -10,6 +10,7 @@ import com.exemplo.ufmaextensao.repository.DiscenteRepo;
 import com.exemplo.ufmaextensao.repository.DocenteRepo;
 import com.exemplo.ufmaextensao.repository.InscricaoRepo;
 import com.exemplo.ufmaextensao.repository.OportunidadeRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,23 +32,23 @@ public class InscricaoService {
 
     /**
      * Essa função auxilia na busca
-     * @param id_inscricao Id da inscrição que se quer buscar
+     * @param inscricaoId Id da inscrição que se quer buscar
      * @return A inscrição do id recebido
      * @throws RegraDeNegocioException
      */
-    public Inscricao buscar(Integer id_inscricao) throws RegraDeNegocioException {
-        return inscricaoRepo.findById(id_inscricao).orElseThrow(() -> new RegraDeNegocioException("Inscrição não encontrada"));
+    public Inscricao buscar(Integer inscricaoId) throws RegraDeNegocioException {
+        return inscricaoRepo.findById(inscricaoId).orElseThrow(() -> new RegraDeNegocioException("Inscrição não encontrada"));
     }
 
     /**
      * Essa função aprova uma inscrição
-     * @param id_inscricao ID da inscrição que vai ser aprovado
+     * @param inscricaoId ID da inscrição que vai ser aprovado
      * @param idDocente id do docente responsavel pela oportunidade
      * @return inscricao aprovada
      * @throws RegraDeNegocioException
      */
-    public Inscricao aprovar(Integer id_inscricao, Integer idDocente) throws RegraDeNegocioException {
-        Inscricao inscricao = buscar(id_inscricao);
+    public Inscricao aprovar(Integer inscricaoId, Integer idDocente) throws RegraDeNegocioException {
+        Inscricao inscricao = buscar(inscricaoId);
         Docente docente = docenteService.buscarPorId(idDocente);
         Oportunidade oportunidade = inscricao.getOportunidade();
         if (!oportunidade.getResponsavel_oportunidade().equals(docente)) {
@@ -57,9 +58,9 @@ public class InscricaoService {
             throw new RegraDeNegocioException("Esta oportunidade não tem vagas livres");
         }
         inscricao.aprovar();
-        oportunidade.getListaInscritos().add(inscricao);
-        oportunidade.getListaEspera().remove(inscricao);
-        return inscricaoRepo.save(inscricao);
+        inscricaoRepo.save(inscricao);
+        oportunidadeRepo.save(oportunidade);
+        return inscricao;
     }
 
     /**
@@ -77,18 +78,35 @@ public class InscricaoService {
             throw new RegraDeNegocioException("Este Docente não é responsavel por essa oportunidade");
         }
         inscricao.rejeitar();
-        oportunidade.getListaEspera().remove(inscricao);
-        return inscricaoRepo.save(inscricao);
+        inscricaoRepo.save(inscricao);
+        oportunidadeRepo.save(oportunidade);
+        return inscricao;
     }
 
     /**
      * Essa função lista as inscrições pendentes
+     * @param oportunidadeId id da oportunidade requisitada
      * @return Uma lista com todas as inscrições pendentes
      * @throws RegraDeNegocioException
      */
-    public List<Inscricao> listarPendentes() throws RegraDeNegocioException {
-        return inscricaoRepo.findByStatus(StatusInscricao.PENDENTE);
+    public List<Inscricao> listarPendentes(Integer oportunidadeId) throws RegraDeNegocioException {
+        Oportunidade oportunidade = oportunidadeRepo.findById(oportunidadeId).orElseThrow(
+                () -> new RegraDeNegocioException("Não foi encontrada uma oportunidade"));
+        return inscricaoRepo.findByOportunidadeAndStatus(oportunidade,StatusInscricao.PENDENTE);
     }
+
+    /**
+     * Essa função lista as inscrições aprovadas
+     * @param oportunidadeId
+     * @return
+     * @throws RegraDeNegocioException
+     */
+    public List<Inscricao> listarAprovados(Integer oportunidadeId) throws RegraDeNegocioException {
+        Oportunidade oportunidade = oportunidadeRepo.findById(oportunidadeId).orElseThrow(
+                () -> new RegraDeNegocioException("Não foi encontrada uma oportunidade"));
+        return inscricaoRepo.findByOportunidadeAndStatus(oportunidade,StatusInscricao.APROVADA);
+    }
+
 
     /**
      * Essa função lista todas as inscrições de um discente
@@ -131,6 +149,7 @@ public class InscricaoService {
      * @return  Nova inscrição
      * @throws RegraDeNegocioException
      */
+    @Transactional
     public Inscricao criarInscricao(InscricaoDTO dto, Integer oportunidadeId, Integer discenteId) throws RegraDeNegocioException {
         Oportunidade oportunidade = oportunidadeRepo.findById(oportunidadeId)
                 .orElseThrow(() -> new RegraDeNegocioException("Oportunidade não encontrada"));
@@ -148,22 +167,22 @@ public class InscricaoService {
                 .status(StatusInscricao.PENDENTE)
                 .build();
 
+        inscricaoRepo.save(inscricao);
         Integer vagasOcupadasAtual = oportunidade.getVagasOcupadas() != 0 ? oportunidade.getVagasOcupadas() : 0;
 
         oportunidade.setVagasOcupadas(vagasOcupadasAtual + 1);
-        oportunidade.getListaEspera().add(inscricao);
         oportunidadeRepo.save(oportunidade);
 
-        return inscricaoRepo.save(inscricao);
+        return inscricao;
     }
 
     /**
      * Esta função cancela uma inscrição
-     * @param id_inscricao Id da inscrição que vai ser cancelada
+     * @param inscricaoId Id da inscrição que vai ser cancelada
      * @throws RegraDeNegocioException
      */
-    public Inscricao cancelarInscricao(Integer id_inscricao) throws RegraDeNegocioException {
-        Inscricao inscricao = buscar(id_inscricao);
+    public Inscricao cancelarInscricao(Integer inscricaoId) throws RegraDeNegocioException {
+        Inscricao inscricao = buscar(inscricaoId);
         Oportunidade oportunidade = inscricao.getOportunidade();
 
         if(!oportunidade.getFim().isAfter(LocalDate.now())){
@@ -176,8 +195,6 @@ public class InscricaoService {
         if  (vagasOcupadasAtual > 0) {
             oportunidade.setVagasOcupadas(vagasOcupadasAtual-1);
         }
-
-        oportunidade.getListaInscritos().remove(inscricao);
 
         oportunidadeRepo.save(oportunidade);
         return inscricaoRepo.save(inscricao);

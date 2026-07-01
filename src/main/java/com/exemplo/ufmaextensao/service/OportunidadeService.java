@@ -31,6 +31,8 @@ public class OportunidadeService {
     private TipoOportunidadeService tipoOportunidadeService;
     @Autowired
     private GrupoService grupoService;
+    @Autowired
+    private InscricaoService inscricaoService;
 
     /**
      * Essa função salva uma oportunidade no repositorio após validar as informações da oportunidade instanciada e validar permisão do usuario
@@ -262,28 +264,28 @@ public class OportunidadeService {
 
     /**
      * Essa funcao finaliza oportunidade e gera um certificado para todos os discentes que estao nessa oportunidade
-     * @param idOportunidade id da oportunidade que vai ser finalizada
+     * @param oportunidadeId id da oportunidade que vai ser finalizada
      * @throws RegraDeNegocioException se essa oportunidade nao existir ou se nao tiver nenhum discente cadastrado na oportunidadde
      */
     @Transactional
     // essa anota��o � usada quando um metodo faz mais de uma opera��o, se der erro, o sistema volta pro inicio, se der tudo certo, ele salva no banco de dados
-    public void finalizarOportunidade(Integer idOportunidade)
+    public void finalizarOportunidade(Integer usuarioId,Integer oportunidadeId)
             throws RegraDeNegocioException{
-        Oportunidade oportunidade = oportunidadeRepo.findById(idOportunidade)
-                .orElseThrow(() -> new RegraDeNegocioException("oportunidade n�o encontrada."));
-
-        Grupo grupo = oportunidade.getGrupo();
-        if(grupo == null || grupo.getDiscentes() == null || grupo.getDiscentes().isEmpty()){
-            throw new RegraDeNegocioException("o grupo dessa oportunidade nao tem discentes vinculados");
+        Usuario usuario = usuarioService.obterUsuarioPorId(usuarioId);
+        Oportunidade oportunidade  = buscar(oportunidadeId);
+        securityService.validarPermissao(usuario, "DOCENTE", "ADMIN");
+        if(usuario != oportunidade.getResponsavel_oportunidade()){
+            throw new RegraDeNegocioException("Docente não é responsavel");
         }
+
         oportunidade.setStatus(StatusOportunidade.FINALIZADA);
         oportunidadeRepo.save(oportunidade);
 
-        for(Discente discente : grupo.getDiscentes()){
-            certificadoService.criarCertificado(discente.getId(), idOportunidade);
+        List<Inscricao> listaInscritos = inscricaoService.listarAprovados(oportunidadeId);
+
+        for(Inscricao inscricao : listaInscritos){
+            certificadoService.criarCertificado(inscricao.getDiscente(), oportunidadeId);
         }
-
-
     }
 
 

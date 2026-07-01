@@ -18,19 +18,7 @@ public class CertificadoController {
     @Autowired
     private CertificadoService certificadoService;
 
-    @PostMapping("/criar")
-    public ResponseEntity<?> criar(
-            @RequestParam Integer id_discente,
-            @RequestParam Integer id_docente,
-            @RequestParam Integer id_oportunidade,
-            @RequestBody CertificadoDTO certificadoDTO) throws RegraDeNegocioException{
-        try{
-            Certificado novoCertificado = certificadoService.criarCertificado(id_discente, id_docente, certificadoDTO, id_oportunidade);
-            return  ResponseEntity.status(HttpStatus.CREATED).body(novoCertificado);
-        } catch (RegraDeNegocioException e){
-            return ResponseEntity.badRequest().body((e.getMessage()));
-        }
-    }
+
 
     @PutMapping("/assinar")
     public ResponseEntity<String> assinar(

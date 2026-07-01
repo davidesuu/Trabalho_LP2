@@ -28,20 +28,19 @@ public class CertificadoService {
     /**
      * Essa funcaoo cria um certificado e registra no sistema um novo certificado com status de pendente
      * gerando um hash de autenticidade que ser� ultilizado no qrcode
-     * @param id_discente ID do aluno dono do certificado
+     * @param discente aluno dono do certificado
      * @param id_oportunidade oportunidade que o aluno ganhou o certificado
      * @return O objeto certificado salvo no banco de dados.
      * @throws RegraDeNegocioException Se os dados forem nulos, invalidos ou se o certificado ja possuir id
      */
-    public Certificado criarCertificado(Integer id_discente, Integer id_oportunidade)
+    public Certificado criarCertificado(Discente discente, Integer id_oportunidade)
             throws RegraDeNegocioException {
-        Discente discente = discenteService.buscarPorId(id_discente);
         Oportunidade oportunidade = oportunidadeRepo.findById(id_oportunidade)
                 .orElseThrow(() -> new RegraDeNegocioException("Oportunidade nao encontrada."));
         Integer horasCertificado = oportunidade.getCarga_horaria();
 
         if (horasCertificado== null || horasCertificado <= 0) {
-            throw new RegraDeNegocioException("A carga hor�ria da oportunidade e maior que zero.");
+            throw new RegraDeNegocioException("A carga horária da oportunidade e maior que zero.");
         }
 
         Certificado certificado = Certificado.builder()
